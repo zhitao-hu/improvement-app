@@ -377,16 +377,16 @@
 </head>
 <body>
 
-<!-- ============ 首次配置界面 ============ -->
-<div class="modal show" id="configModal" style="z-index:600">
+<!-- ============ 首次配置界面（默认隐藏） ============ -->
+<div class="modal" id="configModal" style="z-index:600">
   <div class="modal-backdrop" data-config-noop></div>
   <div class="modal-panel" style="max-width:520px">
     <div class="modal-head">
-      <div class="modal-title">首次配置</div>
+      <div class="modal-title">GitHub 配置</div>
     </div>
     <div class="modal-body" style="padding:16px 20px">
       <div class="hint" style="margin-bottom:4px">
-        请输入 GitHub 访问信息。配置将保存在本机浏览器，不会上传到任何服务器。
+        配置保存在本机浏览器（localStorage），不会上传到任何服务器。每次使用同一台设备不用重复输入。
       </div>
       <div class="field">
         <label for="cfgOwner">仓库所有者（Owner）</label>
@@ -1880,7 +1880,7 @@
   }
 
   // ============================================================
-  // ★ 初始化：有配置 → 进欢迎页；无配置 → 弹配置界面
+  // ★ 初始化：有配置 → 显示欢迎页；无配置 → 弹配置界面
   // ============================================================
   current = blankRecord();
   renderTopActions('list');
@@ -1890,11 +1890,14 @@
   if(saved && saved.token){
     cfg = { ...DEFAULTS, ...saved };
     cfg.pagesBase = saved.pagesBase || `https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${cfg.branch}`;
-    // 已有配置：直接进欢迎页（点确认后加载数据）
+    // ★ 已有配置：确保配置界面关闭，显示欢迎页
+    hideConfigModal();
+    $('#welcomeOverlay').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
   } else {
-    // 无配置：弹配置界面
-    setTimeout(() => showConfigModal(), 0);
+    // ★ 无配置：显示配置界面
+    showConfigModal();
+    document.body.style.overflow = 'hidden';
   }
 })();
 </script>
