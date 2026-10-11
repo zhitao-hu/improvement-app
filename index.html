@@ -298,6 +298,34 @@
   .welcome-points li:nth-child(3){animation-delay:.28s}
   .welcome-points li:nth-child(4){animation-delay:.36s}
   .welcome-points li .tick{flex:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(145deg,#d4b28a,#8f6e4b);display:grid;place-items:center;color:#fff;font-size:12px;font-weight:900}
+
+  /* 密码输入区 */
+  .pwd-row{
+    margin:0 0 18px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  .pwd-row input{
+    flex:1;
+    height:48px;
+    border:1px solid rgba(220,190,150,.25);
+    border-radius:13px;
+    background:rgba(255,255,255,.07);
+    color:#f5ead9;
+    font-size:15px;
+    padding:0 16px;
+    outline:none;
+    transition:.2s;
+    letter-spacing:1px;
+  }
+  .pwd-row input::placeholder{color:rgba(232,217,195,.45);letter-spacing:.5px}
+  .pwd-row input:focus{
+    border-color:rgba(212,178,138,.7);
+    background:rgba(255,255,255,.1);
+    box-shadow:0 0 0 4px rgba(184,148,110,.15);
+  }
+
   .welcome-foot{display:flex;gap:12px;margin-top:6px}
   .welcome-foot .btn{flex:1;height:50px;font-size:15px;border-radius:14px;border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f2e9dd}
   .welcome-foot .btn.primary{color:#fff;background:linear-gradient(145deg,#d4b28a,#a07950);border-color:transparent;box-shadow:0 10px 24px rgba(184,148,110,.38)}
@@ -427,6 +455,11 @@
       <li><span class="tick">✓</span><span>改善前后照片 / 视频对比存档</span></li>
       <li><span class="tick">✓</span><span>手写签名确认并保存至云端</span></li>
     </ul>
+
+    <!-- 密码输入 -->
+    <div class="pwd-row">
+      <input type="password" id="welcomePwd" placeholder="请输入访问密码" autocomplete="off" inputmode="numeric">
+    </div>
 
     <div class="welcome-foot">
       <button class="btn" id="welcomeCancel">取消</button>
@@ -879,6 +912,8 @@
   };
   const CFG_KEY = 'cosmetic_cfg_v1';
   const MAX_MEDIA = 4;
+  // 访问密码
+  const ACCESS_PWD = '8888';
 
   const $ = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
@@ -1044,7 +1079,25 @@
   function initWelcome(){
     const overlay = $('#welcomeOverlay');
     const hint = $('#welcomeHint');
-    $('#welcomeConfirm').addEventListener('click', () => {
+    const pwdInput = $('#welcomePwd');
+
+    function tryEnter(){
+      const val = (pwdInput.value || '').trim();
+      if(!val){
+        hint.textContent = '请输入访问密码';
+        hint.style.color = 'rgba(240,180,180,.95)';
+        pwdInput.focus();
+        return;
+      }
+      if(val !== ACCESS_PWD){
+        hint.textContent = '密码错误，请重试';
+        hint.style.color = 'rgba(240,180,180,.95)';
+        pwdInput.value = '';
+        pwdInput.focus();
+        return;
+      }
+      // 密码正确
+      hint.textContent = '';
       welcomeDone = true;
       overlay.classList.add('hidden');
       document.body.style.overflow = '';
@@ -1052,11 +1105,20 @@
       recordsLoaded = false;
       showList();
       ghLoad().then(()=>{ renderList(); toast('数据已加载 · ' + records.length + ' 条'); }).catch(err=>{ recordsLoaded = false; setStatus('连接失败：' + err.message, 'err'); toast('连接失败：' + err.message); });
-    });
+    }
+
+    $('#welcomeConfirm').addEventListener('click', tryEnter);
+    pwdInput.addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); tryEnter(); } });
+
     $('#welcomeCancel').addEventListener('click', () => {
-      hint.textContent = '需要点击「确认进入」才能开始使用';
-      setTimeout(() => { hint.textContent = ''; }, 2600);
+      hint.textContent = '需要输入密码并点击「确认进入」才能开始使用';
+      hint.style.color = 'rgba(240,180,180,.9)';
+      pwdInput.focus();
+      setTimeout(() => { if(hint.textContent === '需要输入密码并点击「确认进入」才能开始使用') hint.textContent = ''; }, 3000);
     });
+
+    // 自动聚焦密码框
+    setTimeout(() => { try { pwdInput.focus(); } catch(e){} }, 400);
   }
 
   function showList(){
