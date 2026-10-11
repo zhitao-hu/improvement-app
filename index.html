@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#009530">
+<title>改善效果确认 - 记录管理</title>
+<style>
+  :root{--green:#009530;--green-dark:#08752d;--green-soft:#eaf7ee;--amber:#f59e0b;--ink:#172033;--muted:#667085;--line:#dfe5e2;--bg:#f2f6f4;--card:#fff;--danger:#d92d20;--radius:20px;--shadow:0 12px 36px rgba(20,50,35,.08)}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  button,input,textarea,select{font:inherit}
+  button{cursor:pointer}
+  .app{min-height:100vh;padding-bottom:calc(30px + env(safe-area-inset-bottom))}
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(210,220,215,.9);padding-top:env(safe-area-inset-top)}
+  .topbar-inner{max-width:1280px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 22px}
+  .brand{display:flex;align-items:center;gap:12px;min-width:0}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(145deg,#00ad45,#007d2b);display:grid;place-items:center;color:#fff;box-shadow:0 8px 18px rgba(0,149,48,.22)}
+  .logo svg{width:25px;height:25px}.brand h1{font-size:19px;margin:0;white-space:nowrap}.brand p{font-size:12px;color:var(--muted);margin:3px 0 0}
+  .actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}.btn{height:42px;border:1px solid var(--line);border-radius:12px;padding:0 15px;background:#fff;color:#344054;font-weight:650;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.18s}.btn:active{transform:scale(.98)}.btn.primary{color:#fff;background:var(--green);border-color:var(--green)}.btn.primary:hover{background:var(--green-dark)}.btn.danger{color:var(--danger)}.btn svg{width:18px;height:18px}.btn:disabled{opacity:.5;cursor:not-allowed}
+  main{max-width:1280px;margin:auto;padding:24px 22px;display:grid;gap:20px}
+  .card{background:var(--card);border:1px solid rgba(220,228,224,.9);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.card-body{padding:20px}.card-title{font-size:18px;font-weight:760;margin:0}
+  .meta-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px}.field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:0 0 7px}.input,.textarea{width:100%;border:1px solid #d8dfdc;border-radius:12px;background:#fff;color:var(--ink);outline:none;transition:.18s}.input{height:46px;padding:0 13px}.textarea{padding:12px 13px;min-height:122px;resize:vertical}.input:focus,.textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(0,149,48,.1)}
+  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.photo-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}.photo-head{height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid #edf0ef;font-weight:750}.dot{width:11px;height:11px;border-radius:50%}.photo-area{padding:14px}.photo-box{position:relative;aspect-ratio:4/3;border:2px dashed #d5deda;border-radius:16px;overflow:hidden;background:#f8faf9;display:grid;place-items:center}.photo-box img{display:none;width:100%;height:100%;object-fit:contain;background:#0f172a}.photo-box.has-image img{display:block}.empty-photo{text-align:center;color:#8a9490}.photo-box.has-image .empty-photo{display:none}.photo-icon{width:54px;height:54px;margin:auto auto 10px;border-radius:50%;display:grid;place-items:center;background:#fff;box-shadow:0 5px 15px rgba(18,55,37,.08)}.photo-icon svg{width:27px;height:27px}.photo-tools{display:flex;gap:8px;margin-top:10px}.photo-tools .btn{flex:1}.file-input{display:none}
+  .bottom-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:20px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:20px 20px 12px}.progress{font-size:12px;font-weight:800;color:#08752d;background:var(--green-soft);padding:7px 11px;border-radius:999px}.check-list{display:grid;gap:9px;padding:0 20px 18px}.check-item{display:flex;align-items:center;gap:12px;border:1px solid #dfe5e2;border-radius:14px;padding:13px;background:#fff}.check-item.done{background:var(--green-soft);border-color:#b9e4c6}.check-item input{width:21px;height:21px;accent-color:var(--green);flex:none}.check-text{flex:1;font-size:14px}.check-item.done .check-text{font-weight:650;color:#09662a}.icon-btn{width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:#a4aca8;display:grid;place-items:center}.icon-btn:hover{background:#fff;color:var(--danger)}.icon-btn svg{width:17px;height:17px}.add-row{display:flex;gap:8px;padding-top:4px}.add-row .input{flex:1}.add-row .btn{width:46px;padding:0}
+  .right-body{padding:0 20px 20px;display:grid;gap:20px}.signature-wrap{position:relative;border:1px solid #d8dfdc;border-radius:15px;overflow:hidden;background:#fff;cursor:pointer}.signature-wrap canvas{display:block;width:100%;height:185px;touch-action:none;cursor:crosshair}.sign-placeholder{position:absolute;left:0;right:0;bottom:30px;text-align:center;color:#b2bab6;font-size:13px;pointer-events:none}.sign-line{position:absolute;left:12%;right:12%;bottom:48px;border-top:1px solid #e1e5e3;pointer-events:none}.signature-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}.signature-label{font-size:14px;font-weight:750;display:flex;align-items:center;gap:7px}.signature-label svg{width:18px;color:var(--green)}.date-row{display:flex;justify-content:space-between;border-top:1px solid #edf0ef;padding-top:14px;color:var(--muted);font-size:12px}
+  .toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translate(-50%,18px);padding:13px 19px;border-radius:999px;background:#172033;color:#fff;font-size:14px;font-weight:650;box-shadow:0 14px 35px rgba(0,0,0,.24);opacity:0;pointer-events:none;transition:.25s;z-index:99}.toast.show{opacity:1;transform:translate(-50%,0)}
+  .privacy{font-size:12px;color:var(--muted);text-align:center;margin-top:-5px}
+  .view{display:none}.view.active{display:block}
+  .list-toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+  .record-list{display:grid;gap:12px;padding:0}
+  .record-item{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 16px;cursor:pointer;transition:.18s;box-shadow:0 6px 20px rgba(20,50,35,.05)}
+  .record-item:hover{border-color:var(--green);transform:translateY(-1px);box-shadow:0 10px 26px rgba(20,149,48,.12)}
+  .record-thumb{width:64px;height:64px;border-radius:12px;overflow:hidden;background:#eef3f0;display:grid;place-items:center;flex:none}
+  .record-thumb img{width:100%;height:100%;object-fit:cover}
+  .record-thumb .ph{font-size:11px;color:#9aa5a1}
+  .record-main{min-width:0}
+  .record-title{font-weight:760;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .record-sub{font-size:12px;color:var(--muted);margin-top:4px;display:flex;gap:12px;flex-wrap:wrap}
+  .record-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--green-soft);color:#08752d;white-space:nowrap}
+  .record-badge.pending{background:#fff4e5;color:#b45309}
+  .record-del{width:36px;height:36px;border:0;border-radius:10px;background:#f7f9f8;color:#98a29e;display:grid;place-items:center}
+  .record-del:hover{background:#fdecea;color:var(--danger)}
+  .record-del svg{width:17px;height:17px}
+  .empty-list{text-align:center;padding:60px 20px;color:var(--muted)}
+  .empty-list .big{font-size:52px;margin-bottom:12px}
+  .list-count{font-size:13px;color:var(--muted);font-weight:600}
+  .status-bar{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);padding:8px 22px;background:#f8faf9;border-bottom:1px solid #edf0ef}
+  .status-dot{width:8px;height:8px;border-radius:50%;background:#cbd5d1}
+  .status-dot.ok{background:var(--green)}
+  .status-dot.err{background:var(--danger)}
+  .status-dot.loading{background:var(--amber)}
+  .modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
+  .modal.show{display:flex}
+  .modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+  .modal-panel{position:relative;width:100%;max-width:640px;background:#fff;border-radius:24px;overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #edf0ef}
+  .modal-title{font-size:16px;font-weight:760}
+  .modal-body{padding:20px;overflow:auto;display:grid;gap:16px}
+  .modal-foot{display:flex;gap:12px;justify-content:flex-end;padding:12px 20px 20px}
+  .hint{font-size:12px;color:var(--muted);line-height:1.6}
+  .hint code{background:#f2f5f3;padding:1px 6px;border-radius:5px;font-size:12px}
+
+  .filter-bar{display:grid;grid-template-columns:1.6fr 1fr 1fr auto auto;gap:10px;align-items:end;padding:0 0 4px}
+  .filter-bar .field{margin:0}
+  .filter-bar .input{height:42px;font-size:13px}
+  .filter-bar .btn{height:42px;padding:0 14px;font-size:13px}
+  .filter-summary{font-size:12px;color:var(--muted);padding:8px 2px 2px}
+
+  .bulk-bar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:12px 0 2px}
+  .bulk-bar .btn{height:38px;font-size:13px;padding:0 14px}
+  .bulk-count{font-size:13px;color:var(--muted);font-weight:600}
+
+  .record-check{width:22px;height:22px;accent-color:var(--green);flex:none;cursor:pointer}
+  .record-item.selected{border-color:var(--green);background:var(--green-soft)}
+
+  @media(max-width:900px){.meta-grid{grid-template-columns:1fr 1fr}.meta-grid .field:first-child{grid-column:1/-1}.bottom-grid{grid-template-columns:1fr}.filter-bar{grid-template-columns:1fr 1fr}}
+  @media(max-width:650px){.topbar-inner{padding:11px 14px}.brand p{display:none}.brand h1{font-size:16px}.logo{width:39px;height:39px}.actions .btn span{display:none}.actions .btn{width:42px;padding:0}main{padding:14px}.meta-grid,.photo-grid{grid-template-columns:1fr}.meta-grid .field:first-child{grid-column:auto}.card-body{padding:16px}.record-item{grid-template-columns:26px 52px 1fr auto;padding:10px 12px}.record-thumb{width:52px;height:52px}.status-bar{padding:8px 14px}.filter-bar{grid-template-columns:1fr}.filter-bar .btn{width:100%}}
+
+  @media print{
+    @page{size:A4 portrait;margin:12mm}
+    html,body{background:#fff}
+    .app{padding:0}
+    .topbar{position:static;border:0;background:#fff}
+    .topbar-inner{padding:0 0 8px}
+    .actions,.photo-tools,.add-row,.icon-btn,.privacy,.status-bar,.filter-bar,.bulk-bar,.record-del,.record-check,.list-toolbar,.modal,.toast{display:none!important}
+    main{padding:0;gap:0;max-width:none}
+    .view{display:none!important}
+    .view.active{display:block!important}
+    .card,.photo-card{box-shadow:none;border-color:#cfd6d3;border-radius:8px;break-inside:avoid;margin-bottom:8px}
+    .card-body{padding:12px}
+    .meta-grid{gap:10px}
+    .input,.textarea{border:0;padding:0;background:transparent;height:auto;min-height:0;box-shadow:none!important}
+    .photo-grid{gap:10px}
+    .photo-head{height:38px;padding:0 12px}
+    .photo-area{padding:8px}
+    .photo-box{border-style:solid;border-width:1px;aspect-ratio:4/3}
+    .bottom-grid{gap:10px}
+    .section-head{padding:12px 12px 8px}
+    .check-list{padding:0 12px 10px;gap:5px}
+    .check-item{padding:7px 9px;border-radius:8px}
+    .right-body{padding:0 12px 10px;gap:9px}
+    .textarea{min-height:55px}
+    .signature-wrap canvas{height:115px}
+    .date-row{border-top:1px solid #edf0ef}
+    .print-record-list{display:block!important}
+    .record-list{display:block}
+    .record-item{display:block;border:1px solid #cfd6d3;border-radius:8px;padding:10px;margin-bottom:8px;box-shadow:none;break-inside:avoid}
+    .record-thumb{display:none}
+    .record-item.selected{background:#fff}
+  }
+  .print-record-list{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <div><h1>改善效果确认</h1><p>Before &amp; After Validation</p></div>
+      </div>
+      <div class="actions" id="topActions"></div>
+    </div>
+    <div class="status-bar">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">未连接</span>
+      <span style="margin-left:auto"></span>
+      <button class="btn" id="settingsBtn" style="height:30px;padding:0 10px;font-size:12px">⚙️ 设置</button>
+    </div>
+  </header>
+
+  <main class="view active" id="viewList">
+    <section class="card">
+      <div class="card-body" style="display:grid;gap:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <div>
+            <h2 class="card-title">改善记录列表</h2>
+            <div class="list-count" id="listCount">共 0 条记录</div>
+          </div>
+          <div class="list-toolbar">
+            <button class="btn" id="refreshBtn" title="刷新">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+              <span>刷新</span>
+            </button>
+            <button class="btn primary" id="newBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              <span>新建记录</span>
+            </button>
+          </div>
+        </div>
+        <div class="filter-bar">
+          <div class="field"><label for="filterKeyword">关键词</label><input class="input" id="filterKeyword" placeholder="搜索标题 / 区域 / 确认人 / 备注"></div>
+          <div class="field"><label for="filterFrom">起始日期</label><input class="input" id="filterFrom" type="date"></div>
+          <div class="field"><label for="filterTo">结束日期</label><input class="input" id="filterTo" type="date"></div>
+          <button class="btn" id="filterReset">重置</button>
+          <button class="btn primary" id="filterApply">筛选</button>
+        </div>
+        <div class="filter-summary" id="filterSummary"></div>
+        <div class="bulk-bar" id="bulkBar" style="display:none">
+          <span class="bulk-count" id="bulkCount">已选 0 条</span>
+          <button class="btn" id="bulkExportPdf">📄 导出所选 PDF</button>
+          <button class="btn danger" id="bulkDelete">🗑 删除所选</button>
+          <button class="btn" id="bulkClear">取消选择</button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="record-list" id="recordList"></div>
+    </section>
+
+    <section class="print-record-list" id="printRecordList"></section>
+  </main>
+
+  <main class="view" id="viewForm">
+    <section class="card"><div class="card-body meta-grid">
+      <div class="field"><label for="title">改善主题</label><input class="input" id="title" value="现场改善效果确认" maxlength="80"></div>
+      <div class="field"><label for="location">区域 / 工位</label><input class="input" id="location" placeholder="例如：装配线 A01" maxlength="50"></div>
+      <div class="field"><label for="owner">确认人</label><input class="input" id="owner" placeholder="输入姓名" maxlength="30"></div>
+    </div></section>
+    <section class="photo-grid">
+      <article class="photo-card"><div class="photo-head"><span>改善之前</span><span class="dot" style="background:var(--amber)"></span></div><div class="photo-area">
+        <div class="photo-box" id="beforeBox"><img id="beforePreview" alt="改善之前"><div class="empty-photo"><div class="photo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div><strong>拍照或选择图片</strong><div style="font-size:12px;margin-top:5px">支持相机和照片图库</div></div></div>
+        <input class="file-input" id="beforeInput" type="file" accept="image/*">
+        <div class="photo-tools"><button class="btn" data-pick="before">选择 / 拍照</button><button class="btn danger" data-remove="before">移除</button></div>
+      </div></article>
+      <article class="photo-card"><div class="photo-head"><span>改善之后</span><span class="dot" style="background:var(--green)"></span></div><div class="photo-area">
+        <div class="photo-box" id="afterBox"><img id="afterPreview" alt="改善之后"><div class="empty-photo"><div class="photo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div><strong>拍照或选择图片</strong><div style="font-size:12px;margin-top:5px">支持相机和照片图库</div></div></div>
+        <input class="file-input" id="afterInput" type="file" accept="image/*">
+        <div class="photo-tools"><button class="btn" data-pick="after">选择 / 拍照</button><button class="btn danger" data-remove="after">移除</button></div>
+      </div></article>
+    </section>
+    <section class="bottom-grid">
+      <article class="card"><div class="section-head"><h2 class="card-title">确认事项</h2><span class="progress" id="progress">完成 0%</span></div><div class="check-list" id="checkList"></div><div class="check-list" style="padding-top:0"><div class="add-row"><input class="input" id="newCheck" placeholder="添加自定义确认事项" maxlength="60"><button class="btn" id="addCheck" title="添加">＋</button></div></div></article>
+      <article class="card"><div class="section-head"><h2 class="card-title">说明与签名</h2></div><div class="right-body">
+        <div class="field"><label for="notes">改善说明 / 确认备注</label><textarea class="textarea" id="notes" placeholder="填写改善内容、验证结果或需要跟进的事项……" maxlength="800"></textarea></div>
+        <div><div class="signature-top"><div class="signature-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>用户签名 <span style="font-weight:400;font-size:12px;color:var(--muted);margin-left:4px">（点击放大签名）</span></div><button class="btn" id="clearSign" style="height:36px">清除</button></div><div class="signature-wrap" id="signatureWrap"><canvas id="signature"></canvas><div class="sign-line"></div><div class="sign-placeholder" id="signPlaceholder">请使用手指或 Apple Pencil 签名</div></div></div>
+        <div class="date-row"><span>签名日期</span><span id="dateText"></span></div>
+      </div></article>
+    </section>
+    <div class="privacy">数据保存在你的 GitHub 私有仓库，不会因为清缓存而丢失。</div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<div class="modal" id="settingsModal">
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-panel">
+    <div class="modal-head">
+      <div class="modal-title">GitHub 连接设置</div>
+      <button class="btn" data-close-modal style="width:38px;height:38px;padding:0">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="hint">
+        需要一个 <b>私有仓库</b>，且 Token 具有该仓库的 <code>Contents: Read and write</code> 权限。<br>
+        配置保存在本机浏览器，只需填写一次。
+      </div>
+      <div class="field"><label for="cfgOwner">GitHub 用户名 / 组织名</label><input class="input" id="cfgOwner" placeholder="例如：yourname" autocomplete="off"></div>
+      <div class="field"><label for="cfgRepo">私有仓库名</label><input class="input" id="cfgRepo" placeholder="例如：improvement-data" autocomplete="off"></div>
+      <div class="field"><label for="cfgPath">数据文件路径</label><input class="input" id="cfgPath" placeholder="records.json" autocomplete="off"></div>
+      <div class="field"><label for="cfgToken">Personal Access Token</label><input class="input" id="cfgToken" type="password" placeholder="github_pat_..." autocomplete="off"></div>
+      <div class="hint" style="color:var(--danger)">⚠️ Token 保存在本机浏览器 localStorage，请勿在公共设备上使用。</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" id="cfgClear">清除配置</button>
+      <button class="btn primary" id="cfgSave">保存并连接</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="signModal">
+  <div class="modal-backdrop" data-close-sign></div>
+  <div class="modal-panel" style="max-width:860px">
+    <div class="modal-head">
+      <div class="modal-title">手写签名</div>
+      <button class="btn" data-close-sign style="width:38px;height:38px;padding:0">✕</button>
+    </div>
+    <div class="modal-body" style="padding:12px 20px 4px">
+      <div id="signModalCanvasWrap" style="position:relative;min-height:300px;border:2px solid #d8dfdc;border-radius:18px;background:#fff;overflow:hidden">
+        <canvas id="signatureModal" style="display:block;width:100%;height:100%;touch-action:none;cursor:crosshair"></canvas>
+        <div id="signModalHint" style="position:absolute;left:0;right:0;bottom:22px;text-align:center;color:#c2cac6;font-size:14px;pointer-events:none">请使用手指或 Apple Pencil 签名</div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" id="signModalClear">清除重写</button>
+      <button class="btn primary" id="signModalConfirm">完成签名</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const CFG_KEY = 'gh-cfg-v1';
+  const defaults = ['改善内容与现场实际一致','改善后风险已完成确认','相关作业指导书已更新','相关人员已完成说明或培训','改善效果达到预期'];
+  const $ = s => document.querySelector(s);
+  const $$ = s => document.querySelectorAll(s);
+
+  let cfg = { owner:'', repo:'', path:'records.json', token:'' };
+  let records = [];
+  let fileSha = null;
+  let current = null;
+  let currentId = null;
+  let changed = false;
+
+  let filter = { keyword:'', from:'', to:'' };
+  let visibleIds = [];
+  let selectedIds = new Set();
+
+  let drawing=false, ctx, ratio=1;
+  let modalDrawing=false, modalCtx, modalRatio=1, modalOpen=false;
+
+  const toast = msg => { const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>t.classList.remove('show'),2400); };
+  const esc = s => String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const uid = () => 'rec_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,7);
+  const nowISO = () => new Date().toISOString();
+  const fmtDate = iso => { try { return new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(iso)); } catch(e){ return iso||''; } };
+  const fmtDay = iso => { try { return new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(iso)); } catch(e){ return (iso||'').slice(0,10); } };
+  const b64encode = str => { const bytes = new TextEncoder().encode(str); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin); };
+  const b64decode = b64 => { const bin = atob(b64.replace(/\s/g,'')); const bytes = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i); return new TextDecoder().decode(bytes); };
+
+  function setStatus(text, kind){
+    $('#statusText').textContent = text;
+    const d = $('#statusDot');
+    d.className = 'status-dot' + (kind ? ' ' + kind : '');
+  }
+
+  const GH_API = 'https://api.github.com';
+  function ghHeaders(){
+    return {
+      'Authorization': 'Bearer ' + cfg.token,
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+  }
+  function ghUrl(){
+    return `${GH_API}/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}`;
+  }
+  function hasConfig(){ return cfg.owner && cfg.repo && cfg.path && cfg.token; }
+
+  async function ghLoad(){
+    if(!hasConfig()) throw new Error('未配置 GitHub 连接');
+    setStatus('读取中…', 'loading');
+    const res = await fetch(ghUrl(), { headers: ghHeaders() });
+    if(res.status === 404){
+      fileSha = null;
+      records = [];
+      await ghCreateEmpty();
+      setStatus('已连接（新建数据文件）', 'ok');
+      return;
+    }
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || ('读取失败 ' + res.status));
+    }
+    const data = await res.json();
+    fileSha = data.sha;
+    let content = '';
+    try { content = b64decode(data.content || ''); } catch(e){ content = ''; }
+    if(!content.trim()){
+      records = [];
+    } else {
+      try {
+        const parsed = JSON.parse(content);
+        records = Array.isArray(parsed) ? parsed : (parsed.records || []);
+      } catch(e){ records = []; }
+    }
+    setStatus(`已连接 · ${records.length} 条记录`, 'ok');
+  }
+  async function ghCreateEmpty(){
+    const body = { message:'init records.json', content: b64encode('[]') };
+    const res = await fetch(ghUrl(), {
+      method:'PUT',
+      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
+      body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || ('初始化失败 ' + res.status));
+    }
+    const data = await res.json();
+    fileSha = data.content.sha;
+  }
+  async function ghSave(){
+    if(!hasConfig()) throw new Error('未配置 GitHub 连接');
+    const json = JSON.stringify({ version:1, updatedAt: nowISO(), records }, null, 2);
+    const body = { message: `更新改善记录 ${nowISO()}`, content: b64encode(json) };
+    if(fileSha) body.sha = fileSha;
+    setStatus('保存中…', 'loading');
+    const res = await fetch(ghUrl(), {
+      method:'PUT',
+      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
+      body: JSON.stringify(body)
+    });
+    if(res.status === 409){
+      const r2 = await fetch(ghUrl(), { headers: ghHeaders() });
+      if(r2.ok){
+        const d2 = await r2.json();
+        fileSha = d2.sha;
+        return ghSave();
+      }
+    }
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || ('保存失败 ' + res.status));
+    }
+    const data = await res.json();
+    fileSha = data.content.sha;
+    setStatus(`已保存 · ${records.length} 条记录`, 'ok');
+  }
+
+  // ---------- 视图切换 ----------
+  function showList(){
+    $('#viewList').classList.add('active');
+    $('#viewForm').classList.remove('active');
+    renderTopActions('list');
+    renderList();
+    window.scrollTo(0,0);
+  }
+  function showForm(){
+    $('#viewList').classList.remove('active');
+    $('#viewForm').classList.add('active');
+    renderTopActions('form');
+    window.scrollTo(0,0);
+
+    // 视图切换后，画布重新可见：重算尺寸，并重绘已有签名
+    // 用 setTimeout 确保布局完成后执行
+    setTimeout(() => {
+      try {
+        resizeCanvas(false);
+        redrawMainSignature();
+      } catch(e){ /* 忽略 */ }
+    }, 0);
+  }
+
+  // 把 current.signature 画到主画布上（用画布真实像素）
+  function redrawMainSignature(){
+    const c = $('#signature');
+    if(!c || !ctx) return;
+    const w = c.width / ratio;
+    const h = c.height / ratio;
+    ctx.clearRect(0, 0, w, h);
+    if(current && current.signature){
+      const im = new Image();
+      im.onload = () => {
+        ctx.drawImage(im, 0, 0, w, h);
+        $('#signPlaceholder').style.display = 'none';
+      };
+      im.src = current.signature;
+    } else {
+      $('#signPlaceholder').style.display = 'block';
+    }
+  }
+
+  function renderTopActions(view){
+    const box = $('#topActions');
+    if(view === 'list'){
+      box.innerHTML = `
+        <button class="btn" id="topRefresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span>刷新</span></button>
+        <button class="btn primary" id="topNew"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span>新建</span></button>`;
+      $('#topRefresh').onclick = () => refreshFromGitHub();
+      $('#topNew').onclick = createNewRecord;
+    } else {
+      box.innerHTML = `
+        <button class="btn" id="topBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span>返回列表</span></button>
+        <button class="btn" id="topPrint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg><span>导出 PDF</span></button>
+        <button class="btn primary" id="topSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg><span>保存到 GitHub</span></button>`;
+      $('#topBack').onclick = () => { if(changed && !confirm('当前有未保存的修改，确定返回列表吗？')) return; changed=false; showList(); };
+      $('#topPrint').onclick = () => { syncForm(); window.print(); };
+      $('#topSave').onclick = saveCurrent;
+    }
+  }
+
+  // 新建记录：先准备数据，再填表，再切视图
+  function createNewRecord(){
+    current = blankRecord();
+    currentId = null;
+    fillForm(current);   // 在列表视图下先填好数据（画布尺寸为0也没关系，showForm里会重绘）
+    showForm();
+  }
+
+  // ---------- 筛选 ----------
+  function applyFilter(){
+    filter.keyword = $('#filterKeyword').value.trim().toLowerCase();
+    filter.from = $('#filterFrom').value;
+    filter.to = $('#filterTo').value;
+    renderList();
+  }
+  function resetFilter(){
+    $('#filterKeyword').value = '';
+    $('#filterFrom').value = '';
+    $('#filterTo').value = '';
+    filter = { keyword:'', from:'', to:'' };
+    renderList();
+  }
+  function matchesFilter(r){
+    const kw = filter.keyword;
+    if(kw){
+      const hay = [r.title||'', r.location||'', r.owner||'', r.notes||''].join(' ').toLowerCase();
+      if(!hay.includes(kw)) return false;
+    }
+    const t = (r.updatedAt || r.savedAt || '').slice(0,10);
+    if(filter.from && t < filter.from) return false;
+    if(filter.to && t > filter.to) return false;
+    return true;
+  }
+
+  // ---------- 列表 ----------
+  function renderList(){
+    const host = $('#recordList');
+    const all = [...records].sort((a,b)=> (b.updatedAt||b.savedAt||'').localeCompare(a.updatedAt||a.savedAt||''));
+    const list = all.filter(matchesFilter);
+    visibleIds = list.map(r=>r.id);
+
+    const total = records.length;
+    const shown = list.length;
+    if(filter.keyword || filter.from || filter.to){
+      const parts = [];
+      if(filter.keyword) parts.push(`关键词「${filter.keyword}」`);
+      if(filter.from) parts.push(`从 ${filter.from}`);
+      if(filter.to) parts.push(`到 ${filter.to}`);
+      $('#filterSummary').textContent = `筛选条件：${parts.join(' · ')} — 显示 ${shown} / ${total} 条`;
+    } else {
+      $('#filterSummary').textContent = total ? `显示全部 ${total} 条` : '';
+    }
+    $('#listCount').textContent = `共 ${total} 条记录` + (shown !== total ? `（当前显示 ${shown} 条）` : '');
+
+    updateBulkBar();
+
+    if(!list.length){
+      host.innerHTML = total
+        ? `<div class="empty-list"><div class="big">🔍</div><div style="font-weight:700;color:#344054">没有匹配的记录</div><div style="margin-top:6px;font-size:13px">试试调整筛选条件，或点“重置”</div></div>`
+        : `<div class="empty-list"><div class="big">📋</div><div style="font-weight:700;color:#344054">还没有改善记录</div><div style="margin-top:6px;font-size:13px">点击右上角“新建记录”开始填写</div></div>`;
+      renderPrintRecords([]);
+      return;
+    }
+
+    host.innerHTML = list.map(r => {
+      const done = (r.checks||[]).filter(c=>c.done).length;
+      const totalC = (r.checks||[]).length;
+      const pct = totalC ? Math.round(done/totalC*100) : 0;
+      const thumb = r.before || r.after;
+      const sel = selectedIds.has(r.id);
+      return `
+      <div class="record-item ${sel?'selected':''}" data-open="${r.id}">
+        <input type="checkbox" class="record-check" data-check-id="${r.id}" ${sel?'checked':''} title="选择">
+        <div class="record-thumb">${thumb ? `<img src="${thumb}" alt="">` : `<span class="ph">无图片</span>`}</div>
+        <div class="record-main">
+          <div class="record-title">${esc(r.title||'未命名')}</div>
+          <div class="record-sub">
+            <span>📍 ${esc(r.location||'未填写区域')}</span>
+            <span>👤 ${esc(r.owner||'未填写')}</span>
+            <span>🕒 ${fmtDate(r.updatedAt||r.savedAt)}</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="record-badge ${pct===100?'':'pending'}">完成 ${pct}%</span>
+          <button class="record-del" data-del="${r.id}" title="删除"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/></svg></button>
+        </div>
+      </div>`;
+    }).join('');
+
+    renderPrintRecords(list);
+  }
+
+  function updateBulkBar(){
+    const bar = $('#bulkBar');
+    selectedIds.forEach(id => { if(!visibleIds.includes(id)) selectedIds.delete(id); });
+    const n = selectedIds.size;
+    if(n > 0){ bar.style.display = 'flex'; $('#bulkCount').textContent = `已选 ${n} 条`; }
+    else { bar.style.display = 'none'; }
+  }
+
+  function renderPrintRecords(list){
+    const host = $('#printRecordList');
+    if(!list.length){ host.innerHTML = ''; return; }
+    host.innerHTML = list.map(r => {
+      const checks = (r.checks||[]).map(c => `<li style="margin:2px 0">${c.done?'☑':'☐'} ${esc(c.text)}</li>`).join('');
+      return `
+      <div class="record-item" style="page-break-after:always">
+        <div style="font-size:16px;font-weight:760;margin-bottom:6px">${esc(r.title||'未命名')}</div>
+        <div style="font-size:12px;color:#667085;margin-bottom:10px">
+          区域：${esc(r.location||'—')}　|　确认人：${esc(r.owner||'—')}　|　更新时间：${fmtDate(r.updatedAt||r.savedAt)}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+          <div><div style="font-size:12px;font-weight:700;margin-bottom:4px">改善之前</div>${r.before ? `<img src="${r.before}" style="width:100%;border:1px solid #cfd6d3;border-radius:6px">` : '<div style="font-size:12px;color:#9aa5a1">（无图片）</div>'}</div>
+          <div><div style="font-size:12px;font-weight:700;margin-bottom:4px">改善之后</div>${r.after ? `<img src="${r.after}" style="width:100%;border:1px solid #cfd6d3;border-radius:6px">` : '<div style="font-size:12px;color:#9aa5a1">（无图片）</div>'}</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;margin:8px 0 4px">确认事项</div>
+        <ul style="margin:0;padding-left:18px;font-size:12px">${checks || '<li>（无）</li>'}</ul>
+        <div style="font-size:12px;font-weight:700;margin:8px 0 4px">改善说明 / 备注</div>
+        <div style="font-size:12px;white-space:pre-wrap;border:1px solid #eef1ef;border-radius:6px;padding:6px;min-height:36px">${esc(r.notes||'（无）')}</div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px">
+          <div style="font-size:12px;color:#667085">签名日期：${fmtDay(r.updatedAt||r.savedAt)}</div>
+          <div style="text-align:right"><div style="font-size:12px;font-weight:700;margin-bottom:4px">用户签名</div>${r.signature ? `<img src="${r.signature}" style="height:60px">` : '<div style="font-size:12px;color:#9aa5a1">（未签名）</div>'}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ---------- 列表事件 ----------
+  $('#recordList').addEventListener('click', async e => {
+    const del = e.target.closest('[data-del]');
+    if(del){
+      e.stopPropagation();
+      const id = del.dataset.del;
+      const rec = records.find(r=>r.id===id);
+      if(!rec) return;
+      if(!confirm(`确定删除「${rec.title||'未命名'}」吗？`)) return;
+      records = records.filter(r=>r.id!==id);
+      selectedIds.delete(id);
+      try { await ghSave(); renderList(); toast('已删除'); }
+      catch(err){ toast('删除同步失败：' + err.message); }
+      return;
+    }
+    const chk = e.target.closest('[data-check-id]');
+    if(chk){
+      e.stopPropagation();
+      const id = chk.dataset.checkId;
+      if(chk.checked) selectedIds.add(id); else selectedIds.delete(id);
+      const row = chk.closest('.record-item');
+      if(row) row.classList.toggle('selected', chk.checked);
+      updateBulkBar();
+      return;
+    }
+    const item = e.target.closest('[data-open]');
+    if(item){
+      const rec = records.find(r=>r.id===item.dataset.open);
+      if(!rec) return;
+      current = normalizeRecord(JSON.parse(JSON.stringify(rec)));
+      currentId = rec.id;
+      fillForm(current);
+      showForm();
+    }
+  });
+
+  $('#bulkClear').onclick = () => { selectedIds.clear(); renderList(); };
+  $('#bulkDelete').onclick = async () => {
+    const ids = [...selectedIds];
+    if(!ids.length) return;
+    if(!confirm(`确定删除所选的 ${ids.length} 条记录吗？此操作不可撤销。`)) return;
+    records = records.filter(r => !selectedIds.has(r.id));
+    selectedIds.clear();
+    try { await ghSave(); renderList(); toast(`已删除 ${ids.length} 条`); }
+    catch(err){ toast('删除同步失败：' + err.message); }
+  };
+  $('#bulkExportPdf').onclick = () => {
+    const ids = [...selectedIds];
+    if(!ids.length) return;
+    const list = records.filter(r => selectedIds.has(r.id));
+    renderPrintRecords(list);
+    setTimeout(() => window.print(), 100);
+  };
+  $('#filterApply').onclick = applyFilter;
+  $('#filterReset').onclick = resetFilter;
+  $('#filterKeyword').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); applyFilter(); } });
+
+  // ---------- 表单 ----------
+  function blankRecord(){
+    return {
+      id: uid(),
+      title:'现场改善效果确认', location:'', owner:'', before:'', after:'', notes:'',
+      checks: defaults.map(text=>({text,done:false})),
+      signature:'',
+      savedAt:'', updatedAt:''
+    };
+  }
+  function normalizeRecord(r){
+    return {
+      id: r.id || uid(),
+      title: r.title || '现场改善效果确认',
+      location: r.location || '',
+      owner: r.owner || '',
+      before: r.before || '',
+      after: r.after || '',
+      notes: r.notes || '',
+      checks: Array.isArray(r.checks) && r.checks.length ? r.checks.map(c=>({text:c.text||'',done:!!c.done})) : defaults.map(text=>({text,done:false})),
+      signature: r.signature || '',
+      savedAt: r.savedAt || nowISO(),
+      updatedAt: r.updatedAt || r.savedAt || nowISO()
+    };
+  }
+  function fillForm(data){
+    if(!data) data = blankRecord();
+    $('#title').value = data.title||'';
+    $('#location').value = data.location||'';
+    $('#owner').value = data.owner||'';
+    $('#notes').value = data.notes||'';
+    setPhoto('before', data.before||'');
+    setPhoto('after', data.after||'');
+    renderChecks(data.checks);
+    $('#dateText').textContent = new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+    changed = false;
+    // 签名重绘交给 showForm / resizeCanvas 统一处理（视图可能还不可见）
+    // 但如果画布已就绪，这里也尝试画一次
+    try {
+      if($('#signature').width > 0 && ctx){ redrawMainSignature(); }
+    } catch(e){}
+  }
+  function syncForm(){
+    if(!current) current = blankRecord();
+    current.title = $('#title').value;
+    current.location = $('#location').value;
+    current.owner = $('#owner').value;
+    current.notes = $('#notes').value;
+  }
+  function setPhoto(kind, value){
+    if(!current) current = blankRecord();
+    current[kind] = value;
+    const box = $(`#${kind}Box`), img = $(`#${kind}Preview`);
+    if(value){ img.src = value; box.classList.add('has-image'); }
+    else { img.removeAttribute('src'); box.classList.remove('has-image'); }
+    changed = true;
+  }
+  function renderChecks(checks){
+    if(!current) current = blankRecord();
+    if(checks) current.checks = checks;
+    const host = $('#checkList');
+    host.innerHTML = current.checks.map((x,i)=>`
+      <label class="check-item ${x.done?'done':''}">
+        <input type="checkbox" data-check="${i}" ${x.done?'checked':''}>
+        <span class="check-text">${esc(x.text)}</span>
+        <button type="button" class="icon-btn" data-del="${i}" aria-label="删除">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/></svg>
+        </button>
+      </label>`).join('');
+    const done = current.checks.filter(x=>x.done).length;
+    $('#progress').textContent = `完成 ${current.checks.length?Math.round(done/current.checks.length*100):0}%`;
+  }
+  async function saveCurrent(){
+    syncForm();
+    if(!current) return;
+    current.updatedAt = nowISO();
+    if(!current.savedAt) current.savedAt = current.updatedAt;
+    const idx = records.findIndex(r=>r.id===current.id);
+    if(idx>=0) records[idx] = JSON.parse(JSON.stringify(current));
+    else records.push(JSON.parse(JSON.stringify(current)));
+    try {
+      await ghSave();
+      changed = false;
+      toast('已保存到 GitHub');
+    } catch(err){
+      toast('保存失败：' + err.message);
+      setStatus('保存失败：' + err.message, 'err');
+    }
+  }
+
+  // ---------- 图片压缩 ----------
+  function compressImage(file, cb){
+    if(!file || !file.type.startsWith('image/')) return;
+    const r = new FileReader();
+    r.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const max = 1600;
+        const scale = Math.min(1, max/Math.max(img.width,img.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width*scale);
+        c.height = Math.round(img.height*scale);
+        c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+        cb(c.toDataURL('image/jpeg',.82));
+      };
+      img.src = e.target.result;
+    };
+    r.readAsDataURL(file);
+  }
+
+  // ---------- 主签名画布 ----------
+  function resizeCanvas(preserve=true){
+    const c = $('#signature');
+    const rect = c.getBoundingClientRect();
+    if(rect.width === 0 || rect.height === 0) return; // 隐藏状态不重算
+
+    const old = preserve && c.width ? c.toDataURL() : '';
+    ratio = Math.max(1, window.devicePixelRatio||1);
+    c.width = Math.round(rect.width*ratio);
+    c.height = Math.round(rect.height*ratio);
+    ctx = c.getContext('2d');
+    ctx.setTransform(ratio,0,0,ratio,0,0);
+    ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineWidth=2.5; ctx.strokeStyle='#172033';
+    if(old){
+      const im = new Image();
+      im.onload = () => ctx.drawImage(im,0,0,rect.width,rect.height);
+      im.src = old;
+    }
+  }
+  function point(e, canvas){
+    const r = canvas.getBoundingClientRect(), p = e.touches ? e.touches[0] : e;
+    return { x: p.clientX-r.left, y: p.clientY-r.top };
+  }
+  function clearSignature(mark=true){
+    const c = $('#signature');
+    const w = c.width / ratio, h = c.height / ratio;
+    ctx.clearRect(0,0,w,h);
+    if(current) current.signature='';
+    $('#signPlaceholder').style.display = 'block';
+    if(mark) changed = true;
+  }
+
+  // ---------- 弹窗签名 ----------
+  function resizeModalCanvas(preserve=true){
+    const c = $('#signatureModal'), wrap = $('#signModalCanvasWrap');
+    const rect = wrap.getBoundingClientRect();
+    if(rect.width === 0 || rect.height === 0) return;
+
+    const old = preserve && c.width ? c.toDataURL() : '';
+    modalRatio = Math.max(1, window.devicePixelRatio||1);
+    c.width = Math.round(rect.width*modalRatio);
+    c.height = Math.round(rect.height*modalRatio);
+    modalCtx = c.getContext('2d');
+    modalCtx.setTransform(modalRatio,0,0,modalRatio,0,0);
+    modalCtx.lineCap='round'; modalCtx.lineJoin='round'; modalCtx.lineWidth=3; modalCtx.strokeStyle='#172033';
+    if(old){
+      const im = new Image();
+      im.onload = () => modalCtx.drawImage(im,0,0,rect.width,rect.height);
+      im.src = old;
+    }
+  }
+  function clearModalSignature(){
+    const c = $('#signatureModal');
+    modalCtx.clearRect(0,0,c.width/modalRatio,c.height/modalRatio);
+    $('#signModalHint').style.display = 'block';
+  }
+  function openSignModal(){
+    $('#signModal').classList.add('show');
+    modalOpen = true;
+    document.body.style.overflow='hidden';
+    // 双 rAF 等布局稳定
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        resizeModalCanvas(false);
+        clearModalSignature();
+        if(current && current.signature){
+          const c = $('#signatureModal');
+          const w = c.width / modalRatio;
+          const h = c.height / modalRatio;
+          const im = new Image();
+          im.onload = () => {
+            modalCtx.drawImage(im, 0, 0, w, h);
+            $('#signModalHint').style.display = 'none';
+          };
+          im.src = current.signature;
+        }
+      });
+    });
+  }
+  function closeSignModal(confirmSave){
+    if(confirmSave){
+      const c = $('#signatureModal');
+      const data = c.toDataURL('image/png');
+      if(current) current.signature = data;
+      changed = true;
+
+      // 用主画布真实像素尺寸绘制
+      const main = $('#signature');
+      const w = main.width / ratio;
+      const h = main.height / ratio;
+      ctx.clearRect(0, 0, w, h);
+      if(data){
+        const im = new Image();
+        im.onload = () => {
+          ctx.drawImage(im, 0, 0, w, h);
+          $('#signPlaceholder').style.display = 'none';
+        };
+        im.src = data;
+      } else {
+        $('#signPlaceholder').style.display = 'block';
+      }
+    }
+    $('#signModal').classList.remove('show');
+    modalOpen = false;
+    document.body.style.overflow = '';
+  }
+
+  // ---------- 设置弹窗 ----------
+  function openSettings(){
+    $('#cfgOwner').value = cfg.owner || '';
+    $('#cfgRepo').value = cfg.repo || '';
+    $('#cfgPath').value = cfg.path || 'records.json';
+    $('#cfgToken').value = cfg.token || '';
+    $('#settingsModal').classList.add('show');
+  }
+  function closeSettings(){ $('#settingsModal').classList.remove('show'); }
+  function loadCfg(){
+    try { cfg = Object.assign(cfg, JSON.parse(localStorage.getItem(CFG_KEY)||'{}')); } catch(e){}
+  }
+  function saveCfg(){ localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); }
+
+  $('#settingsBtn').onclick = openSettings;
+  $$('[data-close-modal]').forEach(el => el.onclick = closeSettings);
+  $('#cfgClear').onclick = () => {
+    if(!confirm('确定清除 GitHub 配置吗？')) return;
+    cfg = { owner:'', repo:'', path:'records.json', token:'' };
+    localStorage.removeItem(CFG_KEY);
+    records = []; fileSha = null;
+    setStatus('未连接', '');
+    renderList(); closeSettings();
+  };
+  $('#cfgSave').onclick = async () => {
+    const owner = $('#cfgOwner').value.trim();
+    const repo = $('#cfgRepo').value.trim();
+    const path = $('#cfgPath').value.trim() || 'records.json';
+    const token = $('#cfgToken').value.trim();
+    if(!owner || !repo || !token){ toast('请填写完整'); return; }
+    cfg = { owner, repo, path, token };
+    saveCfg();
+    closeSettings();
+    try {
+      await ghLoad();
+      renderList();
+      toast('连接成功');
+    } catch(err){
+      setStatus('连接失败：' + err.message, 'err');
+      toast('连接失败：' + err.message);
+    }
+  };
+
+  // ---------- 事件绑定 ----------
+  $$('[data-pick]').forEach(b => b.onclick = () => document.querySelector(`#${b.dataset.pick}Input`).click());
+  $$('[data-remove]').forEach(b => b.onclick = () => setPhoto(b.dataset.remove, ''));
+  ['before','after'].forEach(kind => {
+    $(`#${kind}Input`).addEventListener('change', e => compressImage(e.target.files[0], v => setPhoto(kind, v)));
+    $(`#${kind}Box`).onclick = () => $(`#${kind}Input`).click();
+  });
+  $('#checkList').addEventListener('change', e => {
+    if(e.target.matches('[data-check]')){
+      current.checks[+e.target.dataset.check].done = e.target.checked;
+      renderChecks(); changed = true;
+    }
+  });
+  $('#checkList').addEventListener('click', e => {
+    const b = e.target.closest('[data-del]');
+    if(b){ e.preventDefault(); current.checks.splice(+b.dataset.del,1); renderChecks(); changed=true; }
+  });
+  function addCheck(){
+    const i = $('#newCheck'), text = i.value.trim();
+    if(!text) return;
+    current.checks.push({text,done:false});
+    i.value=''; renderChecks(); changed=true;
+  }
+  $('#addCheck').onclick = addCheck;
+  $('#newCheck').onkeydown = e => { if(e.key==='Enter'){ e.preventDefault(); addCheck(); } };
+  ['title','location','owner','notes'].forEach(id => $('#'+id).addEventListener('input', () => changed=true));
+  $('#clearSign').onclick = () => clearSignature(true);
+  $('#newBtn').onclick = createNewRecord;
+  $('#refreshBtn').onclick = () => refreshFromGitHub();
+
+  const canvas = $('#signature');
+  const start = e => { e.preventDefault(); drawing=true; const p=point(e,canvas); ctx.beginPath(); ctx.moveTo(p.x,p.y); $('#signPlaceholder').style.display='none'; };
+  const move = e => { if(!drawing) return; e.preventDefault(); const p=point(e,canvas); ctx.lineTo(p.x,p.y); ctx.stroke(); };
+  const end = e => { if(!drawing) return; if(e) e.preventDefault(); drawing=false; if(current) current.signature = canvas.toDataURL('image/png'); changed=true; };
+  canvas.addEventListener('pointerdown', start);
+  canvas.addEventListener('pointermove', move);
+  canvas.addEventListener('pointerup', end);
+  canvas.addEventListener('pointercancel', end);
+  canvas.addEventListener('pointerleave', end);
+  $('#signatureWrap').addEventListener('click', openSignModal);
+
+  const modalCanvas = $('#signatureModal');
+  const mStart = e => { e.preventDefault(); modalDrawing=true; const p=point(e,modalCanvas); modalCtx.beginPath(); modalCtx.moveTo(p.x,p.y); $('#signModalHint').style.display='none'; };
+  const mMove = e => { if(!modalDrawing) return; e.preventDefault(); const p=point(e,modalCanvas); modalCtx.lineTo(p.x,p.y); modalCtx.stroke(); };
+  const mEnd = e => { if(!modalDrawing) return; if(e) e.preventDefault(); modalDrawing=false; };
+  modalCanvas.addEventListener('pointerdown', mStart);
+  modalCanvas.addEventListener('pointermove', mMove);
+  modalCanvas.addEventListener('pointerup', mEnd);
+  modalCanvas.addEventListener('pointercancel', mEnd);
+  modalCanvas.addEventListener('pointerleave', mEnd);
+  $$('[data-close-sign]').forEach(el => el.onclick = () => closeSignModal(false));
+  $('#signModalClear').onclick = clearModalSignature;
+  $('#signModalConfirm').onclick = () => closeSignModal(true);
+  document.addEventListener('keydown', e => { if(e.key==='Escape' && modalOpen) closeSignModal(false); });
+
+  window.addEventListener('resize', () => {
+    if(modalOpen) resizeModalCanvas(true);
+    else if($('#viewForm').classList.contains('active')) resizeCanvas(true);
+  });
+  window.addEventListener('beforeunload', e => { if(changed){ e.preventDefault(); e.returnValue=''; } });
+
+  async function refreshFromGitHub(){
+    if(!hasConfig()){ openSettings(); return; }
+    try { await ghLoad(); renderList(); toast('已刷新'); }
+    catch(err){ toast('刷新失败：' + err.message); }
+  }
+
+  // ---------- 初始化 ----------
+  loadCfg();
+  current = blankRecord();
+  showList();
+  resizeCanvas(false);
+  if(hasConfig()){
+    ghLoad().then(()=>renderList()).catch(err=>{
+      setStatus('连接失败：' + err.message, 'err');
+    });
+  } else {
+    setStatus('未配置 GitHub，请点击「设置」', '');
+    setTimeout(openSettings, 400);
+  }
+})();
+</script>
+</body>
+</html>
