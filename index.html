@@ -377,8 +377,47 @@
 </head>
 <body>
 
+<!-- ============ 首次配置界面 ============ -->
+<div class="modal show" id="configModal" style="z-index:600">
+  <div class="modal-backdrop" data-config-noop></div>
+  <div class="modal-panel" style="max-width:520px">
+    <div class="modal-head">
+      <div class="modal-title">首次配置</div>
+    </div>
+    <div class="modal-body" style="padding:16px 20px">
+      <div class="hint" style="margin-bottom:4px">
+        请输入 GitHub 访问信息。配置将保存在本机浏览器，不会上传到任何服务器。
+      </div>
+      <div class="field">
+        <label for="cfgOwner">仓库所有者（Owner）</label>
+        <input class="input" id="cfgOwner" placeholder="例如 zhitao-hu" value="zhitao-hu">
+      </div>
+      <div class="field">
+        <label for="cfgRepo">仓库名（Repo）</label>
+        <input class="input" id="cfgRepo" placeholder="例如 improvement-data" value="improvement-data">
+      </div>
+      <div class="field">
+        <label for="cfgBranch">分支</label>
+        <input class="input" id="cfgBranch" placeholder="main" value="main">
+      </div>
+      <div class="field">
+        <label for="cfgToken">GitHub Token（需要 repo 或 contents:write 权限）</label>
+        <input class="input" id="cfgToken" placeholder="github_pat_..." type="password">
+      </div>
+      <div class="hint">
+        Token 申请：GitHub → Settings → Developer settings → Personal access tokens。<br>
+        需要 <code>contents:write</code>（fine-grained）或 <code>repo</code>（classic）权限。
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" id="cfgClear">清空已保存</button>
+      <button class="btn primary" id="cfgSave">保存并进入</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ 欢迎界面 ============ -->
-<div class="welcome-overlay" id="welcomeOverlay">
+<div class="welcome-overlay hidden" id="welcomeOverlay">
   <div class="welcome-card">
     <div class="welcome-logo">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
@@ -425,6 +464,10 @@
             <div class="list-count" id="listCount">共 0 条记录</div>
           </div>
           <div class="list-toolbar">
+            <button class="btn" id="settingsBtn" title="设置">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+              <span>设置</span>
+            </button>
             <button class="btn" id="refreshBtn" title="刷新">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
               <span>刷新</span>
@@ -577,22 +620,26 @@
 (() => {
   'use strict';
 
-  const PRESET_CONFIG = {
-    // ★ Worker 地址（末尾不带 /）
-    worker: 'https://improvement-api.1362259735.workers.dev',
+  // ★ 默认仓库信息（用户可在配置界面修改）
+  const DEFAULTS = {
+    owner: 'zhitao-hu',
+    repo: 'improvement-data',
+    branch: 'main',
+    path: 'records.json',
     imagesDir: 'images',
     videosDir: 'videos',
-    // 媒体读取前缀
     pagesBase: 'https://raw.githubusercontent.com/zhitao-hu/improvement-data/main'
   };
+  const CFG_KEY = 'improvement_cfg_v1';
   const MAX_MEDIA = 4;
 
   const defaults = ['改善内容与现场实际一致','改善后风险已完成确认','相关作业指导书已更新','相关人员已完成说明或培训','改善效果达到预期'];
   const $ = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
 
-  let cfg = { ...PRESET_CONFIG };
+  let cfg = { ...DEFAULTS, token: '' };
   let records = [];
+  let fileSha = null;
   let current = null;
   let currentId = null;
   let changed = false;
@@ -615,6 +662,8 @@
   const nowISO = () => new Date().toISOString();
   const fmtDate = iso => { try { return new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(iso)); } catch(e){ return iso||''; } };
   const fmtDay = iso => { try { return new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(iso)); } catch(e){ return (iso||'').slice(0,10); } };
+  const b64encode = str => { const bytes = new TextEncoder().encode(str); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin); };
+  const b64decode = b64 => { const bin = atob(b64.replace(/\s/g,'')); const bytes = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i); return new TextDecoder().decode(bytes); };
 
   const isVideo = v => {
     if(typeof v !== 'string' || !v) return false;
@@ -662,78 +711,224 @@
   }
 
   // ============================================================
-  // ★ 所有请求改为走 Cloudflare Worker（token 在 Worker 侧保管）
+  // ★ 配置存取
   // ============================================================
-
-  function workerUrl(path){
-    const base = (cfg.worker || '').replace(/\/+$/,'');
-    return base + path;
+  function loadCfg(){
+    try {
+      const raw = localStorage.getItem(CFG_KEY);
+      if(!raw) return null;
+      const parsed = JSON.parse(raw);
+      if(!parsed || !parsed.token) return null;
+      return parsed;
+    } catch(e){ return null; }
+  }
+  function saveCfg(c){
+    try { localStorage.setItem(CFG_KEY, JSON.stringify(c)); } catch(e){}
+  }
+  function clearStoredCfg(){
+    try { localStorage.removeItem(CFG_KEY); } catch(e){}
   }
 
-  // 读取 records.json
-  async function ghLoad(){
-    setStatus('读取中…', 'loading');
-    const res = await fetch(workerUrl('/records'), {
-      method: 'GET',
-      headers: { 'Accept': 'application/json' }
-    });
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.error || ('读取失败 ' + res.status));
-    }
-    const data = await res.json();
-    if(!data.success){
-      throw new Error(data.error || '读取失败');
-    }
-    const rawList = Array.isArray(data.records) ? data.records : [];
-    records = rawList.map(r => normalizeRecord(r));
-    setStatus(`已连接 · ${records.length} 条记录`, 'ok');
-    recordsLoaded = true;
+  // ============================================================
+  // ★ GitHub API（直连，用用户自己的 token）
+  // ============================================================
+  function ghHeaders(){
+    return {
+      'Authorization': 'Bearer ' + cfg.token,
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+  }
+  function ghUrl(){
+    return `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}`;
+  }
+  function ghFileUrl(path){
+    return `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${path}`;
   }
 
-  // 保存 records.json
-  async function ghSave(){
-    setStatus('保存中…', 'loading');
-    const body = { version: 1, updatedAt: nowISO(), records };
-    const res = await fetch(workerUrl('/records'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+  async function ghUploadFile(path, base64Content, commitMsg){
+    let sha = null;
+    try {
+      const r = await fetch(ghFileUrl(path), { headers: ghHeaders() });
+      if(r.ok){ const d = await r.json(); sha = d.sha; }
+    } catch(e){}
+    const body = { message: commitMsg || `upload ${path}`, content: base64Content };
+    if(sha) body.sha = sha;
+    const res = await fetch(ghFileUrl(path), {
+      method:'PUT',
+      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
       body: JSON.stringify(body)
     });
     if(!res.ok){
       const err = await res.json().catch(()=>({}));
-      throw new Error(err.error || ('保存失败 ' + res.status));
+      throw new Error(err.message || ('上传失败 ' + res.status));
     }
-    const data = await res.json();
-    if(!data.success){
-      throw new Error(data.error || '保存失败');
-    }
-    setStatus(`已保存 · ${records.length} 条记录`, 'ok');
-  }
-
-  // 上传媒体
-  async function ghUploadFile(path, base64Content, commitMsg){
-    const res = await fetch(workerUrl('/upload'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ path, content: base64Content, message: commitMsg })
-    });
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.error || ('上传失败 ' + res.status));
-    }
-    const data = await res.json();
-    if(!data.success) throw new Error(data.error || '上传失败');
     return true;
   }
 
-  // 删除文件（Worker 尚未提供此端点，暂时空实现）
   async function ghDeleteFile(path){
-    return;
+    try {
+      const r = await fetch(ghFileUrl(path), { headers: ghHeaders() });
+      if(!r.ok) return;
+      const d = await r.json();
+      await fetch(ghFileUrl(path), {
+        method:'DELETE',
+        headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
+        body: JSON.stringify({ message: `delete ${path}`, sha: d.sha })
+      });
+    } catch(e){}
+  }
+
+  async function ghLoad(){
+    setStatus('读取中…', 'loading');
+    const res = await fetch(ghUrl(), { headers: ghHeaders() });
+    if(res.status === 404){
+      fileSha = null;
+      records = [];
+      await ghCreateEmpty();
+      setStatus('已连接（新建数据文件）', 'ok');
+      recordsLoaded = true;
+      return;
+    }
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || ('读取失败 ' + res.status));
+    }
+    const data = await res.json();
+    fileSha = data.sha;
+    let content = '';
+    if(data.content && data.encoding !== 'none'){
+      try { content = b64decode(data.content || ''); } catch(e){ content = ''; }
+    }
+    if(!content && data.download_url){
+      try {
+        const raw = await fetch(data.download_url, { headers: ghHeaders() });
+        if(raw.ok) content = await raw.text();
+      } catch(e){}
+    }
+    if(!content.trim()){
+      records = [];
+    } else {
+      try {
+        const parsed = JSON.parse(content);
+        const rawList = Array.isArray(parsed) ? parsed : (parsed.records || []);
+        records = rawList.map(r => normalizeRecord(r));
+      } catch(e){ records = []; }
+    }
+    setStatus(`已连接 · ${records.length} 条记录`, 'ok');
+    recordsLoaded = true;
+  }
+  async function ghCreateEmpty(){
+    const body = { message:'init records.json', content: b64encode('[]') };
+    const res = await fetch(ghUrl(), {
+      method:'PUT',
+      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
+      body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || ('初始化失败 ' + res.status));
+    }
+    const data = await res.json();
+    fileSha = data.content.sha;
+  }
+  async function ghSave(){
+    if(!fileSha){
+      try {
+        const check = await fetch(ghUrl(), { headers: ghHeaders() });
+        if(check.ok){
+          const d = await check.json();
+          fileSha = d.sha;
+        }
+      } catch(e){}
+    }
+    const json = JSON.stringify({ version:1, updatedAt: nowISO(), records }, null, 2);
+    const body = { message: `更新改善记录 ${nowISO()}`, content: b64encode(json) };
+    if(fileSha) body.sha = fileSha;
+    setStatus('保存中…', 'loading');
+    const res = await fetch(ghUrl(), {
+      method:'PUT',
+      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
+      body: JSON.stringify(body)
+    });
+    if(res.status === 409){
+      const r2 = await fetch(ghUrl(), { headers: ghHeaders() });
+      if(r2.ok){
+        const d2 = await r2.json();
+        fileSha = d2.sha;
+        const res2 = await fetch(ghUrl(), {
+          method:'PUT',
+          headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
+          body: JSON.stringify({ message: body.message, content: body.content, sha: fileSha })
+        });
+        if(res2.ok){
+          const data2 = await res2.json();
+          fileSha = data2.content.sha;
+          setStatus(`已保存 · ${records.length} 条记录`, 'ok');
+          return;
+        }
+      }
+      throw new Error('远端数据已被其他设备修改，请点击「刷新」后重试');
+    }
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || ('保存失败 ' + res.status));
+    }
+    const data = await res.json();
+    fileSha = data.content.sha;
+    setStatus(`已保存 · ${records.length} 条记录`, 'ok');
   }
 
   // ============================================================
+  // ★ 配置界面
+  // ============================================================
+  function showConfigModal(){
+    const c = loadCfg() || {};
+    $('#cfgOwner').value = c.owner || DEFAULTS.owner;
+    $('#cfgRepo').value = c.repo || DEFAULTS.repo;
+    $('#cfgBranch').value = c.branch || DEFAULTS.branch;
+    $('#cfgToken').value = c.token || '';
+    $('#configModal').classList.add('show');
+  }
+  function hideConfigModal(){
+    $('#configModal').classList.remove('show');
+  }
 
+  async function applyConfigFromForm(){
+    const owner = $('#cfgOwner').value.trim();
+    const repo = $('#cfgRepo').value.trim();
+    const branch = $('#cfgBranch').value.trim() || 'main';
+    const token = $('#cfgToken').value.trim();
+    if(!owner || !repo || !token){
+      showAlert('配置不完整', '请填写 Owner、Repo 和 Token。');
+      return;
+    }
+    cfg = { ...DEFAULTS, owner, repo, branch, token };
+    cfg.pagesBase = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}`;
+
+    saveCfg({
+      owner, repo, branch, token,
+      pagesBase: cfg.pagesBase
+    });
+
+    hideConfigModal();
+    welcomeDone = true;
+    // 显示欢迎页
+    $('#welcomeOverlay').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  $('#cfgSave').onclick = applyConfigFromForm;
+  $('#cfgClear').onclick = () => {
+    if(!confirm('确定清空本机保存的配置吗？')) return;
+    clearStoredCfg();
+    $('#cfgToken').value = '';
+    toast('已清空');
+  };
+
+  // ============================================================
+  // ★ 欢迎界面
+  // ============================================================
   function initWelcome(){
     const overlay = $('#welcomeOverlay');
     const hint = $('#welcomeHint');
@@ -764,8 +959,6 @@
       card.style.animation = 'welcomePop .55s cubic-bezier(.2,.9,.3,1.2)';
       setTimeout(() => { hint.textContent = ''; }, 2600);
     });
-
-    document.body.style.overflow = 'hidden';
   }
 
   function showList(){
@@ -785,7 +978,7 @@
       try {
         resizeCanvas(false);
         redrawMainSignature();
-      } catch(e){ /* 忽略 */ }
+      } catch(e){}
     }, 0);
   }
 
@@ -824,7 +1017,7 @@
 
   function createNewRecord(){
     if(!recordsLoaded){
-      showAlert('请稍候', '正在从 Worker 读取数据，请等待读取完成后再新建记录。');
+      showAlert('请稍候', '正在从 GitHub 读取数据，请等待读取完成后再新建记录。');
       return;
     }
     current = blankRecord();
@@ -880,7 +1073,7 @@
     updateBulkBar();
 
     if(!recordsLoaded){
-      host.innerHTML = `<div class="empty-list"><div class="big">⏳</div><div style="font-weight:700;color:#344054">正在从 Worker 读取数据…</div><div style="margin-top:6px;font-size:13px">请稍候，读取完成前无法新建或编辑</div></div>`;
+      host.innerHTML = `<div class="empty-list"><div class="big">⏳</div><div style="font-weight:700;color:#344054">正在从 GitHub 读取数据…</div><div style="margin-top:6px;font-size:13px">请稍候，读取完成前无法新建或编辑</div></div>`;
       renderPrintRecords([]);
       return;
     }
@@ -1210,9 +1403,12 @@
   function removeMediaAt(kind, idx){
     if(!current) return;
     if(!Array.isArray(current[kind])) current[kind] = toMediaArray(current[kind]);
-    current[kind].splice(idx, 1);
+    const removed = current[kind].splice(idx, 1)[0];
     renderMediaGrid(kind);
     changed = true;
+    if(removed && !removed.startsWith('data:') && !/^https?:\/\//i.test(removed)){
+      ghDeleteFile(removed).catch(()=>{});
+    }
   }
 
   function appendMedia(kind, value){
@@ -1244,7 +1440,7 @@
   async function saveCurrent(){
     if(saving) return;
     if(!recordsLoaded){
-      showAlert('请稍候', '正在从 Worker 读取数据，请等待读取完成后再保存。');
+      showAlert('请稍候', '正在从 GitHub 读取数据，请等待读取完成后再保存。');
       return;
     }
     syncForm();
@@ -1282,6 +1478,13 @@
     const snapshot = JSON.parse(JSON.stringify(current));
     if(idx>=0) nextRecords[idx] = snapshot;
     else nextRecords.push(snapshot);
+
+    if(fileSha && records.length >= 2 && nextRecords.length < records.length){
+      const confirmDelete = confirm(`注意：本次保存将使记录从 ${records.length} 条变为 ${nextRecords.length} 条（疑似删除）。\n\n确定要继续吗？`);
+      if(!confirmDelete){
+        return;
+      }
+    }
 
     saving = true;
     const backup = JSON.parse(JSON.stringify(records));
@@ -1332,7 +1535,6 @@
     });
   }
 
-  // ★ 上传到 Worker → Worker 再写到 GitHub
   async function processFiles(kind, files){
     if(!current) current = blankRecord();
     if(!Array.isArray(current[kind])) current[kind] = toMediaArray(current[kind]);
@@ -1541,6 +1743,9 @@
     const arr = current[kind] || [];
     if(!arr.length) return;
     if(!confirm(`确定清空「${kind==='before'?'改善之前':'改善之后'}」的全部 ${arr.length} 个媒体吗？`)) return;
+    arr.forEach(p => {
+      if(p && !p.startsWith('data:') && !/^https?:\/\//i.test(p)) ghDeleteFile(p).catch(()=>{});
+    });
     current[kind] = [];
     renderMediaGrid(kind);
     changed = true;
@@ -1615,6 +1820,7 @@
   $('#clearSign').onclick = () => clearSignature(true);
   $('#newBtn').onclick = createNewRecord;
   $('#refreshBtn').onclick = () => refreshFromGitHub();
+  $('#settingsBtn').onclick = () => showConfigModal();
 
   const canvas = $('#signature');
   const start = e => { e.preventDefault(); drawing=true; const p=point(e,canvas); ctx.beginPath(); ctx.moveTo(p.x,p.y); $('#signPlaceholder').style.display='none'; };
@@ -1673,9 +1879,23 @@
     }
   }
 
+  // ============================================================
+  // ★ 初始化：有配置 → 进欢迎页；无配置 → 弹配置界面
+  // ============================================================
   current = blankRecord();
-  initWelcome();
   renderTopActions('list');
+  initWelcome();
+
+  const saved = loadCfg();
+  if(saved && saved.token){
+    cfg = { ...DEFAULTS, ...saved };
+    cfg.pagesBase = saved.pagesBase || `https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${cfg.branch}`;
+    // 已有配置：直接进欢迎页（点确认后加载数据）
+    document.body.style.overflow = 'hidden';
+  } else {
+    // 无配置：弹配置界面
+    setTimeout(() => showConfigModal(), 0);
+  }
 })();
 </script>
 </body>
