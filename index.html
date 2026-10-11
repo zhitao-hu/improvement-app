@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#009530">
+<meta name="robots" content="noindex, nofollow">
 <title>改善效果确认 - 记录管理</title>
 <style>
   :root{--green:#009530;--green-dark:#08752d;--green-soft:#eaf7ee;--amber:#f59e0b;--ink:#172033;--muted:#667085;--line:#dfe5e2;--bg:#f2f6f4;--card:#fff;--danger:#d92d20;--radius:20px;--shadow:0 12px 36px rgba(20,50,35,.08)}
@@ -13,38 +14,100 @@
   button{cursor:pointer}
   .app{min-height:100vh;padding-bottom:calc(30px + env(safe-area-inset-bottom))}
   .topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(210,220,215,.9);padding-top:env(safe-area-inset-top)}
-  .topbar-inner{max-width:1280px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 22px}
-  .brand{display:flex;align-items:center;gap:12px;min-width:0}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(145deg,#00ad45,#007d2b);display:grid;place-items:center;color:#fff;box-shadow:0 8px 18px rgba(0,149,48,.22)}
-  .logo svg{width:25px;height:25px}.brand h1{font-size:19px;margin:0;white-space:nowrap}.brand p{font-size:12px;color:var(--muted);margin:3px 0 0}
-  .actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}.btn{height:42px;border:1px solid var(--line);border-radius:12px;padding:0 15px;background:#fff;color:#344054;font-weight:650;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.18s}.btn:active{transform:scale(.98)}.btn.primary{color:#fff;background:var(--green);border-color:var(--green)}.btn.primary:hover{background:var(--green-dark)}.btn.danger{color:var(--danger)}.btn svg{width:18px;height:18px}.btn:disabled{opacity:.5;cursor:not-allowed}
-  main{max-width:1280px;margin:auto;padding:24px 22px;display:grid;gap:20px}
-  .card{background:var(--card);border:1px solid rgba(220,228,224,.9);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.card-body{padding:20px}.card-title{font-size:18px;font-weight:760;margin:0}
-  .meta-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px}.field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:0 0 7px}.input,.textarea{width:100%;border:1px solid #d8dfdc;border-radius:12px;background:#fff;color:var(--ink);outline:none;transition:.18s}.input{height:46px;padding:0 13px}.textarea{padding:12px 13px;min-height:122px;resize:vertical}.input:focus,.textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(0,149,48,.1)}
-  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.photo-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}.photo-head{height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid #edf0ef;font-weight:750}.dot{width:11px;height:11px;border-radius:50%}.photo-area{padding:14px}.photo-box{position:relative;aspect-ratio:4/3;border:2px dashed #d5deda;border-radius:16px;overflow:hidden;background:#f8faf9;display:grid;place-items:center}.photo-box img{display:none;width:100%;height:100%;object-fit:contain;background:#0f172a}.photo-box.has-image img{display:block}.empty-photo{text-align:center;color:#8a9490}.photo-box.has-image .empty-photo{display:none}.photo-icon{width:54px;height:54px;margin:auto auto 10px;border-radius:50%;display:grid;place-items:center;background:#fff;box-shadow:0 5px 15px rgba(18,55,37,.08)}.photo-icon svg{width:27px;height:27px}.photo-tools{display:flex;gap:8px;margin-top:10px}.photo-tools .btn{flex:1}.file-input{display:none}
-  .bottom-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:20px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:20px 20px 12px}.progress{font-size:12px;font-weight:800;color:#08752d;background:var(--green-soft);padding:7px 11px;border-radius:999px}.check-list{display:grid;gap:9px;padding:0 20px 18px}.check-item{display:flex;align-items:center;gap:12px;border:1px solid #dfe5e2;border-radius:14px;padding:13px;background:#fff}.check-item.done{background:var(--green-soft);border-color:#b9e4c6}.check-item input{width:21px;height:21px;accent-color:var(--green);flex:none}.check-text{flex:1;font-size:14px}.check-item.done .check-text{font-weight:650;color:#09662a}.icon-btn{width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:#a4aca8;display:grid;place-items:center}.icon-btn:hover{background:#fff;color:var(--danger)}.icon-btn svg{width:17px;height:17px}.add-row{display:flex;gap:8px;padding-top:4px}.add-row .input{flex:1}.add-row .btn{width:46px;padding:0}
-  .right-body{padding:0 20px 20px;display:grid;gap:20px}.signature-wrap{position:relative;border:1px solid #d8dfdc;border-radius:15px;overflow:hidden;background:#fff;cursor:pointer}.signature-wrap canvas{display:block;width:100%;height:185px;touch-action:none;cursor:crosshair}.sign-placeholder{position:absolute;left:0;right:0;bottom:30px;text-align:center;color:#b2bab6;font-size:13px;pointer-events:none}.sign-line{position:absolute;left:12%;right:12%;bottom:48px;border-top:1px solid #e1e5e3;pointer-events:none}.signature-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}.signature-label{font-size:14px;font-weight:750;display:flex;align-items:center;gap:7px}.signature-label svg{width:18px;color:var(--green)}.date-row{display:flex;justify-content:space-between;border-top:1px solid #edf0ef;padding-top:14px;color:var(--muted);font-size:12px}
-  .toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translate(-50%,18px);padding:13px 19px;border-radius:999px;background:#172033;color:#fff;font-size:14px;font-weight:650;box-shadow:0 14px 35px rgba(0,0,0,.24);opacity:0;pointer-events:none;transition:.25s;z-index:99}.toast.show{opacity:1;transform:translate(-50%,0)}
+  .topbar-inner{max-width:1280px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 20px}
+  .brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,#00ad45,#007d2b);display:grid;place-items:center;color:#fff;box-shadow:0 6px 14px rgba(0,149,48,.22)}
+  .logo svg{width:20px;height:20px}
+  .brand h1{font-size:16px;margin:0;white-space:nowrap}
+  .brand p{font-size:11px;color:var(--muted);margin:2px 0 0}
+  .actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+  .btn{height:38px;border:1px solid var(--line);border-radius:11px;padding:0 14px;background:#fff;color:#344054;font-weight:650;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.18s;font-size:14px}
+  .btn:active{transform:scale(.98)}
+  .btn.primary{color:#fff;background:var(--green);border-color:var(--green)}
+  .btn.primary:hover{background:var(--green-dark)}
+  .btn.danger{color:var(--danger)}
+  .btn svg{width:17px;height:17px}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  main{max-width:1280px;margin:auto;padding:16px 20px;display:grid;gap:14px}
+  .card{background:var(--card);border:1px solid rgba(220,228,224,.9);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  .card-body{padding:16px}
+  .card-title{font-size:16px;font-weight:760;margin:0}
+  .meta-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px}
+  .field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:0 0 6px}
+  .input,.textarea{width:100%;border:1px solid #d8dfdc;border-radius:11px;background:#fff;color:var(--ink);outline:none;transition:.18s}
+  .input{height:42px;padding:0 12px;font-size:14px}
+  .textarea{padding:11px 12px;min-height:122px;resize:vertical;font-size:14px}
+  .input:focus,.textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(0,149,48,.1)}
+  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .photo-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+  .photo-head{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid #edf0ef;font-weight:750;font-size:15px}
+  .dot{width:10px;height:10px;border-radius:50%}
+  .photo-area{padding:12px}
+  .photo-count{font-size:11px;font-weight:700;color:var(--muted);background:#f2f5f3;padding:3px 9px;border-radius:999px}
+  .media-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .media-cell{position:relative;aspect-ratio:1/1;border:2px dashed #d5deda;border-radius:14px;overflow:hidden;background:#f8faf9;display:grid;place-items:center;cursor:pointer;transition:.18s}
+  .media-cell:hover{border-color:var(--green)}
+  .media-cell.filled{border-style:solid;border-color:#cfd6d3;background:#0f172a}
+  .media-cell img,.media-cell video{width:100%;height:100%;object-fit:cover;display:block;background:#0f172a}
+  .media-cell .empty-icon{width:34px;height:34px;color:#b6bfbb}
+  .media-cell .cell-badge{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;pointer-events:none}
+  .media-cell .cell-remove{position:absolute;top:6px;right:6px;width:24px;height:24px;border:0;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:14px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(4px)}
+  .media-cell .cell-remove:hover{background:rgba(217,45,32,.85)}
+  .media-cell .cell-num{position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.55);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;pointer-events:none}
+  .photo-tools{display:flex;gap:8px;margin-top:10px}
+  .photo-tools .btn{flex:1}
+  .file-input{display:none}
+  .upload-progress{margin-top:8px;font-size:12px;color:var(--muted);min-height:16px;text-align:center}
+
+  .bottom-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:20px}
+  .section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 10px}
+  .progress{font-size:12px;font-weight:800;color:#08752d;background:var(--green-soft);padding:6px 10px;border-radius:999px}
+  .check-list{display:grid;gap:9px;padding:0 18px 16px}
+  .check-item{display:flex;align-items:center;gap:12px;border:1px solid #dfe5e2;border-radius:14px;padding:12px;background:#fff}
+  .check-item.done{background:var(--green-soft);border-color:#b9e4c6}
+  .check-item input{width:21px;height:21px;accent-color:var(--green);flex:none}
+  .check-text{flex:1;font-size:14px}
+  .check-item.done .check-text{font-weight:650;color:#09662a}
+  .icon-btn{width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:#a4aca8;display:grid;place-items:center}
+  .icon-btn:hover{background:#fff;color:var(--danger)}
+  .icon-btn svg{width:17px;height:17px}
+  .add-row{display:flex;gap:8px;padding-top:4px}
+  .add-row .input{flex:1}
+  .add-row .btn{width:46px;padding:0}
+  .right-body{padding:0 18px 18px;display:grid;gap:18px}
+  .signature-wrap{position:relative;border:1px solid #d8dfdc;border-radius:15px;overflow:hidden;background:#fff;cursor:pointer}
+  .signature-wrap canvas{display:block;width:100%;height:185px;touch-action:none;cursor:crosshair}
+  .sign-placeholder{position:absolute;left:0;right:0;bottom:30px;text-align:center;color:#b2bab6;font-size:13px;pointer-events:none}
+  .sign-line{position:absolute;left:12%;right:12%;bottom:48px;border-top:1px solid #e1e5e3;pointer-events:none}
+  .signature-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+  .signature-label{font-size:14px;font-weight:750;display:flex;align-items:center;gap:7px}
+  .signature-label svg{width:18px;color:var(--green)}
+  .date-row{display:flex;justify-content:space-between;border-top:1px solid #edf0ef;padding-top:14px;color:var(--muted);font-size:12px}
+  .toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translate(-50%,18px);padding:13px 19px;border-radius:999px;background:#172033;color:#fff;font-size:14px;font-weight:650;box-shadow:0 14px 35px rgba(0,0,0,.24);opacity:0;pointer-events:none;transition:.25s;z-index:99}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
   .privacy{font-size:12px;color:var(--muted);text-align:center;margin-top:-5px}
-  .view{display:none}.view.active{display:block}
+  .view{display:none}
+  .view.active{display:block}
   .list-toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-  .record-list{display:grid;gap:12px;padding:0}
-  .record-item{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 16px;cursor:pointer;transition:.18s;box-shadow:0 6px 20px rgba(20,50,35,.05)}
+  .record-list{display:grid;gap:10px;padding:0}
+  .record-item{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;transition:.18s;box-shadow:0 6px 20px rgba(20,50,35,.05)}
   .record-item:hover{border-color:var(--green);transform:translateY(-1px);box-shadow:0 10px 26px rgba(20,149,48,.12)}
-  .record-thumb{width:64px;height:64px;border-radius:12px;overflow:hidden;background:#eef3f0;display:grid;place-items:center;flex:none}
-  .record-thumb img{width:100%;height:100%;object-fit:cover}
-  .record-thumb .ph{font-size:11px;color:#9aa5a1}
   .record-main{min-width:0}
-  .record-title{font-weight:760;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .record-sub{font-size:12px;color:var(--muted);margin-top:4px;display:flex;gap:12px;flex-wrap:wrap}
+  .record-title{font-weight:760;font-size:16px;margin:0 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+  .record-sub{font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .record-sub .media-hint{display:inline-flex;align-items:center;gap:4px}
+  .record-sub .media-hint img{width:22px;height:22px;border-radius:5px;object-fit:cover;background:#eef3f0}
   .record-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--green-soft);color:#08752d;white-space:nowrap}
   .record-badge.pending{background:#fff4e5;color:#b45309}
+  .record-badge.unsigned{background:#fdecea;color:#b42318}
+  .record-actions{display:flex;align-items:center;gap:8px}
   .record-del{width:36px;height:36px;border:0;border-radius:10px;background:#f7f9f8;color:#98a29e;display:grid;place-items:center}
   .record-del:hover{background:#fdecea;color:var(--danger)}
   .record-del svg{width:17px;height:17px}
   .empty-list{text-align:center;padding:60px 20px;color:var(--muted)}
   .empty-list .big{font-size:52px;margin-bottom:12px}
   .list-count{font-size:13px;color:var(--muted);font-weight:600}
-  .status-bar{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);padding:8px 22px;background:#f8faf9;border-bottom:1px solid #edf0ef}
+  .status-bar{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);padding:6px 20px;background:#f8faf9;border-bottom:1px solid #edf0ef}
   .status-dot{width:8px;height:8px;border-radius:50%;background:#cbd5d1}
   .status-dot.ok{background:var(--green)}
   .status-dot.err{background:var(--danger)}
@@ -60,21 +123,219 @@
   .hint{font-size:12px;color:var(--muted);line-height:1.6}
   .hint code{background:#f2f5f3;padding:1px 6px;border-radius:5px;font-size:12px}
 
-  .filter-bar{display:grid;grid-template-columns:1.6fr 1fr 1fr auto auto;gap:10px;align-items:end;padding:0 0 4px}
+  .filter-bar{display:grid;grid-template-columns:1.8fr 1fr 1fr auto auto;gap:8px;align-items:end}
   .filter-bar .field{margin:0}
-  .filter-bar .input{height:42px;font-size:13px}
-  .filter-bar .btn{height:42px;padding:0 14px;font-size:13px}
-  .filter-summary{font-size:12px;color:var(--muted);padding:8px 2px 2px}
+  .filter-bar .field label{font-size:11px;margin-bottom:4px}
+  .filter-bar .input{height:38px;font-size:13px}
+  .filter-bar .btn{height:38px;padding:0 14px;font-size:13px}
+  .filter-summary{font-size:12px;color:var(--muted);margin-top:6px}
 
-  .bulk-bar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:12px 0 2px}
-  .bulk-bar .btn{height:38px;font-size:13px;padding:0 14px}
+  .bulk-bar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:8px 0 2px}
+  .bulk-bar .btn{height:36px;font-size:13px;padding:0 14px}
   .bulk-count{font-size:13px;color:var(--muted);font-weight:600}
 
-  .record-check{width:22px;height:22px;accent-color:var(--green);flex:none;cursor:pointer}
+  .record-check{width:20px;height:20px;accent-color:var(--green);flex:none;cursor:pointer}
   .record-item.selected{border-color:var(--green);background:var(--green-soft)}
 
-  @media(max-width:900px){.meta-grid{grid-template-columns:1fr 1fr}.meta-grid .field:first-child{grid-column:1/-1}.bottom-grid{grid-template-columns:1fr}.filter-bar{grid-template-columns:1fr 1fr}}
-  @media(max-width:650px){.topbar-inner{padding:11px 14px}.brand p{display:none}.brand h1{font-size:16px}.logo{width:39px;height:39px}.actions .btn span{display:none}.actions .btn{width:42px;padding:0}main{padding:14px}.meta-grid,.photo-grid{grid-template-columns:1fr}.meta-grid .field:first-child{grid-column:auto}.card-body{padding:16px}.record-item{grid-template-columns:26px 52px 1fr auto;padding:10px 12px}.record-thumb{width:52px;height:52px}.status-bar{padding:8px 14px}.filter-bar{grid-template-columns:1fr}.filter-bar .btn{width:100%}}
+  .viewer-modal{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.92);padding:20px}
+  .viewer-modal.show{display:flex}
+  .viewer-content{max-width:100%;max-height:100%;display:flex;align-items:center;justify-content:center;position:relative}
+  .viewer-content img,.viewer-content video{max-width:100%;max-height:calc(100vh - 80px);object-fit:contain;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .viewer-close{position:absolute;top:-50px;right:0;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:22px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(10px)}
+  .viewer-close:hover{background:rgba(255,255,255,.3)}
+  .viewer-title{position:absolute;top:-50px;left:0;color:#fff;font-size:14px;font-weight:650;opacity:.9}
+  .viewer-hint{position:absolute;bottom:-40px;left:0;right:0;text-align:center;color:rgba(255,255,255,.6);font-size:12px}
+
+  .welcome-overlay{
+    position:fixed;inset:0;z-index:500;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+    overflow:hidden;
+    background:
+      radial-gradient(1200px 600px at 12% 8%, rgba(0,173,69,.42), transparent 60%),
+      radial-gradient(900px 500px at 88% 92%, rgba(8,117,45,.55), transparent 62%),
+      linear-gradient(160deg,#04140a 0%,#072a17 45%,#03140a 100%);
+    transition:opacity .4s ease, visibility .4s ease;
+  }
+  .welcome-overlay::before{
+    content:"";
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(circle at 50% 45%, #000 30%, transparent 78%);
+    -webkit-mask-image:radial-gradient(circle at 50% 45%, #000 30%, transparent 78%);
+    pointer-events:none;
+  }
+  .welcome-overlay::after{
+    content:"";
+    position:absolute;
+    width:600px;height:600px;left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(0,173,69,.28), transparent 65%);
+    filter:blur(40px);
+    animation:glowPulse 6s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes glowPulse{
+    0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(1)}
+    50%{opacity:.9;transform:translate(-50%,-50%) scale(1.12)}
+  }
+  .welcome-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
+
+  .welcome-card{
+    position:relative;width:100%;max-width:460px;
+    background:rgba(18,32,24,.62);
+    border:1px solid rgba(122,235,168,.18);
+    border-radius:28px;
+    box-shadow:
+      0 30px 80px rgba(0,0,0,.55),
+      inset 0 1px 0 rgba(255,255,255,.06);
+    backdrop-filter:blur(22px) saturate(160%);
+    -webkit-backdrop-filter:blur(22px) saturate(160%);
+    padding:36px 30px 26px;text-align:center;
+    animation:welcomePop .55s cubic-bezier(.2,.9,.3,1.2);
+    color:#e9f5ee;
+    overflow:hidden;
+  }
+  .welcome-card::before{
+    content:"";
+    position:absolute;top:0;left:12%;right:12%;height:1px;
+    background:linear-gradient(90deg, transparent, rgba(0,220,110,.7), transparent);
+    pointer-events:none;
+  }
+  @keyframes welcomePop{
+    0%{transform:translateY(24px) scale(.95);opacity:0}
+    100%{transform:translateY(0) scale(1);opacity:1}
+  }
+
+  .welcome-logo{
+    width:78px;height:78px;border-radius:22px;margin:0 auto 20px;
+    background:linear-gradient(145deg,#00c853,#007d2b);
+    display:grid;place-items:center;color:#fff;
+    box-shadow:
+      0 14px 34px rgba(0,200,80,.4),
+      0 0 0 1px rgba(255,255,255,.08),
+      inset 0 1px 0 rgba(255,255,255,.35);
+    position:relative;
+    animation:logoFloat 4.5s ease-in-out infinite;
+  }
+  .welcome-logo::after{
+    content:"";
+    position:absolute;inset:-8px;border-radius:28px;
+    background:radial-gradient(circle, rgba(0,220,110,.35), transparent 70%);
+    z-index:-1;
+    animation:glowPulse 4s ease-in-out infinite;
+  }
+  @keyframes logoFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-5px)}
+  }
+  .welcome-logo svg{width:42px;height:42px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+
+  .welcome-title{
+    font-size:24px;font-weight:800;margin:0 0 10px;
+    letter-spacing:.5px;
+    background:linear-gradient(180deg,#ffffff 0%,#b7f0cf 120%);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .welcome-sub{
+    font-size:12.5px;color:rgba(215,240,225,.7);line-height:1.7;margin:0 0 8px;
+    letter-spacing:.3px;
+  }
+
+  .welcome-points{
+    list-style:none;margin:22px 0 24px;padding:0;
+    display:grid;gap:10px;text-align:left;
+  }
+  .welcome-points li{
+    display:flex;gap:12px;align-items:flex-start;font-size:13px;
+    color:rgba(230,245,236,.92);
+    background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;padding:12px 14px;
+    animation:pointIn .5s cubic-bezier(.2,.9,.3,1.2) backwards;
+    transition:border-color .2s, transform .2s;
+  }
+  .welcome-points li:hover{
+    border-color:rgba(0,220,110,.4);
+    transform:translateX(2px);
+  }
+  .welcome-points li:nth-child(1){animation-delay:.12s}
+  .welcome-points li:nth-child(2){animation-delay:.2s}
+  .welcome-points li:nth-child(3){animation-delay:.28s}
+  @keyframes pointIn{
+    0%{opacity:0;transform:translateY(8px)}
+    100%{opacity:1;transform:translateY(0)}
+  }
+  .welcome-points li .tick{
+    flex:none;width:22px;height:22px;border-radius:50%;
+    background:linear-gradient(145deg,#00c853,#007d2b);
+    display:grid;place-items:center;color:#fff;
+    font-size:12px;font-weight:900;margin-top:0;
+    box-shadow:0 4px 10px rgba(0,200,80,.4), inset 0 1px 0 rgba(255,255,255,.3);
+  }
+
+  .welcome-foot{display:flex;gap:12px;margin-top:6px}
+  .welcome-foot .btn{
+    flex:1;height:50px;font-size:15px;border-radius:14px;
+    border-color:rgba(255,255,255,.12);
+    background:rgba(255,255,255,.06);
+    color:#e9f5ee;
+    transition:.2s;
+  }
+  .welcome-foot .btn:hover{
+    background:rgba(255,255,255,.12);
+    border-color:rgba(255,255,255,.2);
+  }
+  .welcome-foot .btn.primary{
+    color:#fff;
+    background:linear-gradient(145deg,#00c853,#008a34);
+    border-color:transparent;
+    box-shadow:0 10px 24px rgba(0,200,80,.38), inset 0 1px 0 rgba(255,255,255,.25);
+  }
+  .welcome-foot .btn.primary:hover{
+    background:linear-gradient(145deg,#00d95a,#009a3a);
+    transform:translateY(-1px);
+    box-shadow:0 14px 30px rgba(0,200,80,.5), inset 0 1px 0 rgba(255,255,255,.3);
+  }
+
+  .welcome-hint{
+    margin-top:16px;font-size:12px;min-height:16px;
+    color:rgba(255,180,180,.9);
+    transition:opacity .25s;
+  }
+
+  @media(max-width:900px){
+    .meta-grid{grid-template-columns:1fr 1fr}
+    .meta-grid .field:first-child{grid-column:1/-1}
+    .bottom-grid{grid-template-columns:1fr}
+    .filter-bar{grid-template-columns:1fr 1fr}
+    .filter-bar .field:nth-child(1){grid-column:1/-1}
+  }
+  @media(max-width:650px){
+    .topbar-inner{padding:8px 14px}
+    .brand p{display:none}
+    .brand h1{font-size:15px}
+    .logo{width:34px;height:34px;border-radius:10px}
+    .logo svg{width:18px;height:18px}
+    main{padding:12px}
+    .meta-grid,.photo-grid{grid-template-columns:1fr}
+    .meta-grid .field:first-child{grid-column:auto}
+    .card-body{padding:14px}
+    .status-bar{padding:6px 14px}
+    .filter-bar{grid-template-columns:1fr}
+    .filter-bar .field:nth-child(1){grid-column:auto}
+    .filter-bar .btn{width:100%}
+    .welcome-card{padding:30px 22px 22px;border-radius:24px}
+    .welcome-logo{width:66px;height:66px;border-radius:20px}
+    .welcome-logo svg{width:34px;height:34px}
+    .welcome-title{font-size:20px}
+    .welcome-foot .btn{height:46px;font-size:14px}
+    .viewer-close{top:10px;right:10px}
+    .viewer-title{top:10px;left:10px;background:rgba(0,0,0,.5);padding:4px 10px;border-radius:999px}
+  }
 
   @media print{
     @page{size:A4 portrait;margin:12mm}
@@ -82,7 +343,7 @@
     .app{padding:0}
     .topbar{position:static;border:0;background:#fff}
     .topbar-inner{padding:0 0 8px}
-    .actions,.photo-tools,.add-row,.icon-btn,.privacy,.status-bar,.filter-bar,.bulk-bar,.record-del,.record-check,.list-toolbar,.modal,.toast{display:none!important}
+    .actions,.photo-tools,.add-row,.icon-btn,.privacy,.status-bar,.filter-bar,.bulk-bar,.record-del,.record-check,.list-toolbar,.modal,.toast,.welcome-overlay,.viewer-modal,.upload-progress{display:none!important}
     main{padding:0;gap:0;max-width:none}
     .view{display:none!important}
     .view.active{display:block!important}
@@ -93,7 +354,11 @@
     .photo-grid{gap:10px}
     .photo-head{height:38px;padding:0 12px}
     .photo-area{padding:8px}
-    .photo-box{border-style:solid;border-width:1px;aspect-ratio:4/3}
+    .media-grid{gap:6px}
+    .media-cell{border-style:solid;border-width:1px;cursor:default}
+    .media-cell .cell-remove,.media-cell .cell-badge{display:none!important}
+    .media-cell img{display:block!important}
+    .media-cell video{display:none!important}
     .bottom-grid{gap:10px}
     .section-head{padding:12px 12px 8px}
     .check-list{padding:0 12px 10px;gap:5px}
@@ -105,13 +370,36 @@
     .print-record-list{display:block!important}
     .record-list{display:block}
     .record-item{display:block;border:1px solid #cfd6d3;border-radius:8px;padding:10px;margin-bottom:8px;box-shadow:none;break-inside:avoid}
-    .record-thumb{display:none}
     .record-item.selected{background:#fff}
   }
   .print-record-list{display:none}
 </style>
 </head>
 <body>
+
+<!-- ============ 欢迎界面 ============ -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-card">
+    <div class="welcome-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    </div>
+    <h1 class="welcome-title">改善效果确认</h1>
+    <p class="welcome-sub">Before &amp; After Validation<br>现场改善记录与签名确认工具</p>
+
+    <ul class="welcome-points">
+      <li><span class="tick">✓</span><span>最多 4 张照片 / 视频记录改善前后对比</span></li>
+      <li><span class="tick">✓</span><span>逐项确认改善事项完成情况</span></li>
+      <li><span class="tick">✓</span><span>手写签名并保存到云端仓库</span></li>
+    </ul>
+
+    <div class="welcome-foot">
+      <button class="btn" id="welcomeCancel">取消</button>
+      <button class="btn primary" id="welcomeConfirm">确认进入</button>
+    </div>
+    <div class="welcome-hint" id="welcomeHint"></div>
+  </div>
+</div>
+
 <div class="app">
   <header class="topbar">
     <div class="topbar-inner">
@@ -125,13 +413,12 @@
       <span class="status-dot" id="statusDot"></span>
       <span id="statusText">未连接</span>
       <span style="margin-left:auto"></span>
-      <button class="btn" id="settingsBtn" style="height:30px;padding:0 10px;font-size:12px">⚙️ 设置</button>
     </div>
   </header>
 
   <main class="view active" id="viewList">
     <section class="card">
-      <div class="card-body" style="display:grid;gap:14px">
+      <div class="card-body" style="display:grid;gap:12px">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
           <div>
             <h2 class="card-title">改善记录列表</h2>
@@ -178,54 +465,73 @@
       <div class="field"><label for="location">区域 / 工位</label><input class="input" id="location" placeholder="例如：装配线 A01" maxlength="50"></div>
       <div class="field"><label for="owner">确认人</label><input class="input" id="owner" placeholder="输入姓名" maxlength="30"></div>
     </div></section>
+
     <section class="photo-grid">
-      <article class="photo-card"><div class="photo-head"><span>改善之前</span><span class="dot" style="background:var(--amber)"></span></div><div class="photo-area">
-        <div class="photo-box" id="beforeBox"><img id="beforePreview" alt="改善之前"><div class="empty-photo"><div class="photo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div><strong>拍照或选择图片</strong><div style="font-size:12px;margin-top:5px">支持相机和照片图库</div></div></div>
-        <input class="file-input" id="beforeInput" type="file" accept="image/*">
-        <div class="photo-tools"><button class="btn" data-pick="before">选择 / 拍照</button><button class="btn danger" data-remove="before">移除</button></div>
-      </div></article>
-      <article class="photo-card"><div class="photo-head"><span>改善之后</span><span class="dot" style="background:var(--green)"></span></div><div class="photo-area">
-        <div class="photo-box" id="afterBox"><img id="afterPreview" alt="改善之后"><div class="empty-photo"><div class="photo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div><strong>拍照或选择图片</strong><div style="font-size:12px;margin-top:5px">支持相机和照片图库</div></div></div>
-        <input class="file-input" id="afterInput" type="file" accept="image/*">
-        <div class="photo-tools"><button class="btn" data-pick="after">选择 / 拍照</button><button class="btn danger" data-remove="after">移除</button></div>
-      </div></article>
+      <article class="photo-card">
+        <div class="photo-head">
+          <span>改善之前</span>
+          <span style="display:flex;align-items:center;gap:10px">
+            <span class="photo-count" id="beforeCount">0 / 4</span>
+            <span class="dot" style="background:var(--amber)"></span>
+          </span>
+        </div>
+        <div class="photo-area">
+          <div class="media-grid" id="beforeGrid"></div>
+          <input class="file-input" id="beforeInput" type="file" accept="image/*,video/*" multiple>
+          <div class="photo-tools">
+            <button class="btn" data-pick="before">📷 上传照片 / 视频</button>
+            <button class="btn danger" data-clear="before">清空</button>
+          </div>
+          <div class="upload-progress" id="beforeProgress"></div>
+        </div>
+      </article>
+
+      <article class="photo-card">
+        <div class="photo-head">
+          <span>改善之后</span>
+          <span style="display:flex;align-items:center;gap:10px">
+            <span class="photo-count" id="afterCount">0 / 4</span>
+            <span class="dot" style="background:var(--green)"></span>
+          </span>
+        </div>
+        <div class="photo-area">
+          <div class="media-grid" id="afterGrid"></div>
+          <input class="file-input" id="afterInput" type="file" accept="image/*,video/*" multiple>
+          <div class="photo-tools">
+            <button class="btn" data-pick="after">📷 上传照片 / 视频</button>
+            <button class="btn danger" data-clear="after">清空</button>
+          </div>
+          <div class="upload-progress" id="afterProgress"></div>
+        </div>
+      </article>
     </section>
+
     <section class="bottom-grid">
       <article class="card"><div class="section-head"><h2 class="card-title">确认事项</h2><span class="progress" id="progress">完成 0%</span></div><div class="check-list" id="checkList"></div><div class="check-list" style="padding-top:0"><div class="add-row"><input class="input" id="newCheck" placeholder="添加自定义确认事项" maxlength="60"><button class="btn" id="addCheck" title="添加">＋</button></div></div></article>
       <article class="card"><div class="section-head"><h2 class="card-title">说明与签名</h2></div><div class="right-body">
         <div class="field"><label for="notes">改善说明 / 确认备注</label><textarea class="textarea" id="notes" placeholder="填写改善内容、验证结果或需要跟进的事项……" maxlength="800"></textarea></div>
-        <div><div class="signature-top"><div class="signature-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>用户签名 <span style="font-weight:400;font-size:12px;color:var(--muted);margin-left:4px">（点击放大签名）</span></div><button class="btn" id="clearSign" style="height:36px">清除</button></div><div class="signature-wrap" id="signatureWrap"><canvas id="signature"></canvas><div class="sign-line"></div><div class="sign-placeholder" id="signPlaceholder">请使用手指或 Apple Pencil 签名</div></div></div>
+        <div>
+          <div class="signature-top">
+            <div class="signature-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>用户签名 <span style="font-weight:400;font-size:12px;color:var(--muted);margin-left:4px">（点击放大签名）</span></div>
+            <button class="btn" id="clearSign" style="height:36px">清除</button>
+          </div>
+          <div class="signature-wrap" id="signatureWrap"><canvas id="signature"></canvas><div class="sign-line"></div><div class="sign-placeholder" id="signPlaceholder">请使用手指或 Apple Pencil 签名</div></div>
+        </div>
         <div class="date-row"><span>签名日期</span><span id="dateText"></span></div>
       </div></article>
     </section>
-    <div class="privacy">数据保存在你的 GitHub 私有仓库，不会因为清缓存而丢失。</div>
   </main>
 
   <div class="toast" id="toast"></div>
 </div>
 
-<div class="modal" id="settingsModal">
-  <div class="modal-backdrop" data-close-modal></div>
-  <div class="modal-panel">
-    <div class="modal-head">
-      <div class="modal-title">GitHub 连接设置</div>
-      <button class="btn" data-close-modal style="width:38px;height:38px;padding:0">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="hint">
-        需要一个 <b>私有仓库</b>，且 Token 具有该仓库的 <code>Contents: Read and write</code> 权限。<br>
-        配置保存在本机浏览器，只需填写一次。
-      </div>
-      <div class="field"><label for="cfgOwner">GitHub 用户名 / 组织名</label><input class="input" id="cfgOwner" placeholder="例如：yourname" autocomplete="off"></div>
-      <div class="field"><label for="cfgRepo">私有仓库名</label><input class="input" id="cfgRepo" placeholder="例如：improvement-data" autocomplete="off"></div>
-      <div class="field"><label for="cfgPath">数据文件路径</label><input class="input" id="cfgPath" placeholder="records.json" autocomplete="off"></div>
-      <div class="field"><label for="cfgToken">Personal Access Token</label><input class="input" id="cfgToken" type="password" placeholder="github_pat_..." autocomplete="off"></div>
-      <div class="hint" style="color:var(--danger)">⚠️ Token 保存在本机浏览器 localStorage，请勿在公共设备上使用。</div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn" id="cfgClear">清除配置</button>
-      <button class="btn primary" id="cfgSave">保存并连接</button>
-    </div>
+<!-- 媒体查看器 -->
+<div class="viewer-modal" id="viewerModal">
+  <div class="viewer-content">
+    <div class="viewer-title" id="viewerTitle"></div>
+    <button class="viewer-close" id="viewerClose" aria-label="关闭">✕</button>
+    <div id="viewerMediaHost"></div>
+    <div class="viewer-hint">点击空白处或按 ESC 关闭</div>
   </div>
 </div>
 
@@ -249,20 +555,53 @@
   </div>
 </div>
 
+<!-- 通用提示弹窗 -->
+<div class="modal" id="alertModal">
+  <div class="modal-backdrop" data-close-alert></div>
+  <div class="modal-panel" style="max-width:420px">
+    <div class="modal-head">
+      <div class="modal-title" id="alertTitle">提示</div>
+      <button class="btn" data-close-alert style="width:38px;height:38px;padding:0">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="alertMessage" style="font-size:14px;line-height:1.7;color:#344054"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn primary" id="alertOk">知道了</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (() => {
   'use strict';
-  const CFG_KEY = 'gh-cfg-v1';
+
+  const PRESET_CONFIG = {
+    owner: 'zhitao-hu',
+    repo: 'improvement-data',
+    path: 'records.json',
+    imagesDir: 'images',
+    videosDir: 'videos',
+    pagesBase: 'https://raw.githubusercontent.com/zhitao-hu/improvement-data/main',
+    token: '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'
+  };
+  const MAX_MEDIA = 4;
+
   const defaults = ['改善内容与现场实际一致','改善后风险已完成确认','相关作业指导书已更新','相关人员已完成说明或培训','改善效果达到预期'];
   const $ = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
 
-  let cfg = { owner:'', repo:'', path:'records.json', token:'' };
+  let cfg = { ...PRESET_CONFIG };
   let records = [];
   let fileSha = null;
   let current = null;
   let currentId = null;
   let changed = false;
+  let welcomeDone = false;
+  let recordsLoaded = false;
+  let saving = false;
+
+  let pristineSnapshot = null;
 
   let filter = { keyword:'', from:'', to:'' };
   let visibleIds = [];
@@ -279,6 +618,51 @@
   const fmtDay = iso => { try { return new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(iso)); } catch(e){ return (iso||'').slice(0,10); } };
   const b64encode = str => { const bytes = new TextEncoder().encode(str); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin); };
   const b64decode = b64 => { const bin = atob(b64.replace(/\s/g,'')); const bytes = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i); return new TextDecoder().decode(bytes); };
+
+  // ★ 判断视频/图片：兼容 data:URL 和路径
+  const isVideo = v => {
+    if(typeof v !== 'string' || !v) return false;
+    if(v.startsWith('data:video')) return true;
+    return /\.(mp4|mov|webm|m4v|ogv)(\?|#|$)/i.test(v);
+  };
+  const isImage = v => {
+    if(typeof v !== 'string' || !v) return false;
+    if(v.startsWith('data:image')) return true;
+    return /\.(jpe?g|png|gif|webp|bmp|avif)(\?|#|$)/i.test(v);
+  };
+
+  // ★ 把存储值统一转成可直接用于 src 的 URL
+  //   - data:...   → 原样返回（老数据兼容）
+  //   - http(s):// → 原样返回
+  //   - images/xxx → 拼 Pages 域名
+  function mediaUrl(v){
+    if(typeof v !== 'string' || !v) return '';
+    if(v.startsWith('data:')) return v;
+    if(/^https?:\/\//i.test(v)) return v;
+    const base = (cfg.pagesBase || '').replace(/\/+$/,'');
+    return base + '/' + v.replace(/^\/+/,'');
+  }
+
+  // ★ data:URL → 纯 base64（GitHub Contents API 需要）
+  function dataUrlToBase64(dataUrl){
+    const idx = dataUrl.indexOf(',');
+    return idx >= 0 ? dataUrl.slice(idx+1) : dataUrl;
+  }
+
+  function toMediaArray(v){
+    if(Array.isArray(v)) return v.filter(x => typeof x === 'string' && x);
+    if(typeof v === 'string' && v) return [v];
+    return [];
+  }
+
+  function showAlert(title, message){
+    $('#alertTitle').textContent = title || '提示';
+    $('#alertMessage').innerHTML = message || '';
+    $('#alertModal').classList.add('show');
+  }
+  function closeAlert(){ $('#alertModal').classList.remove('show'); }
+  $$('[data-close-alert]').forEach(el => el.onclick = closeAlert);
+  $('#alertOk').onclick = closeAlert;
 
   function setStatus(text, kind){
     $('#statusText').textContent = text;
@@ -297,10 +681,50 @@
   function ghUrl(){
     return `${GH_API}/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}`;
   }
+  function ghFileUrl(path){
+    return `${GH_API}/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${path}`;
+  }
   function hasConfig(){ return cfg.owner && cfg.repo && cfg.path && cfg.token; }
 
+  // ★ 上传一个文件到仓库指定路径（自动处理同名覆盖）
+  async function ghUploadFile(path, base64Content, commitMsg){
+    let sha = null;
+    try {
+      const r = await fetch(ghFileUrl(path), { headers: ghHeaders() });
+      if(r.ok){ const d = await r.json(); sha = d.sha; }
+    } catch(e){ /* 不存在则忽略 */ }
+
+    const body = { message: commitMsg || `upload ${path}`, content: base64Content };
+    if(sha) body.sha = sha;
+
+    const res = await fetch(ghFileUrl(path), {
+      method:'PUT',
+      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
+      body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || ('上传失败 ' + res.status));
+    }
+    return true;
+  }
+
+  // ★ 删除仓库文件（清空媒体时可选调用）
+  async function ghDeleteFile(path){
+    try {
+      const r = await fetch(ghFileUrl(path), { headers: ghHeaders() });
+      if(!r.ok) return; // 不存在就算了
+      const d = await r.json();
+      await fetch(ghFileUrl(path), {
+        method:'DELETE',
+        headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
+        body: JSON.stringify({ message: `delete ${path}`, sha: d.sha })
+      });
+    } catch(e){ /* 忽略 */ }
+  }
+
   async function ghLoad(){
-    if(!hasConfig()) throw new Error('未配置 GitHub 连接');
+    if(!hasConfig()) throw new Error('配置不完整');
     setStatus('读取中…', 'loading');
     const res = await fetch(ghUrl(), { headers: ghHeaders() });
     if(res.status === 404){
@@ -308,6 +732,7 @@
       records = [];
       await ghCreateEmpty();
       setStatus('已连接（新建数据文件）', 'ok');
+      recordsLoaded = true;
       return;
     }
     if(!res.ok){
@@ -316,17 +741,33 @@
     }
     const data = await res.json();
     fileSha = data.sha;
+
     let content = '';
-    try { content = b64decode(data.content || ''); } catch(e){ content = ''; }
+    if(data.content && data.encoding !== 'none'){
+      try { content = b64decode(data.content || ''); } catch(e){ content = ''; }
+    }
+    // 大文件时走 download_url（保留兜底，即使现在 JSON 很小）
+    if(!content && data.download_url){
+      setStatus('读取中（大文件）…', 'loading');
+      try {
+        const raw = await fetch(data.download_url, {
+          headers: { 'Authorization': 'Bearer ' + cfg.token }
+        });
+        if(raw.ok) content = await raw.text();
+      } catch(e){}
+    }
+
     if(!content.trim()){
       records = [];
     } else {
       try {
         const parsed = JSON.parse(content);
-        records = Array.isArray(parsed) ? parsed : (parsed.records || []);
+        const rawList = Array.isArray(parsed) ? parsed : (parsed.records || []);
+        records = rawList.map(r => normalizeRecord(r));
       } catch(e){ records = []; }
     }
     setStatus(`已连接 · ${records.length} 条记录`, 'ok');
+    recordsLoaded = true;
   }
   async function ghCreateEmpty(){
     const body = { message:'init records.json', content: b64encode('[]') };
@@ -343,7 +784,16 @@
     fileSha = data.content.sha;
   }
   async function ghSave(){
-    if(!hasConfig()) throw new Error('未配置 GitHub 连接');
+    if(!hasConfig()) throw new Error('配置不完整');
+    if(!fileSha){
+      try {
+        const check = await fetch(ghUrl(), { headers: ghHeaders() });
+        if(check.ok){
+          const d = await check.json();
+          fileSha = d.sha;
+        }
+      } catch(e){}
+    }
     const json = JSON.stringify({ version:1, updatedAt: nowISO(), records }, null, 2);
     const body = { message: `更新改善记录 ${nowISO()}`, content: b64encode(json) };
     if(fileSha) body.sha = fileSha;
@@ -358,8 +808,19 @@
       if(r2.ok){
         const d2 = await r2.json();
         fileSha = d2.sha;
-        return ghSave();
+        const res2 = await fetch(ghUrl(), {
+          method:'PUT',
+          headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
+          body: JSON.stringify({ message: body.message, content: body.content, sha: fileSha })
+        });
+        if(res2.ok){
+          const data2 = await res2.json();
+          fileSha = data2.content.sha;
+          setStatus(`已保存 · ${records.length} 条记录`, 'ok');
+          return;
+        }
       }
+      throw new Error('远端数据已被其他设备修改，请点击「刷新」后重试');
     }
     if(!res.ok){
       const err = await res.json().catch(()=>({}));
@@ -370,7 +831,40 @@
     setStatus(`已保存 · ${records.length} 条记录`, 'ok');
   }
 
-  // ---------- 视图切换 ----------
+  function initWelcome(){
+    const overlay = $('#welcomeOverlay');
+    const hint = $('#welcomeHint');
+
+    $('#welcomeConfirm').addEventListener('click', () => {
+      welcomeDone = true;
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+      setStatus('读取中…', 'loading');
+      recordsLoaded = false;
+      showList();
+      ghLoad().then(()=>{
+        renderList();
+        toast('数据已加载 · ' + records.length + ' 条');
+      }).catch(err=>{
+        recordsLoaded = false;
+        setStatus('连接失败：' + err.message, 'err');
+        toast('连接失败：' + err.message);
+      });
+    });
+
+    $('#welcomeCancel').addEventListener('click', () => {
+      hint.textContent = '需要点击「确认进入」才能开始使用';
+      hint.style.color = 'rgba(255,140,140,.9)';
+      const card = overlay.querySelector('.welcome-card');
+      card.style.animation = 'none';
+      void card.offsetWidth;
+      card.style.animation = 'welcomePop .55s cubic-bezier(.2,.9,.3,1.2)';
+      setTimeout(() => { hint.textContent = ''; }, 2600);
+    });
+
+    document.body.style.overflow = 'hidden';
+  }
+
   function showList(){
     $('#viewList').classList.add('active');
     $('#viewForm').classList.remove('active');
@@ -384,8 +878,6 @@
     renderTopActions('form');
     window.scrollTo(0,0);
 
-    // 视图切换后，画布重新可见：重算尺寸，并重绘已有签名
-    // 用 setTimeout 确保布局完成后执行
     setTimeout(() => {
       try {
         resizeCanvas(false);
@@ -394,7 +886,6 @@
     }, 0);
   }
 
-  // 把 current.signature 画到主画布上（用画布真实像素）
   function redrawMainSignature(){
     const c = $('#signature');
     if(!c || !ctx) return;
@@ -416,11 +907,7 @@
   function renderTopActions(view){
     const box = $('#topActions');
     if(view === 'list'){
-      box.innerHTML = `
-        <button class="btn" id="topRefresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span>刷新</span></button>
-        <button class="btn primary" id="topNew"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span>新建</span></button>`;
-      $('#topRefresh').onclick = () => refreshFromGitHub();
-      $('#topNew').onclick = createNewRecord;
+      box.innerHTML = '';
     } else {
       box.innerHTML = `
         <button class="btn" id="topBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span>返回列表</span></button>
@@ -432,15 +919,17 @@
     }
   }
 
-  // 新建记录：先准备数据，再填表，再切视图
   function createNewRecord(){
+    if(!recordsLoaded){
+      showAlert('请稍候', '正在从 GitHub 读取数据，请等待读取完成后再新建记录。');
+      return;
+    }
     current = blankRecord();
     currentId = null;
-    fillForm(current);   // 在列表视图下先填好数据（画布尺寸为0也没关系，showForm里会重绘）
+    fillForm(current);
     showForm();
   }
 
-  // ---------- 筛选 ----------
   function applyFilter(){
     filter.keyword = $('#filterKeyword').value.trim().toLowerCase();
     filter.from = $('#filterFrom').value;
@@ -466,7 +955,6 @@
     return true;
   }
 
-  // ---------- 列表 ----------
   function renderList(){
     const host = $('#recordList');
     const all = [...records].sort((a,b)=> (b.updatedAt||b.savedAt||'').localeCompare(a.updatedAt||a.savedAt||''));
@@ -488,6 +976,12 @@
 
     updateBulkBar();
 
+    if(!recordsLoaded){
+      host.innerHTML = `<div class="empty-list"><div class="big">⏳</div><div style="font-weight:700;color:#344054">正在从 GitHub 读取数据…</div><div style="margin-top:6px;font-size:13px">请稍候，读取完成前无法新建或编辑</div></div>`;
+      renderPrintRecords([]);
+      return;
+    }
+
     if(!list.length){
       host.innerHTML = total
         ? `<div class="empty-list"><div class="big">🔍</div><div style="font-weight:700;color:#344054">没有匹配的记录</div><div style="margin-top:6px;font-size:13px">试试调整筛选条件，或点“重置”</div></div>`
@@ -500,22 +994,43 @@
       const done = (r.checks||[]).filter(c=>c.done).length;
       const totalC = (r.checks||[]).length;
       const pct = totalC ? Math.round(done/totalC*100) : 0;
-      const thumb = r.before || r.after;
+      const beforeArr = toMediaArray(r.before);
+      const afterArr = toMediaArray(r.after);
+      const allMedia = beforeArr.concat(afterArr);
+      const totalMedia = allMedia.length;
+      const firstMedia = allMedia[0];
+
+      let mediaHintHTML = '';
+      if(totalMedia > 0){
+        if(firstMedia && isImage(firstMedia)){
+          mediaHintHTML = `<span class="media-hint"><img src="${mediaUrl(firstMedia)}" alt=""> ${totalMedia} 个媒体</span>`;
+        } else {
+          mediaHintHTML = `<span class="media-hint">📹 ${totalMedia} 个媒体</span>`;
+        }
+      }
+
       const sel = selectedIds.has(r.id);
+      const signBadge = r.signature
+        ? `<span class="record-badge">已签名</span>`
+        : `<span class="record-badge unsigned">未签名</span>`;
+
       return `
       <div class="record-item ${sel?'selected':''}" data-open="${r.id}">
-        <input type="checkbox" class="record-check" data-check-id="${r.id}" ${sel?'checked':''} title="选择">
-        <div class="record-thumb">${thumb ? `<img src="${thumb}" alt="">` : `<span class="ph">无图片</span>`}</div>
-        <div class="record-main">
-          <div class="record-title">${esc(r.title||'未命名')}</div>
-          <div class="record-sub">
-            <span>📍 ${esc(r.location||'未填写区域')}</span>
-            <span>👤 ${esc(r.owner||'未填写')}</span>
-            <span>🕒 ${fmtDate(r.updatedAt||r.savedAt)}</span>
+        <div style="display:flex;align-items:center;gap:12px;min-width:0">
+          <input type="checkbox" class="record-check" data-check-id="${r.id}" ${sel?'checked':''} title="选择" onclick="event.stopPropagation()">
+          <div class="record-main">
+            <div class="record-title">${esc(r.title||'未命名')}</div>
+            <div class="record-sub">
+              <span>📍 ${esc(r.location||'未填写区域')}</span>
+              <span>👤 ${esc(r.owner||'未填写')}</span>
+              <span>🕒 ${fmtDate(r.updatedAt||r.savedAt)}</span>
+              ${mediaHintHTML}
+            </div>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px">
+        <div class="record-actions">
           <span class="record-badge ${pct===100?'':'pending'}">完成 ${pct}%</span>
+          ${signBadge}
           <button class="record-del" data-del="${r.id}" title="删除"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/></svg></button>
         </div>
       </div>`;
@@ -537,6 +1052,16 @@
     if(!list.length){ host.innerHTML = ''; return; }
     host.innerHTML = list.map(r => {
       const checks = (r.checks||[]).map(c => `<li style="margin:2px 0">${c.done?'☑':'☐'} ${esc(c.text)}</li>`).join('');
+      function mediaGrid(val){
+        const arr = toMediaArray(val);
+        if(!arr.length) return '<div style="font-size:12px;color:#9aa5a1">（无）</div>';
+        return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">` +
+          arr.map(m => {
+            if(isVideo(m)) return '<div style="aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border:1px dashed #cfd6d3;border-radius:6px;background:#f8faf9;font-size:11px;color:#667085;text-align:center;padding:8px">📹 视频</div>';
+            return `<img src="${mediaUrl(m)}" style="width:100%;aspect-ratio:1/1;object-fit:cover;border:1px solid #cfd6d3;border-radius:6px">`;
+          }).join('') +
+        `</div>`;
+      }
       return `
       <div class="record-item" style="page-break-after:always">
         <div style="font-size:16px;font-weight:760;margin-bottom:6px">${esc(r.title||'未命名')}</div>
@@ -544,8 +1069,8 @@
           区域：${esc(r.location||'—')}　|　确认人：${esc(r.owner||'—')}　|　更新时间：${fmtDate(r.updatedAt||r.savedAt)}
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-          <div><div style="font-size:12px;font-weight:700;margin-bottom:4px">改善之前</div>${r.before ? `<img src="${r.before}" style="width:100%;border:1px solid #cfd6d3;border-radius:6px">` : '<div style="font-size:12px;color:#9aa5a1">（无图片）</div>'}</div>
-          <div><div style="font-size:12px;font-weight:700;margin-bottom:4px">改善之后</div>${r.after ? `<img src="${r.after}" style="width:100%;border:1px solid #cfd6d3;border-radius:6px">` : '<div style="font-size:12px;color:#9aa5a1">（无图片）</div>'}</div>
+          <div><div style="font-size:12px;font-weight:700;margin-bottom:4px">改善之前</div>${mediaGrid(r.before)}</div>
+          <div><div style="font-size:12px;font-weight:700;margin-bottom:4px">改善之后</div>${mediaGrid(r.after)}</div>
         </div>
         <div style="font-size:12px;font-weight:700;margin:8px 0 4px">确认事项</div>
         <ul style="margin:0;padding-left:18px;font-size:12px">${checks || '<li>（无）</li>'}</ul>
@@ -559,8 +1084,8 @@
     }).join('');
   }
 
-  // ---------- 列表事件 ----------
   $('#recordList').addEventListener('click', async e => {
+    if(!welcomeDone) return;
     const del = e.target.closest('[data-del]');
     if(del){
       e.stopPropagation();
@@ -568,10 +1093,14 @@
       const rec = records.find(r=>r.id===id);
       if(!rec) return;
       if(!confirm(`确定删除「${rec.title||'未命名'}」吗？`)) return;
+      const backup = records.slice();
       records = records.filter(r=>r.id!==id);
       selectedIds.delete(id);
       try { await ghSave(); renderList(); toast('已删除'); }
-      catch(err){ toast('删除同步失败：' + err.message); }
+      catch(err){
+        records = backup;
+        toast('删除同步失败：' + err.message);
+      }
       return;
     }
     const chk = e.target.closest('[data-check-id]');
@@ -586,9 +1115,13 @@
     }
     const item = e.target.closest('[data-open]');
     if(item){
+      if(!recordsLoaded){
+        showAlert('请稍候', '数据读取中，请稍后再试。');
+        return;
+      }
       const rec = records.find(r=>r.id===item.dataset.open);
       if(!rec) return;
-      current = normalizeRecord(JSON.parse(JSON.stringify(rec)));
+      current = JSON.parse(JSON.stringify(rec));
       currentId = rec.id;
       fillForm(current);
       showForm();
@@ -600,10 +1133,14 @@
     const ids = [...selectedIds];
     if(!ids.length) return;
     if(!confirm(`确定删除所选的 ${ids.length} 条记录吗？此操作不可撤销。`)) return;
+    const backup = records.slice();
     records = records.filter(r => !selectedIds.has(r.id));
     selectedIds.clear();
     try { await ghSave(); renderList(); toast(`已删除 ${ids.length} 条`); }
-    catch(err){ toast('删除同步失败：' + err.message); }
+    catch(err){
+      records = backup;
+      toast('删除同步失败：' + err.message);
+    }
   };
   $('#bulkExportPdf').onclick = () => {
     const ids = [...selectedIds];
@@ -616,48 +1153,84 @@
   $('#filterReset').onclick = resetFilter;
   $('#filterKeyword').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); applyFilter(); } });
 
-  // ---------- 表单 ----------
   function blankRecord(){
     return {
       id: uid(),
-      title:'现场改善效果确认', location:'', owner:'', before:'', after:'', notes:'',
+      title:'现场改善效果确认', location:'', owner:'', before:[], after:[], notes:'',
       checks: defaults.map(text=>({text,done:false})),
       signature:'',
       savedAt:'', updatedAt:''
     };
   }
+
   function normalizeRecord(r){
+    const hasChecksField = Object.prototype.hasOwnProperty.call(r, 'checks') && Array.isArray(r.checks);
     return {
       id: r.id || uid(),
       title: r.title || '现场改善效果确认',
       location: r.location || '',
       owner: r.owner || '',
-      before: r.before || '',
-      after: r.after || '',
+      before: toMediaArray(r.before),
+      after: toMediaArray(r.after),
       notes: r.notes || '',
-      checks: Array.isArray(r.checks) && r.checks.length ? r.checks.map(c=>({text:c.text||'',done:!!c.done})) : defaults.map(text=>({text,done:false})),
+      checks: hasChecksField
+        ? r.checks.map(c => ({ text: (c && c.text) || '', done: !!(c && c.done) }))
+        : defaults.map(text => ({ text, done: false })),
       signature: r.signature || '',
       savedAt: r.savedAt || nowISO(),
       updatedAt: r.updatedAt || r.savedAt || nowISO()
     };
   }
+
+  function computeSignRelevantSnapshot(rec){
+    if(!rec) return '';
+    const checks = Array.isArray(rec.checks) ? rec.checks : [];
+    const checksStr = checks
+      .map(c => `${((c && c.text) || '').trim()}|${(c && c.done) ? 1 : 0}`)
+      .join('::');
+    const notesStr = String(rec.notes || '').replace(/\r\n/g, '\n').trim();
+    return checksStr + '||' + notesStr;
+  }
+
+  // ★ 把画布导出为固定 600px 宽、JPEG 0.6 的签名图，体积约为 PNG 的 1/4
+  function exportSignature(canvasEl){
+    const W = 600;
+    const H = Math.round(canvasEl.height / canvasEl.width * W);
+    const tmp = document.createElement('canvas');
+    tmp.width = W;
+    tmp.height = H;
+    const tctx = tmp.getContext('2d');
+    tctx.fillStyle = '#ffffff';
+    tctx.fillRect(0, 0, W, H);
+    tctx.drawImage(canvasEl, 0, 0, W, H);
+    return tmp.toDataURL('image/jpeg', 0.6);
+  }
+
   function fillForm(data){
     if(!data) data = blankRecord();
-    $('#title').value = data.title||'';
-    $('#location').value = data.location||'';
-    $('#owner').value = data.owner||'';
-    $('#notes').value = data.notes||'';
-    setPhoto('before', data.before||'');
-    setPhoto('after', data.after||'');
-    renderChecks(data.checks);
+    current = JSON.parse(JSON.stringify(data));
+
+    $('#title').value = current.title || '';
+    $('#location').value = current.location || '';
+    $('#owner').value = current.owner || '';
+    $('#notes').value = current.notes || '';
+    renderMediaGrid('before');
+    renderMediaGrid('after');
+    renderChecks();
     $('#dateText').textContent = new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
     changed = false;
-    // 签名重绘交给 showForm / resizeCanvas 统一处理（视图可能还不可见）
-    // 但如果画布已就绪，这里也尝试画一次
+
+    current.title = $('#title').value;
+    current.location = $('#location').value;
+    current.owner = $('#owner').value;
+    current.notes = $('#notes').value;
+    pristineSnapshot = computeSignRelevantSnapshot(current);
+
     try {
       if($('#signature').width > 0 && ctx){ redrawMainSignature(); }
     } catch(e){}
   }
+
   function syncForm(){
     if(!current) current = blankRecord();
     current.title = $('#title').value;
@@ -665,19 +1238,100 @@
     current.owner = $('#owner').value;
     current.notes = $('#notes').value;
   }
-  function setPhoto(kind, value){
-    if(!current) current = blankRecord();
-    current[kind] = value;
-    const box = $(`#${kind}Box`), img = $(`#${kind}Preview`);
-    if(value){ img.src = value; box.classList.add('has-image'); }
-    else { img.removeAttribute('src'); box.classList.remove('has-image'); }
-    changed = true;
+
+  function isSignRelevantChanged(){
+    if(!current) return false;
+    if(pristineSnapshot === null) return false;
+    const now = computeSignRelevantSnapshot(current);
+    return now !== pristineSnapshot;
   }
-  function renderChecks(checks){
+
+  function updateSignStatusUI(){ /* no-op */ }
+
+  function checkAndInvalidateSignature(){
+    if(!current) return;
+    const relevantChanged = isSignRelevantChanged();
+    if(relevantChanged && current.signature){
+      current.signature = '';
+      try {
+        const c = $('#signature');
+        const w = c.width / ratio;
+        const h = c.height / ratio;
+        ctx.clearRect(0,0,w,h);
+      } catch(e){}
+      $('#signPlaceholder').style.display = 'block';
+      setStatus('内容已修改，请重新签名', 'err');
+      toast('内容已修改，原签名已清除，请重新签名');
+    }
+  }
+
+  function renderMediaGrid(kind){
     if(!current) current = blankRecord();
-    if(checks) current.checks = checks;
+    if(!Array.isArray(current[kind])) current[kind] = toMediaArray(current[kind]);
+    const arr = current[kind];
+    const grid = $(`#${kind}Grid`);
+    const countEl = $(`#${kind}Count`);
+    countEl.textContent = `${arr.length} / ${MAX_MEDIA}`;
+
+    let html = '';
+    for(let i = 0; i < MAX_MEDIA; i++){
+      const v = arr[i];
+      if(v){
+        const src = mediaUrl(v);
+        let inner = '';
+        if(isVideo(v)){
+          inner = `<video src="${src}" muted preload="metadata"></video>`;
+        } else {
+          inner = `<img src="${src}" alt="">`;
+        }
+        const badge = isVideo(v) ? '📹' : '🖼';
+        html += `
+          <div class="media-cell filled" data-cell="${i}" data-kind="${kind}">
+            ${inner}
+            <span class="cell-badge">${badge}</span>
+            <button type="button" class="cell-remove" data-remove-cell="${i}" data-remove-kind="${kind}" title="删除">✕</button>
+            <span class="cell-num">${i+1}</span>
+          </div>`;
+      } else {
+        html += `
+          <div class="media-cell" data-cell="${i}" data-kind="${kind}" title="点击上传">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            <span class="cell-num">${i+1}</span>
+          </div>`;
+      }
+    }
+    grid.innerHTML = html;
+  }
+
+  function removeMediaAt(kind, idx){
+    if(!current) return;
+    if(!Array.isArray(current[kind])) current[kind] = toMediaArray(current[kind]);
+    const removed = current[kind].splice(idx, 1)[0];
+    renderMediaGrid(kind);
+    changed = true;
+    // 可选：同步删除仓库文件（避免孤儿文件堆积）。若不需要，注释掉下面这段。
+    if(removed && !removed.startsWith('data:') && !/^https?:\/\//i.test(removed)){
+      ghDeleteFile(removed).catch(()=>{});
+    }
+  }
+
+  function appendMedia(kind, value){
+    if(!current) current = blankRecord();
+    if(!Array.isArray(current[kind])) current[kind] = toMediaArray(current[kind]);
+    if(current[kind].length >= MAX_MEDIA) return false;
+    current[kind].push(value);
+    renderMediaGrid(kind);
+    changed = true;
+    return true;
+  }
+
+  function renderChecks(){
+    if(!current) current = blankRecord();
+    const checks = current.checks || [];
     const host = $('#checkList');
-    host.innerHTML = current.checks.map((x,i)=>`
+    host.innerHTML = checks.map((x,i)=>`
       <label class="check-item ${x.done?'done':''}">
         <input type="checkbox" data-check="${i}" ${x.done?'checked':''}>
         <span class="check-text">${esc(x.text)}</span>
@@ -685,52 +1339,171 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/></svg>
         </button>
       </label>`).join('');
-    const done = current.checks.filter(x=>x.done).length;
-    $('#progress').textContent = `完成 ${current.checks.length?Math.round(done/current.checks.length*100):0}%`;
+    const done = checks.filter(x=>x.done).length;
+    $('#progress').textContent = `完成 ${checks.length?Math.round(done/checks.length*100):0}%`;
   }
+
   async function saveCurrent(){
+    if(saving) return;
+    if(!recordsLoaded){
+      showAlert('请稍候', '正在从 GitHub 读取数据，请等待读取完成后再保存。');
+      return;
+    }
     syncForm();
     if(!current) return;
+
+    if(!current.signature){
+      showAlert('无法保存', '请先在「用户签名」区域完成手写签名，然后再保存。<br><br>签名是对本次改善确认的正式确认，未签名不能提交。');
+      try {
+        const wrap = $('#signatureWrap');
+        wrap.scrollIntoView({ behavior:'smooth', block:'center' });
+        wrap.style.transition = 'box-shadow .3s';
+        wrap.style.boxShadow = '0 0 0 4px rgba(217,45,32,.25)';
+        setTimeout(() => { wrap.style.boxShadow = ''; }, 1500);
+      } catch(e){}
+      return;
+    }
+
+    if(isSignRelevantChanged()){
+      current.signature = '';
+      try {
+        const c = $('#signature');
+        const w = c.width / ratio;
+        const h = c.height / ratio;
+        ctx.clearRect(0,0,w,h);
+      } catch(e){}
+      $('#signPlaceholder').style.display = 'block';
+      showAlert('需要重新签名', '「确认事项」或「说明与签名」内容已修改，原签名已失效。<br><br>请重新签名后再保存。');
+      return;
+    }
+
+    const idx = records.findIndex(r=>r.id===current.id);
+    const nextRecords = records.map(r => JSON.parse(JSON.stringify(r)));
     current.updatedAt = nowISO();
     if(!current.savedAt) current.savedAt = current.updatedAt;
-    const idx = records.findIndex(r=>r.id===current.id);
-    if(idx>=0) records[idx] = JSON.parse(JSON.stringify(current));
-    else records.push(JSON.parse(JSON.stringify(current)));
+    const snapshot = JSON.parse(JSON.stringify(current));
+    if(idx>=0) nextRecords[idx] = snapshot;
+    else nextRecords.push(snapshot);
+
+    if(fileSha && records.length >= 2 && nextRecords.length < records.length){
+      const confirmDelete = confirm(`注意：本次保存将使记录从 ${records.length} 条变为 ${nextRecords.length} 条（疑似删除）。\n\n确定要继续吗？`);
+      if(!confirmDelete){
+        return;
+      }
+    }
+
+    saving = true;
+    const backup = JSON.parse(JSON.stringify(records));
+    records = nextRecords;
+
     try {
       await ghSave();
       changed = false;
+      pristineSnapshot = computeSignRelevantSnapshot(current);
       toast('已保存到 GitHub');
+      renderList();
     } catch(err){
+      records = backup;
       toast('保存失败：' + err.message);
       setStatus('保存失败：' + err.message, 'err');
+    } finally {
+      saving = false;
     }
   }
 
-  // ---------- 图片压缩 ----------
-  function compressImage(file, cb){
-    if(!file || !file.type.startsWith('image/')) return;
-    const r = new FileReader();
-    r.onload = e => {
-      const img = new Image();
-      img.onload = () => {
-        const max = 1600;
-        const scale = Math.min(1, max/Math.max(img.width,img.height));
-        const c = document.createElement('canvas');
-        c.width = Math.round(img.width*scale);
-        c.height = Math.round(img.height*scale);
-        c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-        cb(c.toDataURL('image/jpeg',.82));
+  function compressImage(file){
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          const max = 1600;
+          const scale = Math.min(1, max/Math.max(img.width,img.height));
+          const c = document.createElement('canvas');
+          c.width = Math.round(img.width*scale);
+          c.height = Math.round(img.height*scale);
+          c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+          resolve(c.toDataURL('image/jpeg',.82));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
       };
-      img.src = e.target.result;
-    };
-    r.readAsDataURL(file);
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+  function readVideo(file){
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = e => resolve(e.target.result);
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
   }
 
-  // ---------- 主签名画布 ----------
+  // ★ 改为：先压缩/读取 → 上传到仓库 images/ 或 videos/ → JSON 里只存相对路径
+  async function processFiles(kind, files){
+    if(!current) current = blankRecord();
+    if(!Array.isArray(current[kind])) current[kind] = toMediaArray(current[kind]);
+    const remain = MAX_MEDIA - current[kind].length;
+    if(remain <= 0){
+      toast(`最多 ${MAX_MEDIA} 个，请先删除部分再上传`);
+      return;
+    }
+    const arr = Array.from(files || []);
+    if(arr.length > remain){
+      toast(`本次只处理前 ${remain} 个（已满 ${MAX_MEDIA}）`);
+    }
+    const todo = arr.slice(0, remain);
+
+    const progressEl = $(`#${kind}Progress`);
+    let done = 0;
+    progressEl.textContent = `准备上传 0 / ${todo.length}…`;
+
+    for(const file of todo){
+      try {
+        const stamp = Date.now();
+        const rand = Math.random().toString(36).slice(2,6);
+
+        if(file.type.startsWith('image/')){
+          progressEl.textContent = `压缩图片 ${done+1} / ${todo.length}…`;
+          const dataUrl = await compressImage(file);
+          const b64 = dataUrlToBase64(dataUrl);
+          const name = `${kind}_${current.id}_${stamp}_${rand}.jpg`;
+          const path = `${cfg.imagesDir}/${name}`;
+          progressEl.textContent = `上传图片 ${done+1} / ${todo.length}…`;
+          await ghUploadFile(path, b64, `upload ${name}`);
+          appendMedia(kind, path);   // ★ JSON 里只存相对路径
+        } else if(file.type.startsWith('video/')){
+          if(file.size > 25 * 1024 * 1024){
+            const ok = confirm(`「${file.name}」约 ${(file.size/1024/1024).toFixed(1)}MB，上传可能较慢。\n仍要上传吗？`);
+            if(!ok){ done++; continue; }
+          }
+          progressEl.textContent = `读取视频 ${done+1} / ${todo.length}…`;
+          const dataUrl = await readVideo(file);
+          const b64 = dataUrlToBase64(dataUrl);
+          const ext = (file.name.split('.').pop() || 'mp4').toLowerCase().replace(/[^a-z0-9]/g,'') || 'mp4';
+          const name = `${kind}_${current.id}_${stamp}_${rand}.${ext}`;
+          const path = `${cfg.videosDir}/${name}`;
+          progressEl.textContent = `上传视频 ${done+1} / ${todo.length}…`;
+          await ghUploadFile(path, b64, `upload ${name}`);
+          appendMedia(kind, path);
+        } else {
+          toast(`跳过不支持的文件：${file.name}`);
+        }
+      } catch(err){
+        toast(`上传失败：${file.name} — ${err.message}`);
+      }
+      done++;
+    }
+    progressEl.textContent = '';
+    renderMediaGrid(kind);
+  }
+
   function resizeCanvas(preserve=true){
     const c = $('#signature');
     const rect = c.getBoundingClientRect();
-    if(rect.width === 0 || rect.height === 0) return; // 隐藏状态不重算
+    if(rect.width === 0 || rect.height === 0) return;
 
     const old = preserve && c.width ? c.toDataURL() : '';
     ratio = Math.max(1, window.devicePixelRatio||1);
@@ -758,7 +1531,6 @@
     if(mark) changed = true;
   }
 
-  // ---------- 弹窗签名 ----------
   function resizeModalCanvas(preserve=true){
     const c = $('#signatureModal'), wrap = $('#signModalCanvasWrap');
     const rect = wrap.getBoundingClientRect();
@@ -786,7 +1558,6 @@
     $('#signModal').classList.add('show');
     modalOpen = true;
     document.body.style.overflow='hidden';
-    // 双 rAF 等布局稳定
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         resizeModalCanvas(false);
@@ -808,11 +1579,10 @@
   function closeSignModal(confirmSave){
     if(confirmSave){
       const c = $('#signatureModal');
-      const data = c.toDataURL('image/png');
+      const data = exportSignature(c);
       if(current) current.signature = data;
       changed = true;
 
-      // 用主画布真实像素尺寸绘制
       const main = $('#signature');
       const w = main.width / ratio;
       const h = main.height / ratio;
@@ -827,81 +1597,135 @@
       } else {
         $('#signPlaceholder').style.display = 'block';
       }
+      pristineSnapshot = computeSignRelevantSnapshot(current);
     }
     $('#signModal').classList.remove('show');
     modalOpen = false;
     document.body.style.overflow = '';
   }
 
-  // ---------- 设置弹窗 ----------
-  function openSettings(){
-    $('#cfgOwner').value = cfg.owner || '';
-    $('#cfgRepo').value = cfg.repo || '';
-    $('#cfgPath').value = cfg.path || 'records.json';
-    $('#cfgToken').value = cfg.token || '';
-    $('#settingsModal').classList.add('show');
-  }
-  function closeSettings(){ $('#settingsModal').classList.remove('show'); }
-  function loadCfg(){
-    try { cfg = Object.assign(cfg, JSON.parse(localStorage.getItem(CFG_KEY)||'{}')); } catch(e){}
-  }
-  function saveCfg(){ localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); }
-
-  $('#settingsBtn').onclick = openSettings;
-  $$('[data-close-modal]').forEach(el => el.onclick = closeSettings);
-  $('#cfgClear').onclick = () => {
-    if(!confirm('确定清除 GitHub 配置吗？')) return;
-    cfg = { owner:'', repo:'', path:'records.json', token:'' };
-    localStorage.removeItem(CFG_KEY);
-    records = []; fileSha = null;
-    setStatus('未连接', '');
-    renderList(); closeSettings();
-  };
-  $('#cfgSave').onclick = async () => {
-    const owner = $('#cfgOwner').value.trim();
-    const repo = $('#cfgRepo').value.trim();
-    const path = $('#cfgPath').value.trim() || 'records.json';
-    const token = $('#cfgToken').value.trim();
-    if(!owner || !repo || !token){ toast('请填写完整'); return; }
-    cfg = { owner, repo, path, token };
-    saveCfg();
-    closeSettings();
-    try {
-      await ghLoad();
-      renderList();
-      toast('连接成功');
-    } catch(err){
-      setStatus('连接失败：' + err.message, 'err');
-      toast('连接失败：' + err.message);
+  // ★ 打开大图时把路径转成完整 URL
+  function openViewer(mediaValue, label){
+    if(!mediaValue) return;
+    const src = mediaUrl(mediaValue);
+    const modal = $('#viewerModal');
+    const host = $('#viewerMediaHost');
+    $('#viewerTitle').textContent = label || '';
+    host.innerHTML = '';
+    if(isVideo(mediaValue)){
+      const v = document.createElement('video');
+      v.src = src;
+      v.controls = true;
+      v.autoplay = true;
+      v.playsInline = true;
+      v.style.maxWidth = '100%';
+      v.style.maxHeight = 'calc(100vh - 80px)';
+      host.appendChild(v);
+    } else {
+      const i = document.createElement('img');
+      i.src = src;
+      i.alt = label || '';
+      host.appendChild(i);
     }
-  };
-
-  // ---------- 事件绑定 ----------
-  $$('[data-pick]').forEach(b => b.onclick = () => document.querySelector(`#${b.dataset.pick}Input`).click());
-  $$('[data-remove]').forEach(b => b.onclick = () => setPhoto(b.dataset.remove, ''));
-  ['before','after'].forEach(kind => {
-    $(`#${kind}Input`).addEventListener('change', e => compressImage(e.target.files[0], v => setPhoto(kind, v)));
-    $(`#${kind}Box`).onclick = () => $(`#${kind}Input`).click();
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeViewer(){
+    const modal = $('#viewerModal');
+    const host = $('#viewerMediaHost');
+    const v = host.querySelector('video');
+    if(v){ try { v.pause(); v.currentTime = 0; } catch(e){} }
+    host.innerHTML = '';
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  $('#viewerClose').onclick = closeViewer;
+  $('#viewerModal').addEventListener('click', e => {
+    if(e.target.id === 'viewerModal' || e.target.classList.contains('viewer-content')) closeViewer();
   });
+
+  $$('[data-pick]').forEach(b => b.onclick = () => document.querySelector(`#${b.dataset.pick}Input`).click());
+  $$('[data-clear]').forEach(b => b.onclick = () => {
+    const kind = b.dataset.clear;
+    if(!current) return;
+    const arr = current[kind] || [];
+    if(!arr.length) return;
+    if(!confirm(`确定清空「${kind==='before'?'改善之前':'改善之后'}」的全部 ${arr.length} 个媒体吗？`)) return;
+    // 可选：同步删除仓库文件。若不需要，注释掉下面这段。
+    arr.forEach(p => {
+      if(p && !p.startsWith('data:') && !/^https?:\/\//i.test(p)) ghDeleteFile(p).catch(()=>{});
+    });
+    current[kind] = [];
+    renderMediaGrid(kind);
+    changed = true;
+  });
+
+  ['before','after'].forEach(kind => {
+    $(`#${kind}Input`).addEventListener('change', e => {
+      const files = e.target.files;
+      if(files && files.length) processFiles(kind, files);
+      e.target.value = '';
+    });
+  });
+
+  ['before','after'].forEach(kind => {
+    const grid = $(`#${kind}Grid`);
+    grid.addEventListener('click', e => {
+      const rm = e.target.closest('[data-remove-cell]');
+      if(rm){
+        e.stopPropagation();
+        const idx = +rm.dataset.removeCell;
+        const k = rm.dataset.removeKind;
+        removeMediaAt(k, idx);
+        return;
+      }
+      const cell = e.target.closest('[data-cell]');
+      if(!cell) return;
+      const idx = +cell.dataset.cell;
+      const k = cell.dataset.kind;
+      const arr = current && current[k] ? current[k] : [];
+      if(arr[idx]){
+        const label = (k === 'before' ? '改善之前' : '改善之后') + ` · ${idx+1}`;
+        openViewer(arr[idx], label);
+      } else {
+        $(`#${k}Input`).click();
+      }
+    });
+  });
+
   $('#checkList').addEventListener('change', e => {
     if(e.target.matches('[data-check]')){
       current.checks[+e.target.dataset.check].done = e.target.checked;
-      renderChecks(); changed = true;
+      renderChecks();
+      changed = true;
+      checkAndInvalidateSignature();
     }
   });
   $('#checkList').addEventListener('click', e => {
     const b = e.target.closest('[data-del]');
-    if(b){ e.preventDefault(); current.checks.splice(+b.dataset.del,1); renderChecks(); changed=true; }
+    if(b){ e.preventDefault(); current.checks.splice(+b.dataset.del,1); renderChecks(); changed=true; checkAndInvalidateSignature(); }
   });
   function addCheck(){
     const i = $('#newCheck'), text = i.value.trim();
     if(!text) return;
     current.checks.push({text,done:false});
     i.value=''; renderChecks(); changed=true;
+    checkAndInvalidateSignature();
   }
   $('#addCheck').onclick = addCheck;
   $('#newCheck').onkeydown = e => { if(e.key==='Enter'){ e.preventDefault(); addCheck(); } };
-  ['title','location','owner','notes'].forEach(id => $('#'+id).addEventListener('input', () => changed=true));
+
+  $('#notes').addEventListener('input', () => {
+    changed = true;
+    if(current) current.notes = $('#notes').value;
+    checkAndInvalidateSignature();
+  });
+
+  ['title','location','owner'].forEach(id => $('#'+id).addEventListener('input', () => {
+    changed = true;
+    if(current) current[id] = $('#'+id).value;
+  }));
+
   $('#clearSign').onclick = () => clearSignature(true);
   $('#newBtn').onclick = createNewRecord;
   $('#refreshBtn').onclick = () => refreshFromGitHub();
@@ -909,7 +1733,14 @@
   const canvas = $('#signature');
   const start = e => { e.preventDefault(); drawing=true; const p=point(e,canvas); ctx.beginPath(); ctx.moveTo(p.x,p.y); $('#signPlaceholder').style.display='none'; };
   const move = e => { if(!drawing) return; e.preventDefault(); const p=point(e,canvas); ctx.lineTo(p.x,p.y); ctx.stroke(); };
-  const end = e => { if(!drawing) return; if(e) e.preventDefault(); drawing=false; if(current) current.signature = canvas.toDataURL('image/png'); changed=true; };
+  const end = e => {
+    if(!drawing) return;
+    if(e) e.preventDefault();
+    drawing = false;
+    if(current) current.signature = exportSignature(canvas);
+    changed = true;
+    pristineSnapshot = computeSignRelevantSnapshot(current);
+  };
   canvas.addEventListener('pointerdown', start);
   canvas.addEventListener('pointermove', move);
   canvas.addEventListener('pointerup', end);
@@ -929,7 +1760,13 @@
   $$('[data-close-sign]').forEach(el => el.onclick = () => closeSignModal(false));
   $('#signModalClear').onclick = clearModalSignature;
   $('#signModalConfirm').onclick = () => closeSignModal(true);
-  document.addEventListener('keydown', e => { if(e.key==='Escape' && modalOpen) closeSignModal(false); });
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape'){
+      if($('#alertModal').classList.contains('show')) closeAlert();
+      else if($('#viewerModal').classList.contains('show')) closeViewer();
+      else if(modalOpen) closeSignModal(false);
+    }
+  });
 
   window.addEventListener('resize', () => {
     if(modalOpen) resizeModalCanvas(true);
@@ -938,24 +1775,21 @@
   window.addEventListener('beforeunload', e => { if(changed){ e.preventDefault(); e.returnValue=''; } });
 
   async function refreshFromGitHub(){
-    if(!hasConfig()){ openSettings(); return; }
-    try { await ghLoad(); renderList(); toast('已刷新'); }
-    catch(err){ toast('刷新失败：' + err.message); }
+    try {
+      recordsLoaded = false;
+      setStatus('读取中…', 'loading');
+      await ghLoad();
+      renderList();
+      toast('已刷新 · ' + records.length + ' 条');
+    } catch(err){
+      recordsLoaded = false;
+      toast('刷新失败：' + err.message);
+    }
   }
 
-  // ---------- 初始化 ----------
-  loadCfg();
   current = blankRecord();
-  showList();
-  resizeCanvas(false);
-  if(hasConfig()){
-    ghLoad().then(()=>renderList()).catch(err=>{
-      setStatus('连接失败：' + err.message, 'err');
-    });
-  } else {
-    setStatus('未配置 GitHub，请点击「设置」', '');
-    setTimeout(openSettings, 400);
-  }
+  initWelcome();
+  renderTopActions('list');
 })();
 </script>
 </body>
