@@ -3,125 +3,192 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#009530">
+<meta name="theme-color" content="#b8946e">
 <meta name="robots" content="noindex, nofollow">
-<title>改善效果确认 - 记录管理</title>
+<title>全时定妆 · 客户档案管理</title>
 <style>
-  :root{--green:#009530;--green-dark:#08752d;--green-soft:#eaf7ee;--amber:#f59e0b;--ink:#172033;--muted:#667085;--line:#dfe5e2;--bg:#f2f6f4;--card:#fff;--danger:#d92d20;--radius:20px;--shadow:0 12px 36px rgba(20,50,35,.08)}
+  :root{
+    --gold:#b8946e;--gold-deep:#8f6e4b;--gold-soft:#f9f4ee;
+    --rose:#c47a7a;--rose-soft:#fdf0f0;
+    --ink:#2e2a25;--muted:#8a8078;--line:#e8e0d8;--bg:#f7f3ee;--card:#fffdfb;
+    --danger:#b33e3e;--radius:20px;
+    --shadow:0 12px 36px rgba(80,60,40,.07);
+    --shadow-soft:0 6px 20px rgba(80,60,40,.05);
+  }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
   button,input,textarea,select{font:inherit}
   button{cursor:pointer}
   .app{min-height:100vh;padding-bottom:calc(30px + env(safe-area-inset-bottom))}
-  .topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(210,220,215,.9);padding-top:env(safe-area-inset-top)}
+
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(255,253,251,.94);backdrop-filter:blur(18px);border-bottom:1px solid rgba(232,224,216,.9);padding-top:env(safe-area-inset-top)}
   .topbar-inner{max-width:1280px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 20px}
   .brand{display:flex;align-items:center;gap:10px;min-width:0}
-  .logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,#00ad45,#007d2b);display:grid;place-items:center;color:#fff;box-shadow:0 6px 14px rgba(0,149,48,.22)}
+  .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,#c9a57b,#a07950);display:grid;place-items:center;color:#fff;box-shadow:0 6px 14px rgba(184,148,110,.3)}
   .logo svg{width:20px;height:20px}
-  .brand h1{font-size:16px;margin:0;white-space:nowrap}
-  .brand p{font-size:11px;color:var(--muted);margin:2px 0 0}
+  .brand h1{font-size:16px;margin:0;white-space:nowrap;letter-spacing:.5px}
+  .brand p{font-size:11px;color:var(--muted);margin:2px 0 0;letter-spacing:.5px}
   .actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
-  .btn{height:38px;border:1px solid var(--line);border-radius:11px;padding:0 14px;background:#fff;color:#344054;font-weight:650;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.18s;font-size:14px}
+  .btn{height:38px;border:1px solid var(--line);border-radius:11px;padding:0 14px;background:#fff;color:#5a5048;font-weight:650;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.18s;font-size:14px}
   .btn:active{transform:scale(.98)}
-  .btn.primary{color:#fff;background:var(--green);border-color:var(--green)}
-  .btn.primary:hover{background:var(--green-dark)}
+  .btn.primary{color:#fff;background:linear-gradient(145deg,#c9a57b,#a07950);border-color:transparent;box-shadow:0 6px 16px rgba(184,148,110,.28)}
+  .btn.primary:hover{filter:brightness(1.05)}
   .btn.danger{color:var(--danger)}
   .btn svg{width:17px;height:17px}
   .btn:disabled{opacity:.5;cursor:not-allowed}
   main{max-width:1280px;margin:auto;padding:16px 20px;display:grid;gap:14px}
-  .card{background:var(--card);border:1px solid rgba(220,228,224,.9);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+
+  .card{background:var(--card);border:1px solid rgba(232,224,216,.9);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
   .card-body{padding:16px}
   .card-title{font-size:16px;font-weight:760;margin:0}
-  .meta-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px}
-  .field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:0 0 6px}
-  .input,.textarea{width:100%;border:1px solid #d8dfdc;border-radius:11px;background:#fff;color:var(--ink);outline:none;transition:.18s}
+  .field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:0 0 6px;letter-spacing:.3px}
+  .input,.textarea{width:100%;border:1px solid #e0d8cf;border-radius:11px;background:#fff;color:var(--ink);outline:none;transition:.18s}
   .input{height:42px;padding:0 12px;font-size:14px}
   .textarea{padding:11px 12px;min-height:122px;resize:vertical;font-size:14px}
-  .input:focus,.textarea:focus{border-color:var(--green);box-shadow:0 0 0 4px rgba(0,149,48,.1)}
+  .input:focus,.textarea:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(184,148,110,.12)}
+
+  /* 步骤导航：固定在顶部 */
+  .step-tabs{position:sticky;top:calc(54px + env(safe-area-inset-top));z-index:15;display:flex;gap:0;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-soft);flex-wrap:wrap;backdrop-filter:blur(8px)}
+  .step-tab{flex:1;min-width:110px;padding:12px 6px;text-align:center;font-size:13px;font-weight:700;color:var(--muted);background:#fff;border:0;border-right:1px solid var(--line);transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .step-tab:last-child{border-right:0}
+  .step-tab .num{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#f0eae3;color:var(--muted);font-size:12px;font-weight:800}
+  .step-tab.active{color:var(--gold-deep);background:var(--gold-soft)}
+  .step-tab.active .num{background:linear-gradient(145deg,#c9a57b,#a07950);color:#fff}
+  .step-pane{display:none}
+  .step-pane.active{display:block;animation:fadeUp .3s ease}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .info-grid .field{margin:0}
+  .section-label{font-size:13px;font-weight:800;color:var(--gold-deep);margin:18px 0 10px;padding-left:10px;border-left:3px solid var(--gold);letter-spacing:.5px}
+  .section-label:first-child{margin-top:0}
+
+  .chip-group{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13px;background:#fff;color:#5a5048;cursor:pointer;transition:.16s;user-select:none}
+  .chip input{display:none}
+  .chip.checked{background:var(--gold-soft);border-color:var(--gold);color:var(--gold-deep);font-weight:700;box-shadow:0 2px 8px rgba(184,148,110,.15)}
+  .chip.checked::before{content:"✓";font-size:12px;font-weight:900;color:var(--gold-deep)}
+
+  .skin-lip-row{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+  .skin-lip-label{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:2px}
+
+  .svc-table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;table-layout:fixed}
+  .svc-table td,.svc-table th{border:1px solid #d8d0c6;padding:8px 10px;vertical-align:middle}
+  .svc-table .svc-cat{background:#e8e2d9;font-weight:800;color:var(--gold-deep);text-align:center;white-space:nowrap;vertical-align:middle;font-size:13px;width:11%}
+  .svc-table .svc-sub{background:#f4efe8;font-weight:700;color:#6b5d4e;text-align:center;white-space:nowrap;font-size:12.5px;width:11%}
+  .svc-table .svc-cat-plain{background:#e8e2d9;font-weight:800;color:var(--gold-deep);text-align:center;white-space:nowrap;vertical-align:middle;font-size:13px;width:22%}
+  .svc-table .svc-cat-plain::after{content:"";display:block}
+  .svc-row-items{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+  .svc-check{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:#5a5048;cursor:pointer;white-space:nowrap;user-select:none;padding:2px 4px;border-radius:6px;transition:.15s}
+  .svc-check:hover{background:var(--gold-soft)}
+  .svc-check input{accent-color:var(--gold);width:15px;height:15px;flex:none;cursor:pointer}
+  .svc-check.checked{color:var(--gold-deep);font-weight:650}
+
+  .svc-plain-label{background:#f4efe8;font-weight:700;color:#6b5d4e;text-align:center;white-space:nowrap;font-size:12.5px;vertical-align:middle}
+
+  .health-add-row{display:flex;gap:8px;margin-top:8px;align-items:center}
+  .health-add-row .input{height:34px;font-size:13px;flex:1}
+  .health-add-row .btn{width:38px;height:34px;padding:0;font-size:16px}
+
+  .notice-box{font-size:13px;line-height:1.85;color:#5a5048;background:#fffaf5;border:1px solid #f0e6da;border-radius:16px;padding:18px 20px}
+  .notice-box p{margin:0 0 10px}
+  .notice-box p:last-child{margin-bottom:0}
+  .notice-box strong{color:var(--gold-deep)}
+  .notice-sub{font-size:13px;font-weight:800;color:var(--gold-deep);margin:16px 0 8px;padding-left:8px;border-left:3px solid var(--gold)}
+
   .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-  .photo-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
-  .photo-head{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid #edf0ef;font-weight:750;font-size:15px}
+  .photo-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-soft)}
+  .photo-head{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid #f2ece6;font-weight:750;font-size:15px;color:var(--gold-deep)}
   .dot{width:10px;height:10px;border-radius:50%}
   .photo-area{padding:12px}
-  .photo-count{font-size:11px;font-weight:700;color:var(--muted);background:#f2f5f3;padding:3px 9px;border-radius:999px}
+  .photo-count{font-size:11px;font-weight:700;color:var(--muted);background:#f5f0ea;padding:3px 9px;border-radius:999px}
   .media-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .media-cell{position:relative;aspect-ratio:1/1;border:2px dashed #d5deda;border-radius:14px;overflow:hidden;background:#f8faf9;display:grid;place-items:center;cursor:pointer;transition:.18s}
-  .media-cell:hover{border-color:var(--green)}
-  .media-cell.filled{border-style:solid;border-color:#cfd6d3;background:#0f172a}
-  .media-cell img,.media-cell video{width:100%;height:100%;object-fit:cover;display:block;background:#0f172a}
-  .media-cell .empty-icon{width:34px;height:34px;color:#b6bfbb}
-  .media-cell .cell-badge{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;pointer-events:none}
-  .media-cell .cell-remove{position:absolute;top:6px;right:6px;width:24px;height:24px;border:0;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:14px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(4px)}
-  .media-cell .cell-remove:hover{background:rgba(217,45,32,.85)}
-  .media-cell .cell-num{position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.55);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;pointer-events:none}
+  .media-cell{position:relative;aspect-ratio:1/1;border:2px dashed #e0d6ca;border-radius:14px;overflow:hidden;background:#faf6f1;display:grid;place-items:center;cursor:pointer;transition:.18s}
+  .media-cell:hover{border-color:var(--gold)}
+  .media-cell.filled{border-style:solid;border-color:#e0d6ca;background:#2e2a25}
+  .media-cell img,.media-cell video{width:100%;height:100%;object-fit:cover;display:block;background:#2e2a25}
+  .media-cell .empty-icon{width:34px;height:34px;color:#d2c6b8}
+  .media-cell .cell-badge{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.55);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;pointer-events:none}
+  .media-cell .cell-remove{position:absolute;top:6px;right:6px;width:24px;height:24px;border:0;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:14px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(4px)}
+  .media-cell .cell-remove:hover{background:rgba(179,62,62,.85)}
+  .media-cell .cell-num{position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,.5);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;pointer-events:none}
   .photo-tools{display:flex;gap:8px;margin-top:10px}
   .photo-tools .btn{flex:1}
   .file-input{display:none}
   .upload-progress{margin-top:8px;font-size:12px;color:var(--muted);min-height:16px;text-align:center}
 
-  .bottom-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:20px}
-  .section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 10px}
-  .progress{font-size:12px;font-weight:800;color:#08752d;background:var(--green-soft);padding:6px 10px;border-radius:999px}
   .check-list{display:grid;gap:9px;padding:0 18px 16px}
-  .check-item{display:flex;align-items:center;gap:12px;border:1px solid #dfe5e2;border-radius:14px;padding:12px;background:#fff}
-  .check-item.done{background:var(--green-soft);border-color:#b9e4c6}
-  .check-item input{width:21px;height:21px;accent-color:var(--green);flex:none}
+  .check-item{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}
+  .check-item.done{background:var(--gold-soft);border-color:#e6d6c2}
+  .check-item input{width:21px;height:21px;accent-color:var(--gold);flex:none}
   .check-text{flex:1;font-size:14px}
-  .check-item.done .check-text{font-weight:650;color:#09662a}
-  .icon-btn{width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:#a4aca8;display:grid;place-items:center}
+  .check-item.done .check-text{font-weight:650;color:var(--gold-deep)}
+  .icon-btn{width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:#c4b8a8;display:grid;place-items:center}
   .icon-btn:hover{background:#fff;color:var(--danger)}
   .icon-btn svg{width:17px;height:17px}
-  .add-row{display:flex;gap:8px;padding-top:4px}
+  .add-row{display:flex;gap:8px;padding:0 18px 18px}
   .add-row .input{flex:1}
   .add-row .btn{width:46px;padding:0}
+  .section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 10px}
+  .progress{font-size:12px;font-weight:800;color:var(--gold-deep);background:var(--gold-soft);padding:6px 10px;border-radius:999px}
+
   .right-body{padding:0 18px 18px;display:grid;gap:18px}
-  .signature-wrap{position:relative;border:1px solid #d8dfdc;border-radius:15px;overflow:hidden;background:#fff;cursor:pointer}
+  .signature-wrap{position:relative;border:1px solid #e0d8cf;border-radius:15px;overflow:hidden;background:#fff;cursor:pointer}
   .signature-wrap canvas{display:block;width:100%;height:185px;touch-action:none;cursor:crosshair}
-  .sign-placeholder{position:absolute;left:0;right:0;bottom:30px;text-align:center;color:#b2bab6;font-size:13px;pointer-events:none}
-  .sign-line{position:absolute;left:12%;right:12%;bottom:48px;border-top:1px solid #e1e5e3;pointer-events:none}
+  .sign-placeholder{position:absolute;left:0;right:0;bottom:30px;text-align:center;color:#c4b8a8;font-size:13px;pointer-events:none}
+  .sign-line{position:absolute;left:12%;right:12%;bottom:48px;border-top:1px solid #ece5dd;pointer-events:none}
   .signature-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
   .signature-label{font-size:14px;font-weight:750;display:flex;align-items:center;gap:7px}
-  .signature-label svg{width:18px;color:var(--green)}
-  .date-row{display:flex;justify-content:space-between;border-top:1px solid #edf0ef;padding-top:14px;color:var(--muted);font-size:12px}
-  .toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translate(-50%,18px);padding:13px 19px;border-radius:999px;background:#172033;color:#fff;font-size:14px;font-weight:650;box-shadow:0 14px 35px rgba(0,0,0,.24);opacity:0;pointer-events:none;transition:.25s;z-index:99}
-  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .signature-label svg{width:18px;color:var(--gold)}
+  .date-row{display:flex;justify-content:space-between;border-top:1px solid #f2ece6;padding-top:14px;color:var(--muted);font-size:12px}
   .privacy{font-size:12px;color:var(--muted);text-align:center;margin-top:-5px}
+
+  .sign-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .sign-col{display:flex;flex-direction:column;gap:8px}
+  .sign-col .signature-wrap canvas{height:150px}
+  .sign-col .signature-wrap .sign-placeholder{bottom:22px;font-size:12px}
+  .sign-col .signature-wrap .sign-line{bottom:40px}
+
+  .toast{position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translate(-50%,18px);padding:13px 19px;border-radius:999px;background:#2e2a25;color:#fff;font-size:14px;font-weight:650;box-shadow:0 14px 35px rgba(0,0,0,.24);opacity:0;pointer-events:none;transition:.25s;z-index:99}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
   .view{display:none}
   .view.active{display:block}
   .list-toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
   .record-list{display:grid;gap:10px;padding:0}
-  .record-item{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;transition:.18s;box-shadow:0 6px 20px rgba(20,50,35,.05)}
-  .record-item:hover{border-color:var(--green);transform:translateY(-1px);box-shadow:0 10px 26px rgba(20,149,48,.12)}
+  .record-item{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;transition:.18s;box-shadow:var(--shadow-soft)}
+  .record-item:hover{border-color:var(--gold);transform:translateY(-1px);box-shadow:0 10px 26px rgba(184,148,110,.13)}
   .record-main{min-width:0}
   .record-title{font-weight:760;font-size:16px;margin:0 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
   .record-sub{font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
   .record-sub .media-hint{display:inline-flex;align-items:center;gap:4px}
-  .record-sub .media-hint img{width:22px;height:22px;border-radius:5px;object-fit:cover;background:#eef3f0}
-  .record-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--green-soft);color:#08752d;white-space:nowrap}
+  .record-sub .media-hint img{width:22px;height:22px;border-radius:5px;object-fit:cover;background:#f2ece6}
+  .record-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--gold-soft);color:var(--gold-deep);white-space:nowrap}
   .record-badge.pending{background:#fff4e5;color:#b45309}
   .record-badge.unsigned{background:#fdecea;color:#b42318}
   .record-actions{display:flex;align-items:center;gap:8px}
-  .record-del{width:36px;height:36px;border:0;border-radius:10px;background:#f7f9f8;color:#98a29e;display:grid;place-items:center}
+  .record-del{width:36px;height:36px;border:0;border-radius:10px;background:#f7f4f0;color:#b8ac9c;display:grid;place-items:center}
   .record-del:hover{background:#fdecea;color:var(--danger)}
   .record-del svg{width:17px;height:17px}
   .empty-list{text-align:center;padding:60px 20px;color:var(--muted)}
   .empty-list .big{font-size:52px;margin-bottom:12px}
   .list-count{font-size:13px;color:var(--muted);font-weight:600}
-  .status-bar{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);padding:6px 20px;background:#f8faf9;border-bottom:1px solid #edf0ef}
-  .status-dot{width:8px;height:8px;border-radius:50%;background:#cbd5d1}
-  .status-dot.ok{background:var(--green)}
+  .status-bar{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);padding:6px 20px;background:#faf7f3;border-bottom:1px solid #f2ece6}
+  .status-dot{width:8px;height:8px;border-radius:50%;background:#d8cec2}
+  .status-dot.ok{background:#5a9e6f}
   .status-dot.err{background:var(--danger)}
-  .status-dot.loading{background:var(--amber)}
+  .status-dot.loading{background:#d9a441}
+
   .modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
   .modal.show{display:flex}
-  .modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.45)}
-  .modal-panel{position:relative;width:100%;max-width:640px;background:#fff;border-radius:24px;overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
-  .modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #edf0ef}
-  .modal-title{font-size:16px;font-weight:760}
+  .modal-backdrop{position:absolute;inset:0;background:rgba(40,30,20,.5)}
+  .modal-panel{position:relative;width:100%;max-width:640px;background:#fffdfb;border-radius:24px;overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #f2ece6}
+  .modal-title{font-size:16px;font-weight:760;color:var(--gold-deep)}
   .modal-body{padding:20px;overflow:auto;display:grid;gap:16px}
   .modal-foot{display:flex;gap:12px;justify-content:flex-end;padding:12px 20px 20px}
   .hint{font-size:12px;color:var(--muted);line-height:1.6}
-  .hint code{background:#f2f5f3;padding:1px 6px;border-radius:5px;font-size:12px}
+  .hint code{background:#f5f0ea;padding:1px 6px;border-radius:5px;font-size:12px}
 
   .filter-bar{display:grid;grid-template-columns:1.8fr 1fr 1fr auto auto;gap:8px;align-items:end}
   .filter-bar .field{margin:0}
@@ -129,13 +196,11 @@
   .filter-bar .input{height:38px;font-size:13px}
   .filter-bar .btn{height:38px;padding:0 14px;font-size:13px}
   .filter-summary{font-size:12px;color:var(--muted);margin-top:6px}
-
   .bulk-bar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:8px 0 2px}
   .bulk-bar .btn{height:36px;font-size:13px;padding:0 14px}
   .bulk-count{font-size:13px;color:var(--muted);font-weight:600}
-
-  .record-check{width:20px;height:20px;accent-color:var(--green);flex:none;cursor:pointer}
-  .record-item.selected{border-color:var(--green);background:var(--green-soft)}
+  .record-check{width:20px;height:20px;accent-color:var(--gold);flex:none;cursor:pointer}
+  .record-item.selected{border-color:var(--gold);background:var(--gold-soft)}
 
   .viewer-modal{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.92);padding:20px}
   .viewer-modal.show{display:flex}
@@ -146,173 +211,35 @@
   .viewer-title{position:absolute;top:-50px;left:0;color:#fff;font-size:14px;font-weight:650;opacity:.9}
   .viewer-hint{position:absolute;bottom:-40px;left:0;right:0;text-align:center;color:rgba(255,255,255,.6);font-size:12px}
 
-  .welcome-overlay{
-    position:fixed;inset:0;z-index:500;
-    display:flex;align-items:center;justify-content:center;padding:20px;
-    overflow:hidden;
-    background:
-      radial-gradient(1200px 600px at 12% 8%, rgba(0,173,69,.42), transparent 60%),
-      radial-gradient(900px 500px at 88% 92%, rgba(8,117,45,.55), transparent 62%),
-      linear-gradient(160deg,#04140a 0%,#072a17 45%,#03140a 100%);
-    transition:opacity .4s ease, visibility .4s ease;
-  }
-  .welcome-overlay::before{
-    content:"";
-    position:absolute;inset:0;
-    background-image:
-      linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
-    background-size:42px 42px;
-    mask-image:radial-gradient(circle at 50% 45%, #000 30%, transparent 78%);
-    -webkit-mask-image:radial-gradient(circle at 50% 45%, #000 30%, transparent 78%);
-    pointer-events:none;
-  }
-  .welcome-overlay::after{
-    content:"";
-    position:absolute;
-    width:600px;height:600px;left:50%;top:50%;
-    transform:translate(-50%,-50%);
-    background:radial-gradient(circle, rgba(0,173,69,.28), transparent 65%);
-    filter:blur(40px);
-    animation:glowPulse 6s ease-in-out infinite;
-    pointer-events:none;
-  }
-  @keyframes glowPulse{
-    0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(1)}
-    50%{opacity:.9;transform:translate(-50%,-50%) scale(1.12)}
-  }
+  .welcome-overlay{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;
+    background:radial-gradient(1200px 600px at 12% 8%, rgba(184,148,110,.35), transparent 60%),radial-gradient(900px 500px at 88% 92%, rgba(143,110,75,.5), transparent 62%),linear-gradient(160deg,#1c1510 0%,#2e2318 45%,#1a130d 100%);transition:opacity .4s ease, visibility .4s ease}
   .welcome-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
-
-  .welcome-card{
-    position:relative;width:100%;max-width:460px;
-    background:rgba(18,32,24,.62);
-    border:1px solid rgba(122,235,168,.18);
-    border-radius:28px;
-    box-shadow:
-      0 30px 80px rgba(0,0,0,.55),
-      inset 0 1px 0 rgba(255,255,255,.06);
-    backdrop-filter:blur(22px) saturate(160%);
-    -webkit-backdrop-filter:blur(22px) saturate(160%);
-    padding:36px 30px 26px;text-align:center;
-    animation:welcomePop .55s cubic-bezier(.2,.9,.3,1.2);
-    color:#e9f5ee;
-    overflow:hidden;
-  }
-  .welcome-card::before{
-    content:"";
-    position:absolute;top:0;left:12%;right:12%;height:1px;
-    background:linear-gradient(90deg, transparent, rgba(0,220,110,.7), transparent);
-    pointer-events:none;
-  }
-  @keyframes welcomePop{
-    0%{transform:translateY(24px) scale(.95);opacity:0}
-    100%{transform:translateY(0) scale(1);opacity:1}
-  }
-
-  .welcome-logo{
-    width:78px;height:78px;border-radius:22px;margin:0 auto 20px;
-    background:linear-gradient(145deg,#00c853,#007d2b);
-    display:grid;place-items:center;color:#fff;
-    box-shadow:
-      0 14px 34px rgba(0,200,80,.4),
-      0 0 0 1px rgba(255,255,255,.08),
-      inset 0 1px 0 rgba(255,255,255,.35);
-    position:relative;
-    animation:logoFloat 4.5s ease-in-out infinite;
-  }
-  .welcome-logo::after{
-    content:"";
-    position:absolute;inset:-8px;border-radius:28px;
-    background:radial-gradient(circle, rgba(0,220,110,.35), transparent 70%);
-    z-index:-1;
-    animation:glowPulse 4s ease-in-out infinite;
-  }
-  @keyframes logoFloat{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-5px)}
-  }
-  .welcome-logo svg{width:42px;height:42px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
-
-  .welcome-title{
-    font-size:24px;font-weight:800;margin:0 0 10px;
-    letter-spacing:.5px;
-    background:linear-gradient(180deg,#ffffff 0%,#b7f0cf 120%);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;
-  }
-  .welcome-sub{
-    font-size:12.5px;color:rgba(215,240,225,.7);line-height:1.7;margin:0 0 8px;
-    letter-spacing:.3px;
-  }
-
-  .welcome-points{
-    list-style:none;margin:22px 0 24px;padding:0;
-    display:grid;gap:10px;text-align:left;
-  }
-  .welcome-points li{
-    display:flex;gap:12px;align-items:flex-start;font-size:13px;
-    color:rgba(230,245,236,.92);
-    background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02));
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:14px;padding:12px 14px;
-    animation:pointIn .5s cubic-bezier(.2,.9,.3,1.2) backwards;
-    transition:border-color .2s, transform .2s;
-  }
-  .welcome-points li:hover{
-    border-color:rgba(0,220,110,.4);
-    transform:translateX(2px);
-  }
+  .welcome-card{position:relative;width:100%;max-width:460px;background:rgba(40,32,24,.68);border:1px solid rgba(220,190,150,.18);border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(22px) saturate(160%);padding:36px 30px 26px;text-align:center;animation:welcomePop .55s cubic-bezier(.2,.9,.3,1.2);color:#f2e9dd;overflow:hidden}
+  @keyframes welcomePop{0%{transform:translateY(24px) scale(.95);opacity:0}100%{transform:translateY(0) scale(1);opacity:1}}
+  .welcome-logo{width:78px;height:78px;border-radius:22px;margin:0 auto 20px;background:linear-gradient(145deg,#d4b28a,#8f6e4b);display:grid;place-items:center;color:#fff;box-shadow:0 14px 34px rgba(184,148,110,.4);animation:logoFloat 4.5s ease-in-out infinite}
+  @keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  .welcome-logo svg{width:42px;height:42px}
+  .welcome-title{font-size:23px;font-weight:800;margin:0 0 10px;letter-spacing:.5px;background:linear-gradient(180deg,#ffffff 0%,#e8d5bd 120%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .welcome-sub{font-size:12.5px;color:rgba(240,225,205,.7);line-height:1.7;margin:0 0 8px;letter-spacing:.3px}
+  .welcome-points{list-style:none;margin:22px 0 24px;padding:0;display:grid;gap:10px;text-align:left}
+  .welcome-points li{display:flex;gap:12px;align-items:flex-start;font-size:13px;color:rgba(245,235,222,.92);background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px;animation:pointIn .5s cubic-bezier(.2,.9,.3,1.2) backwards}
+  @keyframes pointIn{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
   .welcome-points li:nth-child(1){animation-delay:.12s}
   .welcome-points li:nth-child(2){animation-delay:.2s}
   .welcome-points li:nth-child(3){animation-delay:.28s}
-  @keyframes pointIn{
-    0%{opacity:0;transform:translateY(8px)}
-    100%{opacity:1;transform:translateY(0)}
-  }
-  .welcome-points li .tick{
-    flex:none;width:22px;height:22px;border-radius:50%;
-    background:linear-gradient(145deg,#00c853,#007d2b);
-    display:grid;place-items:center;color:#fff;
-    font-size:12px;font-weight:900;margin-top:0;
-    box-shadow:0 4px 10px rgba(0,200,80,.4), inset 0 1px 0 rgba(255,255,255,.3);
-  }
-
+  .welcome-points li:nth-child(4){animation-delay:.36s}
+  .welcome-points li .tick{flex:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(145deg,#d4b28a,#8f6e4b);display:grid;place-items:center;color:#fff;font-size:12px;font-weight:900}
   .welcome-foot{display:flex;gap:12px;margin-top:6px}
-  .welcome-foot .btn{
-    flex:1;height:50px;font-size:15px;border-radius:14px;
-    border-color:rgba(255,255,255,.12);
-    background:rgba(255,255,255,.06);
-    color:#e9f5ee;
-    transition:.2s;
-  }
-  .welcome-foot .btn:hover{
-    background:rgba(255,255,255,.12);
-    border-color:rgba(255,255,255,.2);
-  }
-  .welcome-foot .btn.primary{
-    color:#fff;
-    background:linear-gradient(145deg,#00c853,#008a34);
-    border-color:transparent;
-    box-shadow:0 10px 24px rgba(0,200,80,.38), inset 0 1px 0 rgba(255,255,255,.25);
-  }
-  .welcome-foot .btn.primary:hover{
-    background:linear-gradient(145deg,#00d95a,#009a3a);
-    transform:translateY(-1px);
-    box-shadow:0 14px 30px rgba(0,200,80,.5), inset 0 1px 0 rgba(255,255,255,.3);
-  }
-
-  .welcome-hint{
-    margin-top:16px;font-size:12px;min-height:16px;
-    color:rgba(255,180,180,.9);
-    transition:opacity .25s;
-  }
+  .welcome-foot .btn{flex:1;height:50px;font-size:15px;border-radius:14px;border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f2e9dd}
+  .welcome-foot .btn.primary{color:#fff;background:linear-gradient(145deg,#d4b28a,#a07950);border-color:transparent;box-shadow:0 10px 24px rgba(184,148,110,.38)}
+  .welcome-hint{margin-top:16px;font-size:12px;min-height:16px;color:rgba(240,180,180,.9)}
 
   @media(max-width:900px){
-    .meta-grid{grid-template-columns:1fr 1fr}
-    .meta-grid .field:first-child{grid-column:1/-1}
-    .bottom-grid{grid-template-columns:1fr}
+    .info-grid{grid-template-columns:1fr 1fr}
+    .photo-grid{grid-template-columns:1fr}
     .filter-bar{grid-template-columns:1fr 1fr}
     .filter-bar .field:nth-child(1){grid-column:1/-1}
+    .sign-row{grid-template-columns:1fr}
   }
   @media(max-width:650px){
     .topbar-inner{padding:8px 14px}
@@ -321,55 +248,46 @@
     .logo{width:34px;height:34px;border-radius:10px}
     .logo svg{width:18px;height:18px}
     main{padding:12px}
-    .meta-grid,.photo-grid{grid-template-columns:1fr}
-    .meta-grid .field:first-child{grid-column:auto}
+    .info-grid{grid-template-columns:1fr}
     .card-body{padding:14px}
     .status-bar{padding:6px 14px}
     .filter-bar{grid-template-columns:1fr}
-    .filter-bar .field:nth-child(1){grid-column:auto}
     .filter-bar .btn{width:100%}
-    .welcome-card{padding:30px 22px 22px;border-radius:24px}
-    .welcome-logo{width:66px;height:66px;border-radius:20px}
-    .welcome-logo svg{width:34px;height:34px}
+    .step-tab{font-size:11px;min-width:60px;padding:10px 4px}
+    .step-tab .num{width:20px;height:20px;font-size:11px}
+    .welcome-card{padding:30px 22px 22px}
     .welcome-title{font-size:20px}
-    .welcome-foot .btn{height:46px;font-size:14px}
     .viewer-close{top:10px;right:10px}
     .viewer-title{top:10px;left:10px;background:rgba(0,0,0,.5);padding:4px 10px;border-radius:999px}
+    .svc-table .svc-cat,.svc-table .svc-sub{width:22%;font-size:11px;padding:6px 4px}
+    .svc-table .svc-cat-plain{width:44%;font-size:11px;padding:6px 4px}
+    .svc-table td{padding:6px 8px}
+    .svc-row-items{gap:6px 12px}
+    .step-tabs{top:calc(50px + env(safe-area-inset-top))}
   }
-
   @media print{
     @page{size:A4 portrait;margin:12mm}
     html,body{background:#fff}
     .app{padding:0}
     .topbar{position:static;border:0;background:#fff}
     .topbar-inner{padding:0 0 8px}
-    .actions,.photo-tools,.add-row,.icon-btn,.privacy,.status-bar,.filter-bar,.bulk-bar,.record-del,.record-check,.list-toolbar,.modal,.toast,.welcome-overlay,.viewer-modal,.upload-progress{display:none!important}
+    .actions,.photo-tools,.add-row,.icon-btn,.privacy,.status-bar,.filter-bar,.bulk-bar,.record-del,.record-check,.list-toolbar,.modal,.toast,.welcome-overlay,.viewer-modal,.upload-progress,.step-tabs,.health-add-row{display:none!important}
     main{padding:0;gap:0;max-width:none}
     .view{display:none!important}
     .view.active{display:block!important}
-    .card,.photo-card{box-shadow:none;border-color:#cfd6d3;border-radius:8px;break-inside:avoid;margin-bottom:8px}
+    .step-pane{display:block!important;margin-bottom:10px}
+    .card,.photo-card{box-shadow:none;border-color:#ddd;border-radius:8px;break-inside:avoid;margin-bottom:8px}
     .card-body{padding:12px}
-    .meta-grid{gap:10px}
     .input,.textarea{border:0;padding:0;background:transparent;height:auto;min-height:0;box-shadow:none!important}
     .photo-grid{gap:10px}
-    .photo-head{height:38px;padding:0 12px}
-    .photo-area{padding:8px}
-    .media-grid{gap:6px}
     .media-cell{border-style:solid;border-width:1px;cursor:default}
     .media-cell .cell-remove,.media-cell .cell-badge{display:none!important}
-    .media-cell img{display:block!important}
     .media-cell video{display:none!important}
-    .bottom-grid{gap:10px}
-    .section-head{padding:12px 12px 8px}
-    .check-list{padding:0 12px 10px;gap:5px}
-    .check-item{padding:7px 9px;border-radius:8px}
-    .right-body{padding:0 12px 10px;gap:9px}
-    .textarea{min-height:55px}
-    .signature-wrap canvas{height:115px}
-    .date-row{border-top:1px solid #edf0ef}
+    .signature-wrap canvas{height:100px}
+    .sign-col .signature-wrap canvas{height:100px}
     .print-record-list{display:block!important}
     .record-list{display:block}
-    .record-item{display:block;border:1px solid #cfd6d3;border-radius:8px;padding:10px;margin-bottom:8px;box-shadow:none;break-inside:avoid}
+    .record-item{display:block;border:1px solid #ddd;border-radius:8px;padding:10px;margin-bottom:8px;box-shadow:none;break-inside:avoid}
     .record-item.selected{background:#fff}
   }
   .print-record-list{display:none}
@@ -377,7 +295,7 @@
 </head>
 <body>
 
-<!-- ============ 首次配置界面（默认隐藏） ============ -->
+<!-- ============ 首次配置界面 ============ -->
 <div class="modal" id="configModal" style="z-index:600">
   <div class="modal-backdrop" data-config-noop></div>
   <div class="modal-panel" style="max-width:520px">
@@ -420,15 +338,16 @@
 <div class="welcome-overlay hidden" id="welcomeOverlay">
   <div class="welcome-card">
     <div class="welcome-logo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
     </div>
-    <h1 class="welcome-title">改善效果确认</h1>
-    <p class="welcome-sub">Before &amp; After Validation<br>现场改善记录与签名确认工具</p>
+    <h1 class="welcome-title">全时定妆 · 客户档案</h1>
+    <p class="welcome-sub">LILING × 24/7 COSMETIC<br>客户档案记录与签名确认系统</p>
 
     <ul class="welcome-points">
-      <li><span class="tick">✓</span><span>最多 4 张照片 / 视频记录改善前后对比</span></li>
-      <li><span class="tick">✓</span><span>逐项确认改善事项完成情况</span></li>
-      <li><span class="tick">✓</span><span>手写签名并保存到云端仓库</span></li>
+      <li><span class="tick">✓</span><span>完整客户基础信息、肤质与服务项目记录</span></li>
+      <li><span class="tick">✓</span><span>术前注意事项电子告知与确认</span></li>
+      <li><span class="tick">✓</span><span>改善前后照片 / 视频对比存档</span></li>
+      <li><span class="tick">✓</span><span>手写签名确认并保存至云端</span></li>
     </ul>
 
     <div class="welcome-foot">
@@ -443,8 +362,8 @@
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand">
-        <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M20 6 9 17l-5-5"/></svg></div>
-        <div><h1>改善效果确认</h1><p>Before &amp; After Validation</p></div>
+        <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <div><h1>全时定妆 · 客户档案</h1><p>LILING × 24/7 COSMETIC</p></div>
       </div>
       <div class="actions" id="topActions"></div>
     </div>
@@ -455,12 +374,13 @@
     </div>
   </header>
 
+  <!-- ========= 列表视图 ========= -->
   <main class="view active" id="viewList">
     <section class="card">
       <div class="card-body" style="display:grid;gap:12px">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
           <div>
-            <h2 class="card-title">改善记录列表</h2>
+            <h2 class="card-title">客户档案列表</h2>
             <div class="list-count" id="listCount">共 0 条记录</div>
           </div>
           <div class="list-toolbar">
@@ -474,12 +394,12 @@
             </button>
             <button class="btn primary" id="newBtn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-              <span>新建记录</span>
+              <span>新建档案</span>
             </button>
           </div>
         </div>
         <div class="filter-bar">
-          <div class="field"><label for="filterKeyword">关键词</label><input class="input" id="filterKeyword" placeholder="搜索标题 / 区域 / 确认人 / 备注"></div>
+          <div class="field"><label for="filterKeyword">关键词</label><input class="input" id="filterKeyword" placeholder="搜索姓名 / 性别 / 备注"></div>
           <div class="field"><label for="filterFrom">起始日期</label><input class="input" id="filterFrom" type="date"></div>
           <div class="field"><label for="filterTo">结束日期</label><input class="input" id="filterTo" type="date"></div>
           <button class="btn" id="filterReset">重置</button>
@@ -502,68 +422,316 @@
     <section class="print-record-list" id="printRecordList"></section>
   </main>
 
+  <!-- ========= 表单视图 ========= -->
   <main class="view" id="viewForm">
-    <section class="card"><div class="card-body meta-grid">
-      <div class="field"><label for="title">改善主题</label><input class="input" id="title" value="现场改善效果确认" maxlength="80"></div>
-      <div class="field"><label for="location">区域 / 工位</label><input class="input" id="location" placeholder="例如：装配线 A01" maxlength="50"></div>
-      <div class="field"><label for="owner">确认人</label><input class="input" id="owner" placeholder="输入姓名" maxlength="30"></div>
-    </div></section>
+    <!-- 步骤导航（固定） -->
+    <div class="step-tabs" id="stepTabs">
+      <button class="step-tab active" data-step="0"><span class="num">1</span>客户档案</button>
+      <button class="step-tab" data-step="1"><span class="num">2</span>术前告知</button>
+      <button class="step-tab" data-step="2"><span class="num">3</span>前后对比</button>
+      <button class="step-tab" data-step="3"><span class="num">4</span>确认与签名</button>
+    </div>
 
-    <section class="photo-grid">
-      <article class="photo-card">
-        <div class="photo-head">
-          <span>改善之前</span>
-          <span style="display:flex;align-items:center;gap:10px">
-            <span class="photo-count" id="beforeCount">0 / 4</span>
-            <span class="dot" style="background:var(--amber)"></span>
-          </span>
-        </div>
-        <div class="photo-area">
-          <div class="media-grid" id="beforeGrid"></div>
-          <input class="file-input" id="beforeInput" type="file" accept="image/*,video/*" multiple>
-          <div class="photo-tools">
-            <button class="btn" data-pick="before">📷 上传照片 / 视频</button>
-            <button class="btn danger" data-clear="before">清空</button>
+    <!-- ========= 第1页：客户档案表 ========= -->
+    <div class="step-pane active" data-pane="0">
+      <section class="card"><div class="card-body">
+        <div class="section-label">基础信息 / BASIC INFORMATION</div>
+        <div class="info-grid">
+          <div class="field"><label>姓名 / NAME</label><input class="input" id="custName" placeholder="输入客户姓名" maxlength="30"></div>
+          <div class="field"><label>性别 / GENDER</label>
+            <div class="chip-group" id="genderGroup">
+              <label class="chip"><input type="radio" name="gender" value="女">女</label>
+              <label class="chip"><input type="radio" name="gender" value="男">男</label>
+            </div>
           </div>
-          <div class="upload-progress" id="beforeProgress"></div>
+          <div class="field"><label>年龄 / AGE</label><input class="input" id="custAge" placeholder="输入年龄" maxlength="10"></div>
         </div>
-      </article>
 
-      <article class="photo-card">
-        <div class="photo-head">
-          <span>改善之后</span>
-          <span style="display:flex;align-items:center;gap:10px">
-            <span class="photo-count" id="afterCount">0 / 4</span>
-            <span class="dot" style="background:var(--green)"></span>
-          </span>
+        <div class="section-label">健康状况 / HEALTH CONDITION</div>
+        <div class="chip-group" id="healthGroup">
+          <label class="chip"><input type="checkbox" value="疤痕体质">疤痕体质</label>
+          <label class="chip"><input type="checkbox" value="生理周期">生理周期</label>
+          <label class="chip"><input type="checkbox" value="口腔炎症">口腔炎症</label>
+          <label class="chip"><input type="checkbox" value="孕期">孕期</label>
+          <label class="chip"><input type="checkbox" value="哺乳期">哺乳期</label>
+          <label class="chip"><input type="checkbox" value="酒精过敏">酒精过敏</label>
+          <label class="chip"><input type="checkbox" value="糖尿病史">糖尿病史</label>
+          <label class="chip"><input type="checkbox" value="心脏病史">心脏病史</label>
+          <label class="chip"><input type="checkbox" value="高血压史">高血压史</label>
         </div>
-        <div class="photo-area">
-          <div class="media-grid" id="afterGrid"></div>
-          <input class="file-input" id="afterInput" type="file" accept="image/*,video/*" multiple>
-          <div class="photo-tools">
-            <button class="btn" data-pick="after">📷 上传照片 / 视频</button>
-            <button class="btn danger" data-clear="after">清空</button>
-          </div>
-          <div class="upload-progress" id="afterProgress"></div>
+        <div class="health-add-row">
+          <input class="input" id="healthOtherInput" placeholder="其他健康状况…" maxlength="30">
+          <button class="btn" id="healthAddBtn" title="添加其他健康状况">＋</button>
         </div>
-      </article>
-    </section>
 
-    <section class="bottom-grid">
-      <article class="card"><div class="section-head"><h2 class="card-title">确认事项</h2><span class="progress" id="progress">完成 0%</span></div><div class="check-list" id="checkList"></div><div class="check-list" style="padding-top:0"><div class="add-row"><input class="input" id="newCheck" placeholder="添加自定义确认事项" maxlength="60"><button class="btn" id="addCheck" title="添加">＋</button></div></div></article>
-      <article class="card"><div class="section-head"><h2 class="card-title">说明与签名</h2></div><div class="right-body">
-        <div class="field"><label for="notes">改善说明 / 确认备注</label><textarea class="textarea" id="notes" placeholder="填写改善内容、验证结果或需要跟进的事项……" maxlength="800"></textarea></div>
-        <div>
-          <div class="signature-top">
-            <div class="signature-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>用户签名 <span style="font-weight:400;font-size:12px;color:var(--muted);margin-left:4px">（点击放大签名）</span></div>
-            <button class="btn" id="clearSign" style="height:36px">清除</button>
-          </div>
-          <div class="signature-wrap" id="signatureWrap"><canvas id="signature"></canvas><div class="sign-line"></div><div class="sign-placeholder" id="signPlaceholder">请使用手指或 Apple Pencil 签名</div></div>
+        <div class="section-label">眉眼唇及肤质状况 / STATE OF THE SKIN</div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px 26px;margin-bottom:12px">
+          <label class="chip"><input type="checkbox" id="doneBefore">是否做过全时定妆项目</label>
+          <label class="chip"><input type="checkbox" id="eyeSensitive">眼睛是否属于敏感型</label>
         </div>
+
+        <div class="skin-lip-row">
+          <div class="skin-lip-label">肤质</div>
+          <div class="chip-group">
+            <label class="chip"><input type="radio" name="skin" value="干性">干性</label>
+            <label class="chip"><input type="radio" name="skin" value="中性">中性</label>
+            <label class="chip"><input type="radio" name="skin" value="混合性">混合性</label>
+            <label class="chip"><input type="radio" name="skin" value="油性">油性</label>
+            <label class="chip"><input type="radio" name="skin" value="敏感性">敏感性</label>
+          </div>
+        </div>
+
+        <div class="skin-lip-row">
+          <div class="skin-lip-label">唇色</div>
+          <div class="chip-group">
+            <label class="chip"><input type="radio" name="lip" value="淡白">淡白</label>
+            <label class="chip"><input type="radio" name="lip" value="发黄">发黄</label>
+            <label class="chip"><input type="radio" name="lip" value="发红">发红</label>
+            <label class="chip"><input type="radio" name="lip" value="乌紫">乌紫</label>
+            <label class="chip"><input type="radio" name="lip" value="上下异色">上下异色</label>
+          </div>
+        </div>
+
+        <div class="section-label">服务项目 / SERVICES AVAILABLE</div>
+        <table class="svc-table">
+          <!-- 眉部 -->
+          <tr>
+            <td class="svc-cat" rowspan="3">眉部</td>
+            <td class="svc-sub">纯雾眉</td>
+            <td><div class="svc-row-items">
+              <label class="svc-check"><input type="checkbox" value="纯雾眉-6D私人高定" data-cat="brow">6D私人高定</label>
+              <label class="svc-check"><input type="checkbox" value="纯雾眉-3D光影眉" data-cat="brow">3D光影眉</label>
+              <label class="svc-check"><input type="checkbox" value="纯雾眉-粉黛眉" data-cat="brow">粉黛眉</label>
+              <label class="svc-check"><input type="checkbox" value="纯雾眉-粉雾眉" data-cat="brow">粉雾眉</label>
+            </div></td>
+          </tr>
+          <tr>
+            <td class="svc-sub">线条眉</td>
+            <td><div class="svc-row-items">
+              <label class="svc-check"><input type="checkbox" value="线条眉-6D私人高定" data-cat="brow">6D私人高定</label>
+              <label class="svc-check"><input type="checkbox" value="线条眉-3D原生眉" data-cat="brow">3D原生眉</label>
+              <label class="svc-check"><input type="checkbox" value="线条眉-丝绒眉" data-cat="brow">丝绒眉</label>
+              <label class="svc-check"><input type="checkbox" value="线条眉-丝韵眉" data-cat="brow">丝韵眉</label>
+            </div></td>
+          </tr>
+          <tr>
+            <td class="svc-sub">丝雾眉</td>
+            <td><div class="svc-row-items">
+              <label class="svc-check"><input type="checkbox" value="丝雾眉-6D私人高定" data-cat="brow">6D私人高定</label>
+              <label class="svc-check"><input type="checkbox" value="丝雾眉-3D纤丝光影眉" data-cat="brow">3D纤丝光影眉</label>
+              <label class="svc-check"><input type="checkbox" value="丝雾眉-纤丝粉黛眉" data-cat="brow">纤丝粉黛眉</label>
+              <label class="svc-check"><input type="checkbox" value="丝雾眉-纤丝粉雾眉" data-cat="brow">纤丝粉雾眉</label>
+            </div></td>
+          </tr>
+          <!-- 美瞳线 -->
+          <tr>
+            <td class="svc-cat" colspan="2">美瞳线</td>
+            <td><div class="svc-row-items">
+              <label class="svc-check"><input type="checkbox" value="美瞳线-私人高定" data-cat="eye">私人高定</label>
+              <label class="svc-check"><input type="checkbox" value="美瞳线-漫雾美瞳线" data-cat="eye">漫雾美瞳线</label>
+              <label class="svc-check"><input type="checkbox" value="美瞳线-深眸美瞳线" data-cat="eye">深眸美瞳线</label>
+              <label class="svc-check"><input type="checkbox" value="美瞳线-美瞳线" data-cat="eye">美瞳线</label>
+            </div></td>
+          </tr>
+          <!-- 唇部 -->
+          <tr>
+            <td class="svc-cat" colspan="2">唇部</td>
+            <td><div class="svc-row-items">
+              <label class="svc-check"><input type="checkbox" value="唇部-私人高定" data-cat="lip">私人高定</label>
+              <label class="svc-check"><input type="checkbox" value="唇部-漫雾星点唇" data-cat="lip">漫雾星点唇</label>
+              <label class="svc-check"><input type="checkbox" value="唇部-柔润微染唇" data-cat="lip">柔润微染唇</label>
+            </div></td>
+          </tr>
+          <!-- 修复 -->
+          <tr>
+            <td class="svc-cat" colspan="2">修复</td>
+            <td><div class="svc-row-items">
+              <label class="svc-check"><input type="checkbox" value="修复-蓝眉" data-cat="repair">蓝眉</label>
+              <label class="svc-check"><input type="checkbox" value="修复-红眉" data-cat="repair">红眉</label>
+              <label class="svc-check"><input type="checkbox" value="修复-乌唇" data-cat="repair">乌唇</label>
+              <label class="svc-check"><input type="checkbox" value="修复-蓝眼线" data-cat="repair">蓝眼线</label>
+              <label class="svc-check"><input type="checkbox" value="修复-激光洗眉" data-cat="repair">激光洗眉</label>
+            </div></td>
+          </tr>
+          <!-- 项目价格 + 服务时间 -->
+          <tr>
+            <td class="svc-plain-label" style="width:11%">项目价格</td>
+            <td colspan="2" style="padding:0">
+              <div style="display:flex;width:100%;align-items:center">
+                <div style="flex:1;padding:8px 10px;border-right:1px solid #d8d0c6">
+                  <input class="input" id="servicePrice" placeholder="输入项目价格" style="height:34px;font-size:13px;border:0;padding:0;box-shadow:none">
+                </div>
+                <div class="svc-plain-label" style="width:11%;padding:8px 6px;border-right:1px solid #d8d0c6">服务时间</div>
+                <div style="flex:1;padding:8px 10px">
+                  <input class="input" id="serviceTime" placeholder="输入服务时间" style="height:34px;font-size:13px;border:0;padding:0;box-shadow:none">
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <div class="section-label">客户须知 / CUSTOMER READING</div>
+        <div class="notice-box">
+          <p>1. 全时定妆眉眼唇为定妆项目，请如实填写以上健康状况及肤质信息，确保定妆前后无过敏及身体不适情况。如由个人隐瞒信息导致出现的身体不适或效果不佳，将由顾客本人承担相应责任。</p>
+          <p>2. 本人已知晓全时定妆操作品项与价格，确认无误。</p>
+        </div>
+      </div></section>
+    </div>
+
+    <!-- ========= 第2页：术前注意事项告知书 ========= -->
+    <div class="step-pane" data-pane="1">
+      <section class="card"><div class="card-body">
+        <div style="text-align:center;margin-bottom:16px">
+          <div style="font-size:20px;font-weight:800;color:var(--gold-deep);letter-spacing:1px">术前护理注意事项告知书</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">请仔细阅读以下内容，确认后签字</div>
+        </div>
+
+        <div id="noticeBrow" style="display:none">
+          <div class="notice-sub">眉部定妆</div>
+          <div class="notice-box">
+            <p>定妆完即刻开始每30分钟用无菌湿棉片清洁眉毛，清洁浮色，每天清洁3-5次即可。</p>
+            <p>定妆当晚不用洗面奶、温水清洁，第2天可正常碰水，定妆部位尽量避开洗面奶，洗完后擦干，护肤品避开定妆面即可。</p>
+            <p>5天内不泡澡、不游泳、不蒸桑拿、不做大汗运动等项目。</p>
+            <p>恢复期间定妆部位轻微痒，属正常情况，请不要揉搓眉毛，可以轻轻点压缓解。</p>
+            <p>请不要将美白、防晒类产品抹在眉毛上，防止眉毛因美白产品发生变化。</p>
+            <p>敏感类皮肤在定妆后会出现短暂发红，一般1到2天即可消退。</p>
+            <p>眉毛首次定妆恢复后，因每个人皮肤留色状态不同，可能会出现局部缺损、不均匀、颜色淡的状态，都属正常现象，2次补色即可。</p>
+          </div>
+        </div>
+
+        <div id="noticeEye" style="display:none">
+          <div class="notice-sub">眼部定妆</div>
+          <div class="notice-box">
+            <p>眼部定妆完后直至睡觉前用无菌水清洁2-3次定妆部位，清洁干净并薄涂修护产品。</p>
+            <p>5天内不泡澡、不游泳、不蒸桑拿、不做大汗运动等项目。</p>
+            <p>定妆当晚不用洗面奶，温水清洁即可，第二天可以正常洗脸，洗完后擦干，护肤品避开定妆面即可。</p>
+            <p>定妆面恢复后，因每个人皮肤留色状态不同，可能会出现局部缺损断节、不均匀、颜色淡的状态，都属正常现象，2次补色即可。</p>
+            <p>恢复期间定妆部位轻微痒，属于皮肤恢复正常情况，请不要使劲揉搓，避免伤口拉扯疼痛，可以轻轻点压缓解。</p>
+          </div>
+        </div>
+
+        <div id="noticeLip" style="display:none">
+          <div class="notice-sub">唇部定妆</div>
+          <div class="notice-box">
+            <p>唇部定妆完即刻唇面薄涂修复产品，1小时内多做唇部活动，例如：咀嚼口香糖，"a"，"o"运动，如有微肿可适当缓解，且注意1小时内不食用过烫食物。</p>
+            <p>7天内正常饮食，多补充维生素C，忌口过辛辣刺激、油腻、烫口的食物，少吃易上火的长材，比如：牛肉、羊肉、辣椒、海鲜，忌烟酒。</p>
+            <p>7天内保持唇面、口腔卫生干净，正常早晚刷牙，注意吃饭前后用无菌湿棉片清洁干净唇面，薄涂修复产品/修复型唇膏。</p>
+            <p>7天内尽量不长时间带口罩。</p>
+            <p>7天内，不泡澡，蒸桑拿，不做大汗剧烈运动等项目。</p>
+            <p>如发胀感明显，可适当冰敷，如皮下颜色变深，多做唇部"a"，"o"运动。</p>
+            <p>定妆后第3-4天，会轻微结皮屑略干燥，可用无菌湿棉片湿敷唇面5-10分钟，再涂抹滋润修复产品，帮助唇部修复，切记手撕皮屑。</p>
+          </div>
+        </div>
+
+        <div id="noticeEmpty" style="display:none">
+          <div class="notice-box" style="text-align:center;color:var(--muted)">
+            请在上方“服务项目”中勾选定妆类别，此处将显示对应的术前注意事项。
+          </div>
+        </div>
+
+        <div class="notice-sub" style="margin-top:20px">补色须知</div>
+        <div class="notice-box">
+          <p>眉眼1个月后3个月内补色，唇3个月后6个月内免费补色1次，如若超期将不享受补色服务。</p>
+          <p>如因怀孕、治疗等特殊情况，最多宽限期为眉眼6个月内、唇9个月内，同时需收取200元超时费。超过以上时间，也将不享受补色服务。</p>
+        </div>
+
+        <div class="notice-sub">效果须知</div>
+        <div class="notice-box">
+          <p>定妆初期，较于设计效果偏粗偏浓，属正常现象，后续随着身体新陈代谢代谢，逐步恢复正常效果。</p>
+          <p>定妆7天后，全时定妆恢复初步完成，如若颜色淡或不均匀都属正常现象。因身体新陈代谢不同，平均3到6个月都是恢复期，这期间颜色会返出也会更加均匀自然，是由内而外透出自然的颜色。如到时候觉得颜色还是偏浅，或不均匀，可联系店家邀约老师补色即可。</p>
+        </div>
+
+        <div class="notice-sub">确认声明</div>
+        <div class="notice-box" style="background:#fdf6f0;border-color:#e8d6c4">
+          <p>本人对定妆效果满意，已认真查看以上内容，并按照注意事项进行护理。如因个人护理问题而导致的效果或其它不适，由本人自行负责，了解确认后请签字。</p>
+          <p>如果特殊情况，请及时联系店家咨询。以上内容，定妆老师已明确告知，并要求顾客严格遵守注意事项进行护理，了解确认后请签字。</p>
+        </div>
+
+        <div style="margin-top:18px;display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--gold-soft);border-radius:14px;border:1px solid #e6d6c2">
+          <input type="checkbox" id="noticeConfirm" style="width:22px;height:22px;accent-color:var(--gold);flex:none">
+          <label for="noticeConfirm" style="font-size:14px;font-weight:700;color:var(--gold-deep);cursor:pointer">本人已认真阅读并确认以上术前注意事项</label>
+        </div>
+      </div></section>
+    </div>
+
+    <!-- ========= 第3页：改善前后照片 ========= -->
+    <div class="step-pane" data-pane="2">
+      <section class="photo-grid">
+        <article class="photo-card">
+          <div class="photo-head">
+            <span>定妆前&补色前照片</span>
+            <span style="display:flex;align-items:center;gap:10px">
+              <span class="photo-count" id="beforeCount">0 / 4</span>
+              <span class="dot" style="background:#d9a441"></span>
+            </span>
+          </div>
+          <div class="photo-area">
+            <div class="media-grid" id="beforeGrid"></div>
+            <input class="file-input" id="beforeInput" type="file" accept="image/*,video/*" multiple>
+            <div class="photo-tools">
+              <button class="btn" data-pick="before">📷 上传照片 / 视频</button>
+              <button class="btn danger" data-clear="before">清空</button>
+            </div>
+            <div class="upload-progress" id="beforeProgress"></div>
+          </div>
+        </article>
+
+        <article class="photo-card">
+          <div class="photo-head">
+            <span>定妆后&补色后照片</span>
+            <span style="display:flex;align-items:center;gap:10px">
+              <span class="photo-count" id="afterCount">0 / 4</span>
+              <span class="dot" style="background:var(--gold)"></span>
+            </span>
+          </div>
+          <div class="photo-area">
+            <div class="media-grid" id="afterGrid"></div>
+            <input class="file-input" id="afterInput" type="file" accept="image/*,video/*" multiple>
+            <div class="photo-tools">
+              <button class="btn" data-pick="after">📷 上传照片 / 视频</button>
+              <button class="btn danger" data-clear="after">清空</button>
+            </div>
+            <div class="upload-progress" id="afterProgress"></div>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <!-- ========= 第4页：确认事项与说明签名（合并） ========= -->
+    <div class="step-pane" data-pane="3">
+      <!-- 确认事项 -->
+      <section class="card" style="margin-bottom:14px">
+        <div class="section-head"><h2 class="card-title">确认事项</h2><span class="progress" id="progress">完成 0%</span></div>
+        <div style="padding:0 18px 6px;font-size:13px;color:var(--muted)">点击下方“＋”添加确认事项，用户自行勾选确认。</div>
+        <div class="check-list" id="checkList"></div>
+        <div class="add-row"><input class="input" id="newCheck" placeholder="输入确认事项内容" maxlength="60"><button class="btn" id="addCheck" title="添加">＋</button></div>
+      </section>
+
+      <!-- 说明与签名 -->
+      <section class="card"><div class="section-head"><h2 class="card-title">说明与签名</h2></div><div class="right-body">
+        <div class="field"><label for="notes">备注事项</label><textarea class="textarea" id="notes" placeholder="请填写备注事项" maxlength="800"></textarea></div>
+
+        <div class="sign-row">
+          <div class="sign-col">
+            <div class="signature-top">
+              <div class="signature-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>客户签名 <span style="font-weight:400;font-size:12px;color:var(--muted);margin-left:4px">（点击放大）</span></div>
+              <button class="btn" id="clearSign" style="height:34px">清除</button>
+            </div>
+            <div class="signature-wrap" id="signatureWrap"><canvas id="signature"></canvas><div class="sign-line"></div><div class="sign-placeholder" id="signPlaceholder">客户签名</div></div>
+          </div>
+          <div class="sign-col">
+            <div class="signature-top">
+              <div class="signature-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>技术签字 <span style="font-weight:400;font-size:12px;color:var(--muted);margin-left:4px">（点击放大）</span></div>
+              <button class="btn" id="clearTechSign" style="height:34px">清除</button>
+            </div>
+            <div class="signature-wrap" id="techSignatureWrap"><canvas id="techSignature"></canvas><div class="sign-line"></div><div class="sign-placeholder" id="techSignPlaceholder">技术签字</div></div>
+          </div>
+        </div>
+
         <div class="date-row"><span>签名日期</span><span id="dateText"></span></div>
-      </div></article>
-    </section>
-    <div class="privacy">数据保存在你的 GitHub 私有仓库，不会因为清缓存而丢失。</div>
+      </div></section>
+      <div class="privacy">数据保存在你的 GitHub 私有仓库，不会因为清缓存而丢失。</div>
+    </div>
   </main>
 
   <div class="toast" id="toast"></div>
@@ -579,17 +747,18 @@
   </div>
 </div>
 
+<!-- 签名弹窗（通用，用于客户/技术签名） -->
 <div class="modal" id="signModal">
   <div class="modal-backdrop" data-close-sign></div>
   <div class="modal-panel" style="max-width:860px">
     <div class="modal-head">
-      <div class="modal-title">手写签名</div>
+      <div class="modal-title" id="signModalTitle">手写签名</div>
       <button class="btn" data-close-sign style="width:38px;height:38px;padding:0">✕</button>
     </div>
     <div class="modal-body" style="padding:12px 20px 4px">
-      <div id="signModalCanvasWrap" style="position:relative;min-height:300px;border:2px solid #d8dfdc;border-radius:18px;background:#fff;overflow:hidden">
+      <div id="signModalCanvasWrap" style="position:relative;min-height:300px;border:2px solid #e0d8cf;border-radius:18px;background:#fff;overflow:hidden">
         <canvas id="signatureModal" style="display:block;width:100%;height:100%;touch-action:none;cursor:crosshair"></canvas>
-        <div id="signModalHint" style="position:absolute;left:0;right:0;bottom:22px;text-align:center;color:#c2cac6;font-size:14px;pointer-events:none">请使用手指或 Apple Pencil 签名</div>
+        <div id="signModalHint" style="position:absolute;left:0;right:0;bottom:22px;text-align:center;color:#d2c6b8;font-size:14px;pointer-events:none">请使用手指或 Apple Pencil 签名</div>
       </div>
     </div>
     <div class="modal-foot">
@@ -599,7 +768,6 @@
   </div>
 </div>
 
-<!-- 通用提示弹窗 -->
 <div class="modal" id="alertModal">
   <div class="modal-backdrop" data-close-alert></div>
   <div class="modal-panel" style="max-width:420px">
@@ -608,7 +776,7 @@
       <button class="btn" data-close-alert style="width:38px;height:38px;padding:0">✕</button>
     </div>
     <div class="modal-body">
-      <div id="alertMessage" style="font-size:14px;line-height:1.7;color:#344054"></div>
+      <div id="alertMessage" style="font-size:14px;line-height:1.7;color:#5a5048"></div>
     </div>
     <div class="modal-foot">
       <button class="btn primary" id="alertOk">知道了</button>
@@ -620,7 +788,6 @@
 (() => {
   'use strict';
 
-  // ★ 默认仓库信息（用户可在配置界面修改）
   const DEFAULTS = {
     owner: 'zhitao-hu',
     repo: 'improvement-data',
@@ -630,10 +797,9 @@
     videosDir: 'videos',
     pagesBase: 'https://raw.githubusercontent.com/zhitao-hu/improvement-data/main'
   };
-  const CFG_KEY = 'improvement_cfg_v1';
+  const CFG_KEY = 'cosmetic_cfg_v1';
   const MAX_MEDIA = 4;
 
-  const defaults = ['改善内容与现场实际一致','改善后风险已完成确认','相关作业指导书已更新','相关人员已完成说明或培训','改善效果达到预期'];
   const $ = s => document.querySelector(s);
   const $$ = s => document.querySelectorAll(s);
 
@@ -641,20 +807,23 @@
   let records = [];
   let fileSha = null;
   let current = null;
-  let currentId = null;
   let changed = false;
   let welcomeDone = false;
   let recordsLoaded = false;
   let saving = false;
-
   let pristineSnapshot = null;
 
   let filter = { keyword:'', from:'', to:'' };
   let visibleIds = [];
   let selectedIds = new Set();
 
+  // 主签名（客户）
   let drawing=false, ctx, ratio=1;
+  // 技术签名
+  let techDrawing=false, techCtx, techRatio=1;
+  // 弹窗签名
   let modalDrawing=false, modalCtx, modalRatio=1, modalOpen=false;
+  let modalTarget = 'customer'; // 'customer' | 'tech'
 
   const toast = msg => { const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>t.classList.remove('show'),2400); };
   const esc = s => String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
@@ -665,16 +834,8 @@
   const b64encode = str => { const bytes = new TextEncoder().encode(str); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin); };
   const b64decode = b64 => { const bin = atob(b64.replace(/\s/g,'')); const bytes = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i); return new TextDecoder().decode(bytes); };
 
-  const isVideo = v => {
-    if(typeof v !== 'string' || !v) return false;
-    if(v.startsWith('data:video')) return true;
-    return /\.(mp4|mov|webm|m4v|ogv)(\?|#|$)/i.test(v);
-  };
-  const isImage = v => {
-    if(typeof v !== 'string' || !v) return false;
-    if(v.startsWith('data:image')) return true;
-    return /\.(jpe?g|png|gif|webp|bmp|avif)(\?|#|$)/i.test(v);
-  };
+  const isVideo = v => { if(typeof v !== 'string' || !v) return false; if(v.startsWith('data:video')) return true; return /\.(mp4|mov|webm|m4v|ogv)(\?|#|$)/i.test(v); };
+  const isImage = v => { if(typeof v !== 'string' || !v) return false; if(v.startsWith('data:image')) return true; return /\.(jpe?g|png|gif|webp|bmp|avif)(\?|#|$)/i.test(v); };
 
   function mediaUrl(v){
     if(typeof v !== 'string' || !v) return '';
@@ -683,17 +844,8 @@
     const base = (cfg.pagesBase || '').replace(/\/+$/,'');
     return base + '/' + v.replace(/^\/+/,'');
   }
-
-  function dataUrlToBase64(dataUrl){
-    const idx = dataUrl.indexOf(',');
-    return idx >= 0 ? dataUrl.slice(idx+1) : dataUrl;
-  }
-
-  function toMediaArray(v){
-    if(Array.isArray(v)) return v.filter(x => typeof x === 'string' && x);
-    if(typeof v === 'string' && v) return [v];
-    return [];
-  }
+  function dataUrlToBase64(dataUrl){ const idx = dataUrl.indexOf(','); return idx >= 0 ? dataUrl.slice(idx+1) : dataUrl; }
+  function toMediaArray(v){ if(Array.isArray(v)) return v.filter(x => typeof x === 'string' && x); if(typeof v === 'string' && v) return [v]; return []; }
 
   function showAlert(title, message){
     $('#alertTitle').textContent = title || '提示';
@@ -710,178 +862,77 @@
     d.className = 'status-dot' + (kind ? ' ' + kind : '');
   }
 
-  // ============================================================
-  // ★ 配置存取
-  // ============================================================
+  // ========== 配置 ==========
   function loadCfg(){
-    try {
-      const raw = localStorage.getItem(CFG_KEY);
-      if(!raw) return null;
-      const parsed = JSON.parse(raw);
-      if(!parsed || !parsed.token) return null;
-      return parsed;
-    } catch(e){ return null; }
+    try { const raw = localStorage.getItem(CFG_KEY); if(!raw) return null; const parsed = JSON.parse(raw); if(!parsed || !parsed.token) return null; return parsed; } catch(e){ return null; }
   }
-  function saveCfg(c){
-    try { localStorage.setItem(CFG_KEY, JSON.stringify(c)); } catch(e){}
-  }
-  function clearStoredCfg(){
-    try { localStorage.removeItem(CFG_KEY); } catch(e){}
-  }
+  function saveCfg(c){ try { localStorage.setItem(CFG_KEY, JSON.stringify(c)); } catch(e){} }
+  function clearStoredCfg(){ try { localStorage.removeItem(CFG_KEY); } catch(e){} }
 
-  // ============================================================
-  // ★ GitHub API（直连，用用户自己的 token）
-  // ============================================================
+  // ========== GitHub ==========
   function ghHeaders(){
-    return {
-      'Authorization': 'Bearer ' + cfg.token,
-      'Accept': 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28'
-    };
+    return { 'Authorization': 'Bearer ' + cfg.token, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
   }
-  function ghUrl(){
-    return `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}`;
-  }
-  function ghFileUrl(path){
-    return `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${path}`;
-  }
+  function ghUrl(){ return `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}`; }
+  function ghFileUrl(path){ return `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${path}`; }
 
   async function ghUploadFile(path, base64Content, commitMsg){
     let sha = null;
-    try {
-      const r = await fetch(ghFileUrl(path), { headers: ghHeaders() });
-      if(r.ok){ const d = await r.json(); sha = d.sha; }
-    } catch(e){}
+    try { const r = await fetch(ghFileUrl(path), { headers: ghHeaders() }); if(r.ok){ const d = await r.json(); sha = d.sha; } } catch(e){}
     const body = { message: commitMsg || `upload ${path}`, content: base64Content };
     if(sha) body.sha = sha;
-    const res = await fetch(ghFileUrl(path), {
-      method:'PUT',
-      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
-      body: JSON.stringify(body)
-    });
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('上传失败 ' + res.status));
-    }
+    const res = await fetch(ghFileUrl(path), { method:'PUT', headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()), body: JSON.stringify(body) });
+    if(!res.ok){ const err = await res.json().catch(()=>({})); throw new Error(err.message || ('上传失败 ' + res.status)); }
     return true;
   }
-
   async function ghDeleteFile(path){
-    try {
-      const r = await fetch(ghFileUrl(path), { headers: ghHeaders() });
-      if(!r.ok) return;
-      const d = await r.json();
-      await fetch(ghFileUrl(path), {
-        method:'DELETE',
-        headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
-        body: JSON.stringify({ message: `delete ${path}`, sha: d.sha })
-      });
+    try { const r = await fetch(ghFileUrl(path), { headers: ghHeaders() }); if(!r.ok) return; const d = await r.json();
+      await fetch(ghFileUrl(path), { method:'DELETE', headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()), body: JSON.stringify({ message: `delete ${path}`, sha: d.sha }) });
     } catch(e){}
   }
 
   async function ghLoad(){
     setStatus('读取中…', 'loading');
     const res = await fetch(ghUrl(), { headers: ghHeaders() });
-    if(res.status === 404){
-      fileSha = null;
-      records = [];
-      await ghCreateEmpty();
-      setStatus('已连接（新建数据文件）', 'ok');
-      recordsLoaded = true;
-      return;
-    }
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('读取失败 ' + res.status));
-    }
+    if(res.status === 404){ fileSha = null; records = []; await ghCreateEmpty(); setStatus('已连接（新建数据文件）', 'ok'); recordsLoaded = true; return; }
+    if(!res.ok){ const err = await res.json().catch(()=>({})); throw new Error(err.message || ('读取失败 ' + res.status)); }
     const data = await res.json();
     fileSha = data.sha;
     let content = '';
-    if(data.content && data.encoding !== 'none'){
-      try { content = b64decode(data.content || ''); } catch(e){ content = ''; }
-    }
-    if(!content && data.download_url){
-      try {
-        const raw = await fetch(data.download_url, { headers: ghHeaders() });
-        if(raw.ok) content = await raw.text();
-      } catch(e){}
-    }
-    if(!content.trim()){
-      records = [];
-    } else {
-      try {
-        const parsed = JSON.parse(content);
-        const rawList = Array.isArray(parsed) ? parsed : (parsed.records || []);
-        records = rawList.map(r => normalizeRecord(r));
-      } catch(e){ records = []; }
-    }
+    if(data.content && data.encoding !== 'none'){ try { content = b64decode(data.content || ''); } catch(e){ content = ''; } }
+    if(!content && data.download_url){ try { const raw = await fetch(data.download_url, { headers: ghHeaders() }); if(raw.ok) content = await raw.text(); } catch(e){} }
+    if(!content.trim()){ records = []; }
+    else { try { const parsed = JSON.parse(content); const rawList = Array.isArray(parsed) ? parsed : (parsed.records || []); records = rawList.map(r => normalizeRecord(r)); } catch(e){ records = []; } }
     setStatus(`已连接 · ${records.length} 条记录`, 'ok');
     recordsLoaded = true;
   }
   async function ghCreateEmpty(){
     const body = { message:'init records.json', content: b64encode('[]') };
-    const res = await fetch(ghUrl(), {
-      method:'PUT',
-      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
-      body: JSON.stringify(body)
-    });
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('初始化失败 ' + res.status));
-    }
-    const data = await res.json();
-    fileSha = data.content.sha;
+    const res = await fetch(ghUrl(), { method:'PUT', headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()), body: JSON.stringify(body) });
+    if(!res.ok){ const err = await res.json().catch(()=>({})); throw new Error(err.message || ('初始化失败 ' + res.status)); }
+    const data = await res.json(); fileSha = data.content.sha;
   }
   async function ghSave(){
-    if(!fileSha){
-      try {
-        const check = await fetch(ghUrl(), { headers: ghHeaders() });
-        if(check.ok){
-          const d = await check.json();
-          fileSha = d.sha;
-        }
-      } catch(e){}
-    }
+    if(!fileSha){ try { const check = await fetch(ghUrl(), { headers: ghHeaders() }); if(check.ok){ const d = await check.json(); fileSha = d.sha; } } catch(e){} }
     const json = JSON.stringify({ version:1, updatedAt: nowISO(), records }, null, 2);
-    const body = { message: `更新改善记录 ${nowISO()}`, content: b64encode(json) };
+    const body = { message: `更新客户档案 ${nowISO()}`, content: b64encode(json) };
     if(fileSha) body.sha = fileSha;
     setStatus('保存中…', 'loading');
-    const res = await fetch(ghUrl(), {
-      method:'PUT',
-      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
-      body: JSON.stringify(body)
-    });
+    const res = await fetch(ghUrl(), { method:'PUT', headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()), body: JSON.stringify(body) });
     if(res.status === 409){
       const r2 = await fetch(ghUrl(), { headers: ghHeaders() });
-      if(r2.ok){
-        const d2 = await r2.json();
-        fileSha = d2.sha;
-        const res2 = await fetch(ghUrl(), {
-          method:'PUT',
-          headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
-          body: JSON.stringify({ message: body.message, content: body.content, sha: fileSha })
-        });
-        if(res2.ok){
-          const data2 = await res2.json();
-          fileSha = data2.content.sha;
-          setStatus(`已保存 · ${records.length} 条记录`, 'ok');
-          return;
-        }
+      if(r2.ok){ const d2 = await r2.json(); fileSha = d2.sha;
+        const res2 = await fetch(ghUrl(), { method:'PUT', headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()), body: JSON.stringify({ message: body.message, content: body.content, sha: fileSha }) });
+        if(res2.ok){ const data2 = await res2.json(); fileSha = data2.content.sha; setStatus(`已保存 · ${records.length} 条记录`, 'ok'); return; }
       }
       throw new Error('远端数据已被其他设备修改，请点击「刷新」后重试');
     }
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('保存失败 ' + res.status));
-    }
-    const data = await res.json();
-    fileSha = data.content.sha;
+    if(!res.ok){ const err = await res.json().catch(()=>({})); throw new Error(err.message || ('保存失败 ' + res.status)); }
+    const data = await res.json(); fileSha = data.content.sha;
     setStatus(`已保存 · ${records.length} 条记录`, 'ok');
   }
 
-  // ============================================================
-  // ★ 配置界面
-  // ============================================================
+  // ========== 配置界面 ==========
   function showConfigModal(){
     const c = loadCfg() || {};
     $('#cfgOwner').value = c.owner || DEFAULTS.owner;
@@ -890,49 +941,29 @@
     $('#cfgToken').value = c.token || '';
     $('#configModal').classList.add('show');
   }
-  function hideConfigModal(){
-    $('#configModal').classList.remove('show');
-  }
+  function hideConfigModal(){ $('#configModal').classList.remove('show'); }
 
   async function applyConfigFromForm(){
     const owner = $('#cfgOwner').value.trim();
     const repo = $('#cfgRepo').value.trim();
     const branch = $('#cfgBranch').value.trim() || 'main';
     const token = $('#cfgToken').value.trim();
-    if(!owner || !repo || !token){
-      showAlert('配置不完整', '请填写 Owner、Repo 和 Token。');
-      return;
-    }
+    if(!owner || !repo || !token){ showAlert('配置不完整', '请填写 Owner、Repo 和 Token。'); return; }
     cfg = { ...DEFAULTS, owner, repo, branch, token };
     cfg.pagesBase = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}`;
-
-    saveCfg({
-      owner, repo, branch, token,
-      pagesBase: cfg.pagesBase
-    });
-
+    saveCfg({ owner, repo, branch, token, pagesBase: cfg.pagesBase });
     hideConfigModal();
     welcomeDone = true;
-    // 显示欢迎页
     $('#welcomeOverlay').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
   }
-
   $('#cfgSave').onclick = applyConfigFromForm;
-  $('#cfgClear').onclick = () => {
-    if(!confirm('确定清空本机保存的配置吗？')) return;
-    clearStoredCfg();
-    $('#cfgToken').value = '';
-    toast('已清空');
-  };
+  $('#cfgClear').onclick = () => { if(!confirm('确定清空本机保存的配置吗？')) return; clearStoredCfg(); $('#cfgToken').value = ''; toast('已清空'); };
 
-  // ============================================================
-  // ★ 欢迎界面
-  // ============================================================
+  // ========== 欢迎界面 ==========
   function initWelcome(){
     const overlay = $('#welcomeOverlay');
     const hint = $('#welcomeHint');
-
     $('#welcomeConfirm').addEventListener('click', () => {
       welcomeDone = true;
       overlay.classList.add('hidden');
@@ -940,23 +971,10 @@
       setStatus('读取中…', 'loading');
       recordsLoaded = false;
       showList();
-      ghLoad().then(()=>{
-        renderList();
-        toast('数据已加载 · ' + records.length + ' 条');
-      }).catch(err=>{
-        recordsLoaded = false;
-        setStatus('连接失败：' + err.message, 'err');
-        toast('连接失败：' + err.message);
-      });
+      ghLoad().then(()=>{ renderList(); toast('数据已加载 · ' + records.length + ' 条'); }).catch(err=>{ recordsLoaded = false; setStatus('连接失败：' + err.message, 'err'); toast('连接失败：' + err.message); });
     });
-
     $('#welcomeCancel').addEventListener('click', () => {
       hint.textContent = '需要点击「确认进入」才能开始使用';
-      hint.style.color = 'rgba(255,140,140,.9)';
-      const card = overlay.querySelector('.welcome-card');
-      card.style.animation = 'none';
-      void card.offsetWidth;
-      card.style.animation = 'welcomePop .55s cubic-bezier(.2,.9,.3,1.2)';
       setTimeout(() => { hint.textContent = ''; }, 2600);
     });
   }
@@ -973,38 +991,36 @@
     $('#viewForm').classList.add('active');
     renderTopActions('form');
     window.scrollTo(0,0);
-
-    setTimeout(() => {
-      try {
-        resizeCanvas(false);
-        redrawMainSignature();
-      } catch(e){}
-    }, 0);
+    setTimeout(() => { try { resizeCanvas(false); resizeTechCanvas(false); redrawMainSignature(); redrawTechSignature(); updateNoticeVisibility(); } catch(e){} }, 0);
   }
 
   function redrawMainSignature(){
     const c = $('#signature');
     if(!c || !ctx) return;
-    const w = c.width / ratio;
-    const h = c.height / ratio;
+    const w = c.width / ratio, h = c.height / ratio;
     ctx.clearRect(0, 0, w, h);
     if(current && current.signature){
       const im = new Image();
-      im.onload = () => {
-        ctx.drawImage(im, 0, 0, w, h);
-        $('#signPlaceholder').style.display = 'none';
-      };
+      im.onload = () => { ctx.drawImage(im, 0, 0, w, h); $('#signPlaceholder').style.display = 'none'; };
       im.src = current.signature;
-    } else {
-      $('#signPlaceholder').style.display = 'block';
-    }
+    } else { $('#signPlaceholder').style.display = 'block'; }
+  }
+  function redrawTechSignature(){
+    const c = $('#techSignature');
+    if(!c || !techCtx) return;
+    const w = c.width / techRatio, h = c.height / techRatio;
+    techCtx.clearRect(0, 0, w, h);
+    if(current && current.techSignature){
+      const im = new Image();
+      im.onload = () => { techCtx.drawImage(im, 0, 0, w, h); $('#techSignPlaceholder').style.display = 'none'; };
+      im.src = current.techSignature;
+    } else { $('#techSignPlaceholder').style.display = 'block'; }
   }
 
   function renderTopActions(view){
     const box = $('#topActions');
-    if(view === 'list'){
-      box.innerHTML = '';
-    } else {
+    if(view === 'list'){ box.innerHTML = ''; }
+    else {
       box.innerHTML = `
         <button class="btn" id="topBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span>返回列表</span></button>
         <button class="btn" id="topPrint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg><span>导出 PDF</span></button>
@@ -1016,12 +1032,8 @@
   }
 
   function createNewRecord(){
-    if(!recordsLoaded){
-      showAlert('请稍候', '正在从 GitHub 读取数据，请等待读取完成后再新建记录。');
-      return;
-    }
+    if(!recordsLoaded){ showAlert('请稍候', '正在从 GitHub 读取数据，请等待读取完成后再新建档案。'); return; }
     current = blankRecord();
-    currentId = null;
     fillForm(current);
     showForm();
   }
@@ -1033,18 +1045,13 @@
     renderList();
   }
   function resetFilter(){
-    $('#filterKeyword').value = '';
-    $('#filterFrom').value = '';
-    $('#filterTo').value = '';
+    $('#filterKeyword').value = ''; $('#filterFrom').value = ''; $('#filterTo').value = '';
     filter = { keyword:'', from:'', to:'' };
     renderList();
   }
   function matchesFilter(r){
     const kw = filter.keyword;
-    if(kw){
-      const hay = [r.title||'', r.location||'', r.owner||'', r.notes||''].join(' ').toLowerCase();
-      if(!hay.includes(kw)) return false;
-    }
+    if(kw){ const hay = [r.name||'', r.gender||'', r.notes||''].join(' ').toLowerCase(); if(!hay.includes(kw)) return false; }
     const t = (r.updatedAt || r.savedAt || '').slice(0,10);
     if(filter.from && t < filter.from) return false;
     if(filter.to && t > filter.to) return false;
@@ -1056,69 +1063,52 @@
     const all = [...records].sort((a,b)=> (b.updatedAt||b.savedAt||'').localeCompare(a.updatedAt||a.savedAt||''));
     const list = all.filter(matchesFilter);
     visibleIds = list.map(r=>r.id);
-
-    const total = records.length;
-    const shown = list.length;
+    const total = records.length, shown = list.length;
     if(filter.keyword || filter.from || filter.to){
       const parts = [];
       if(filter.keyword) parts.push(`关键词「${filter.keyword}」`);
       if(filter.from) parts.push(`从 ${filter.from}`);
       if(filter.to) parts.push(`到 ${filter.to}`);
       $('#filterSummary').textContent = `筛选条件：${parts.join(' · ')} — 显示 ${shown} / ${total} 条`;
-    } else {
-      $('#filterSummary').textContent = total ? `显示全部 ${total} 条` : '';
-    }
+    } else { $('#filterSummary').textContent = total ? `显示全部 ${total} 条` : ''; }
     $('#listCount').textContent = `共 ${total} 条记录` + (shown !== total ? `（当前显示 ${shown} 条）` : '');
-
     updateBulkBar();
 
     if(!recordsLoaded){
-      host.innerHTML = `<div class="empty-list"><div class="big">⏳</div><div style="font-weight:700;color:#344054">正在从 GitHub 读取数据…</div><div style="margin-top:6px;font-size:13px">请稍候，读取完成前无法新建或编辑</div></div>`;
-      renderPrintRecords([]);
-      return;
+      host.innerHTML = `<div class="empty-list"><div class="big">⏳</div><div style="font-weight:700;color:#5a5048">正在从 GitHub 读取数据…</div><div style="margin-top:6px;font-size:13px">请稍候</div></div>`;
+      renderPrintRecords([]); return;
     }
-
     if(!list.length){
       host.innerHTML = total
-        ? `<div class="empty-list"><div class="big">🔍</div><div style="font-weight:700;color:#344054">没有匹配的记录</div><div style="margin-top:6px;font-size:13px">试试调整筛选条件，或点“重置”</div></div>`
-        : `<div class="empty-list"><div class="big">📋</div><div style="font-weight:700;color:#344054">还没有改善记录</div><div style="margin-top:6px;font-size:13px">点击右上角“新建记录”开始填写</div></div>`;
-      renderPrintRecords([]);
-      return;
+        ? `<div class="empty-list"><div class="big">🔍</div><div style="font-weight:700;color:#5a5048">没有匹配的记录</div><div style="margin-top:6px;font-size:13px">试试调整筛选条件，或点“重置”</div></div>`
+        : `<div class="empty-list"><div class="big">📋</div><div style="font-weight:700;color:#5a5048">还没有客户档案</div><div style="margin-top:6px;font-size:13px">点击右上角“新建档案”开始填写</div></div>`;
+      renderPrintRecords([]); return;
     }
 
     host.innerHTML = list.map(r => {
       const done = (r.checks||[]).filter(c=>c.done).length;
       const totalC = (r.checks||[]).length;
       const pct = totalC ? Math.round(done/totalC*100) : 0;
-      const beforeArr = toMediaArray(r.before);
-      const afterArr = toMediaArray(r.after);
+      const beforeArr = toMediaArray(r.before), afterArr = toMediaArray(r.after);
       const allMedia = beforeArr.concat(afterArr);
       const totalMedia = allMedia.length;
       const firstMedia = allMedia[0];
-
       let mediaHintHTML = '';
       if(totalMedia > 0){
-        if(firstMedia && isImage(firstMedia)){
-          mediaHintHTML = `<span class="media-hint"><img src="${mediaUrl(firstMedia)}" alt=""> ${totalMedia} 个媒体</span>`;
-        } else {
-          mediaHintHTML = `<span class="media-hint">📹 ${totalMedia} 个媒体</span>`;
-        }
+        if(firstMedia && isImage(firstMedia)) mediaHintHTML = `<span class="media-hint"><img src="${mediaUrl(firstMedia)}" alt=""> ${totalMedia} 个媒体</span>`;
+        else mediaHintHTML = `<span class="media-hint">📹 ${totalMedia} 个媒体</span>`;
       }
-
       const sel = selectedIds.has(r.id);
-      const signBadge = r.signature
-        ? `<span class="record-badge">已签名</span>`
-        : `<span class="record-badge unsigned">未签名</span>`;
-
+      const signBadge = r.signature ? `<span class="record-badge">已签名</span>` : `<span class="record-badge unsigned">未签名</span>`;
       return `
       <div class="record-item ${sel?'selected':''}" data-open="${r.id}">
         <div style="display:flex;align-items:center;gap:12px;min-width:0">
           <input type="checkbox" class="record-check" data-check-id="${r.id}" ${sel?'checked':''} title="选择" onclick="event.stopPropagation()">
           <div class="record-main">
-            <div class="record-title">${esc(r.title||'未命名')}</div>
+            <div class="record-title">${esc(r.name||'未命名客户')}</div>
             <div class="record-sub">
-              <span>📍 ${esc(r.location||'未填写区域')}</span>
-              <span>👤 ${esc(r.owner||'未填写')}</span>
+              <span>👤 ${esc(r.name||'未填写')}</span>
+              <span>⚥ ${esc(r.gender||'未填写')}</span>
               <span>🕒 ${fmtDate(r.updatedAt||r.savedAt)}</span>
               ${mediaHintHTML}
             </div>
@@ -1131,7 +1121,6 @@
         </div>
       </div>`;
     }).join('');
-
     renderPrintRecords(list);
   }
 
@@ -1150,36 +1139,39 @@
       const checks = (r.checks||[]).map(c => `<li style="margin:2px 0">${c.done?'☑':'☐'} ${esc(c.text)}</li>`).join('');
       function mediaGrid(val){
         const arr = toMediaArray(val);
-        if(!arr.length) return '<div style="font-size:12px;color:#9aa5a1">（无）</div>';
+        if(!arr.length) return '<div style="font-size:12px;color:#aaa">（无）</div>';
         return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">` +
           arr.map(m => {
-            if(isVideo(m)) return '<div style="aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border:1px dashed #cfd6d3;border-radius:6px;background:#f8faf9;font-size:11px;color:#667085;text-align:center;padding:8px">📹 视频</div>';
-            return `<img src="${mediaUrl(m)}" style="width:100%;aspect-ratio:1/1;object-fit:cover;border:1px solid #cfd6d3;border-radius:6px">`;
-          }).join('') +
-        `</div>`;
+            if(isVideo(m)) return '<div style="aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border:1px dashed #ddd;border-radius:6px;background:#f9f5f0;font-size:11px;color:#8a8078;text-align:center;padding:8px">📹 视频</div>';
+            return `<img src="${mediaUrl(m)}" style="width:100%;aspect-ratio:1/1;object-fit:cover;border:1px solid #ddd;border-radius:6px">`;
+          }).join('') + `</div>`;
       }
       return `
       <div class="record-item" style="page-break-after:always">
-        <div style="font-size:16px;font-weight:760;margin-bottom:6px">${esc(r.title||'未命名')}</div>
-        <div style="font-size:12px;color:#667085;margin-bottom:10px">
-          区域：${esc(r.location||'—')}　|　确认人：${esc(r.owner||'—')}　|　更新时间：${fmtDate(r.updatedAt||r.savedAt)}
+        <div style="font-size:16px;font-weight:760;margin-bottom:6px">全时定妆客户档案 · ${esc(r.name||'未命名')}</div>
+        <div style="font-size:12px;color:#8a8078;margin-bottom:10px">
+          姓名：${esc(r.name||'—')}　|　性别：${esc(r.gender||'—')}　|　年龄：${esc(r.age||'—')}　|　更新时间：${fmtDate(r.updatedAt||r.savedAt)}
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-          <div><div style="font-size:12px;font-weight:700;margin-bottom:4px">改善之前</div>${mediaGrid(r.before)}</div>
-          <div><div style="font-size:12px;font-weight:700;margin-bottom:4px">改善之后</div>${mediaGrid(r.after)}</div>
+          <div><div style="font-size:12px;font-weight:700;margin-bottom:4px">定妆前&补色前照片</div>${mediaGrid(r.before)}</div>
+          <div><div style="font-size:12px;font-weight:700;margin-bottom:4px">定妆后&补色后照片</div>${mediaGrid(r.after)}</div>
         </div>
         <div style="font-size:12px;font-weight:700;margin:8px 0 4px">确认事项</div>
         <ul style="margin:0;padding-left:18px;font-size:12px">${checks || '<li>（无）</li>'}</ul>
-        <div style="font-size:12px;font-weight:700;margin:8px 0 4px">改善说明 / 备注</div>
-        <div style="font-size:12px;white-space:pre-wrap;border:1px solid #eef1ef;border-radius:6px;padding:6px;min-height:36px">${esc(r.notes||'（无）')}</div>
+        <div style="font-size:12px;font-weight:700;margin:8px 0 4px">说明与备注</div>
+        <div style="font-size:12px;white-space:pre-wrap;border:1px solid #eee;border-radius:6px;padding:6px;min-height:36px">${esc(r.notes||'（无）')}</div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px">
-          <div style="font-size:12px;color:#667085">签名日期：${fmtDay(r.updatedAt||r.savedAt)}</div>
-          <div style="text-align:right"><div style="font-size:12px;font-weight:700;margin-bottom:4px">用户签名</div>${r.signature ? `<img src="${r.signature}" style="height:60px">` : '<div style="font-size:12px;color:#9aa5a1">（未签名）</div>'}</div>
+          <div style="font-size:12px;color:#8a8078">签名日期：${fmtDay(r.updatedAt||r.savedAt)}</div>
+          <div style="text-align:right"><div style="font-size:12px;font-weight:700;margin-bottom:4px">客户签名</div>${r.signature ? `<img src="${r.signature}" style="height:50px">` : '<div style="font-size:12px;color:#aaa">（未签名）</div>'}</div>
+        </div>
+        <div style="text-align:right;margin-top:6px">
+          <div style="font-size:12px;font-weight:700;margin-bottom:4px">技术签字</div>${r.techSignature ? `<img src="${r.techSignature}" style="height:50px">` : '<div style="font-size:12px;color:#aaa">（未签字）</div>'}
         </div>
       </div>`;
     }).join('');
   }
 
+  // ========== 列表事件 ==========
   $('#recordList').addEventListener('click', async e => {
     if(!welcomeDone) return;
     const del = e.target.closest('[data-del]');
@@ -1188,15 +1180,12 @@
       const id = del.dataset.del;
       const rec = records.find(r=>r.id===id);
       if(!rec) return;
-      if(!confirm(`确定删除「${rec.title||'未命名'}」吗？`)) return;
+      if(!confirm(`确定删除「${rec.name||'未命名'}」的档案吗？`)) return;
       const backup = records.slice();
       records = records.filter(r=>r.id!==id);
       selectedIds.delete(id);
       try { await ghSave(); renderList(); toast('已删除'); }
-      catch(err){
-        records = backup;
-        toast('删除同步失败：' + err.message);
-      }
+      catch(err){ records = backup; toast('删除同步失败：' + err.message); }
       return;
     }
     const chk = e.target.closest('[data-check-id]');
@@ -1211,14 +1200,10 @@
     }
     const item = e.target.closest('[data-open]');
     if(item){
-      if(!recordsLoaded){
-        showAlert('请稍候', '数据读取中，请稍后再试。');
-        return;
-      }
+      if(!recordsLoaded){ showAlert('请稍候', '数据读取中，请稍后再试。'); return; }
       const rec = records.find(r=>r.id===item.dataset.open);
       if(!rec) return;
       current = JSON.parse(JSON.stringify(rec));
-      currentId = rec.id;
       fillForm(current);
       showForm();
     }
@@ -1228,15 +1213,12 @@
   $('#bulkDelete').onclick = async () => {
     const ids = [...selectedIds];
     if(!ids.length) return;
-    if(!confirm(`确定删除所选的 ${ids.length} 条记录吗？此操作不可撤销。`)) return;
+    if(!confirm(`确定删除所选的 ${ids.length} 条档案吗？此操作不可撤销。`)) return;
     const backup = records.slice();
     records = records.filter(r => !selectedIds.has(r.id));
     selectedIds.clear();
     try { await ghSave(); renderList(); toast(`已删除 ${ids.length} 条`); }
-    catch(err){
-      records = backup;
-      toast('删除同步失败：' + err.message);
-    }
+    catch(err){ records = backup; toast('删除同步失败：' + err.message); }
   };
   $('#bulkExportPdf').onclick = () => {
     const ids = [...selectedIds];
@@ -1249,30 +1231,44 @@
   $('#filterReset').onclick = resetFilter;
   $('#filterKeyword').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); applyFilter(); } });
 
+  // ========== 数据模型 ==========
   function blankRecord(){
     return {
       id: uid(),
-      title:'现场改善效果确认', location:'', owner:'', before:[], after:[], notes:'',
-      checks: defaults.map(text=>({text,done:false})),
-      signature:'',
+      name:'', gender:'', age:'',
+      healthIssues:[], healthCustom:[],
+      skinType:'', lipColor:'', doneBefore:false, eyeSensitive:false,
+      selectedServices:[], servicePrice:'', serviceTime:'',
+      noticeConfirmed:false,
+      before:[], after:[], notes:'',
+      checks:[],
+      signature:'', techSignature:'',
       savedAt:'', updatedAt:''
     };
   }
 
   function normalizeRecord(r){
-    const hasChecksField = Object.prototype.hasOwnProperty.call(r, 'checks') && Array.isArray(r.checks);
     return {
       id: r.id || uid(),
-      title: r.title || '现场改善效果确认',
-      location: r.location || '',
-      owner: r.owner || '',
+      name: r.name || '',
+      gender: r.gender || '',
+      age: r.age || '',
+      healthIssues: Array.isArray(r.healthIssues) ? r.healthIssues : [],
+      healthCustom: Array.isArray(r.healthCustom) ? r.healthCustom : [],
+      skinType: r.skinType || '',
+      lipColor: r.lipColor || '',
+      doneBefore: !!r.doneBefore,
+      eyeSensitive: !!r.eyeSensitive,
+      selectedServices: Array.isArray(r.selectedServices) ? r.selectedServices : [],
+      servicePrice: r.servicePrice || '',
+      serviceTime: r.serviceTime || '',
+      noticeConfirmed: !!r.noticeConfirmed,
       before: toMediaArray(r.before),
       after: toMediaArray(r.after),
       notes: r.notes || '',
-      checks: hasChecksField
-        ? r.checks.map(c => ({ text: (c && c.text) || '', done: !!(c && c.done) }))
-        : defaults.map(text => ({ text, done: false })),
+      checks: Array.isArray(r.checks) ? r.checks.map(c => ({ text: (c && c.text) || '', done: !!(c && c.done) })) : [],
       signature: r.signature || '',
+      techSignature: r.techSignature || '',
       savedAt: r.savedAt || nowISO(),
       updatedAt: r.updatedAt || r.savedAt || nowISO()
     };
@@ -1281,9 +1277,7 @@
   function computeSignRelevantSnapshot(rec){
     if(!rec) return '';
     const checks = Array.isArray(rec.checks) ? rec.checks : [];
-    const checksStr = checks
-      .map(c => `${((c && c.text) || '').trim()}|${(c && c.done) ? 1 : 0}`)
-      .join('::');
+    const checksStr = checks.map(c => `${((c && c.text) || '').trim()}|${(c && c.done) ? 1 : 0}`).join('::');
     const notesStr = String(rec.notes || '').replace(/\r\n/g, '\n').trim();
     return checksStr + '||' + notesStr;
   }
@@ -1292,8 +1286,7 @@
     const W = 600;
     const H = Math.round(canvasEl.height / canvasEl.width * W);
     const tmp = document.createElement('canvas');
-    tmp.width = W;
-    tmp.height = H;
+    tmp.width = W; tmp.height = H;
     const tctx = tmp.getContext('2d');
     tctx.fillStyle = '#ffffff';
     tctx.fillRect(0, 0, W, H);
@@ -1301,60 +1294,126 @@
     return tmp.toDataURL('image/jpeg', 0.6);
   }
 
+  // ========== 术前告知动态显示 ==========
+  function updateNoticeVisibility(){
+    if(!current) return;
+    const cats = new Set();
+    $$('.svc-check input[type=checkbox]:checked').forEach(el => {
+      const cat = el.dataset.cat;
+      if(cat) cats.add(cat);
+    });
+    $('#noticeBrow').style.display = cats.has('brow') ? 'block' : 'none';
+    $('#noticeEye').style.display = cats.has('eye') ? 'block' : 'none';
+    $('#noticeLip').style.display = cats.has('lip') ? 'block' : 'none';
+    const any = cats.has('brow') || cats.has('eye') || cats.has('lip');
+    $('#noticeEmpty').style.display = any ? 'none' : 'block';
+  }
+
+  // ========== 表单填充 ==========
   function fillForm(data){
     if(!data) data = blankRecord();
     current = JSON.parse(JSON.stringify(data));
 
-    $('#title').value = current.title || '';
-    $('#location').value = current.location || '';
-    $('#owner').value = current.owner || '';
-    $('#notes').value = current.notes || '';
-    renderMediaGrid('before');
-    renderMediaGrid('after');
-    renderChecks();
-    $('#dateText').textContent = new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-    changed = false;
+    $('#custName').value = current.name || '';
+    $('#custAge').value = current.age || '';
+    $$('input[name="gender"]').forEach(el => el.checked = (el.value === current.gender));
+    $$('#genderGroup .chip').forEach(el => el.classList.toggle('checked', el.querySelector('input').checked));
 
-    current.title = $('#title').value;
-    current.location = $('#location').value;
-    current.owner = $('#owner').value;
+    // 健康：标准 + 自定义
+    $$('#healthGroup input[type=checkbox]').forEach(el => {
+      el.checked = current.healthIssues.includes(el.value) || current.healthCustom.includes(el.value);
+      el.closest('.chip').classList.toggle('checked', el.checked);
+    });
+    $$('#healthGroup .chip.custom-health').forEach(el => el.remove());
+    (current.healthCustom || []).forEach(val => {
+      const label = document.createElement('label');
+      label.className = 'chip custom-health checked';
+      label.innerHTML = `<input type="checkbox" value="${esc(val)}" checked>${esc(val)}`;
+      label.querySelector('input').addEventListener('change', () => {
+        changed = true;
+        syncHealthFromDOM();
+        label.classList.toggle('checked', label.querySelector('input').checked);
+      });
+      $('#healthGroup').appendChild(label);
+    });
+
+    $$('input[name="skin"]').forEach(el => { el.checked = (el.value === current.skinType); el.closest('.chip').classList.toggle('checked', el.checked); });
+    $$('input[name="lip"]').forEach(el => { el.checked = (el.value === current.lipColor); el.closest('.chip').classList.toggle('checked', el.checked); });
+
+    $('#doneBefore').checked = current.doneBefore;
+    $('#doneBefore').closest('.chip').classList.toggle('checked', current.doneBefore);
+    $('#eyeSensitive').checked = current.eyeSensitive;
+    $('#eyeSensitive').closest('.chip').classList.toggle('checked', current.eyeSensitive);
+
+    $$('.svc-check input[type=checkbox]').forEach(el => { el.checked = current.selectedServices.includes(el.value); el.closest('.svc-check').classList.toggle('checked', el.checked); });
+    $('#servicePrice').value = current.servicePrice || '';
+    $('#serviceTime').value = current.serviceTime || '';
+
+    $('#noticeConfirm').checked = current.noticeConfirmed;
+
+    renderMediaGrid('before'); renderMediaGrid('after');
+    renderChecks();
+    $('#notes').value = current.notes || '';
+    $('#dateText').textContent = new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+
+    current.title = $('#custName').value;
+    current.location = current.gender || '';
+    current.owner = current.name || '';
     current.notes = $('#notes').value;
     pristineSnapshot = computeSignRelevantSnapshot(current);
 
-    try {
-      if($('#signature').width > 0 && ctx){ redrawMainSignature(); }
-    } catch(e){}
+    try { if($('#signature').width > 0 && ctx){ redrawMainSignature(); } } catch(e){}
+    try { if($('#techSignature').width > 0 && techCtx){ redrawTechSignature(); } } catch(e){}
+    updateNoticeVisibility();
+    changed = false;
+  }
+
+  function syncHealthFromDOM(){
+    if(!current) return;
+    const standardVals = ['疤痕体质','生理周期','口腔炎症','孕期','哺乳期','酒精过敏','糖尿病史','心脏病史','高血压史'];
+    const checked = [...$$('#healthGroup input[type=checkbox]:checked')].map(el=>el.value);
+    current.healthIssues = checked.filter(v => standardVals.includes(v));
+    current.healthCustom = checked.filter(v => !standardVals.includes(v));
   }
 
   function syncForm(){
     if(!current) current = blankRecord();
-    current.title = $('#title').value;
-    current.location = $('#location').value;
-    current.owner = $('#owner').value;
+    current.name = $('#custName').value;
+    current.age = $('#custAge').value;
+    const genderEl = document.querySelector('input[name="gender"]:checked');
+    current.gender = genderEl ? genderEl.value : '';
+    syncHealthFromDOM();
+    const skinEl = document.querySelector('input[name="skin"]:checked');
+    current.skinType = skinEl ? skinEl.value : '';
+    const lipEl = document.querySelector('input[name="lip"]:checked');
+    current.lipColor = lipEl ? lipEl.value : '';
+    current.doneBefore = $('#doneBefore').checked;
+    current.eyeSensitive = $('#eyeSensitive').checked;
+    current.selectedServices = [...$$('.svc-check input[type=checkbox]:checked')].map(el=>el.value);
+    current.servicePrice = $('#servicePrice').value;
+    current.serviceTime = $('#serviceTime').value;
+    current.noticeConfirmed = $('#noticeConfirm').checked;
     current.notes = $('#notes').value;
+    current.title = current.name;
+    current.location = current.gender;
+    current.owner = current.name;
   }
 
   function isSignRelevantChanged(){
     if(!current) return false;
     if(pristineSnapshot === null) return false;
-    const now = computeSignRelevantSnapshot(current);
-    return now !== pristineSnapshot;
+    return computeSignRelevantSnapshot(current) !== pristineSnapshot;
   }
-
-  function updateSignStatusUI(){ /* no-op */ }
 
   function checkAndInvalidateSignature(){
     if(!current) return;
-    const relevantChanged = isSignRelevantChanged();
-    if(relevantChanged && current.signature){
+    if(isSignRelevantChanged() && (current.signature || current.techSignature)){
       current.signature = '';
-      try {
-        const c = $('#signature');
-        const w = c.width / ratio;
-        const h = c.height / ratio;
-        ctx.clearRect(0,0,w,h);
-      } catch(e){}
+      current.techSignature = '';
+      try { const c = $('#signature'); const w = c.width / ratio, h = c.height / ratio; ctx.clearRect(0,0,w,h); } catch(e){}
+      try { const c = $('#techSignature'); const w = c.width / techRatio, h = c.height / techRatio; techCtx.clearRect(0,0,w,h); } catch(e){}
       $('#signPlaceholder').style.display = 'block';
+      $('#techSignPlaceholder').style.display = 'block';
       setStatus('内容已修改，请重新签名', 'err');
       toast('内容已修改，原签名已清除，请重新签名');
     }
@@ -1367,34 +1426,18 @@
     const grid = $(`#${kind}Grid`);
     const countEl = $(`#${kind}Count`);
     countEl.textContent = `${arr.length} / ${MAX_MEDIA}`;
-
     let html = '';
     for(let i = 0; i < MAX_MEDIA; i++){
       const v = arr[i];
       if(v){
         const src = mediaUrl(v);
         let inner = '';
-        if(isVideo(v)){
-          inner = `<video src="${src}" muted preload="metadata"></video>`;
-        } else {
-          inner = `<img src="${src}" alt="">`;
-        }
+        if(isVideo(v)) inner = `<video src="${src}" muted preload="metadata"></video>`;
+        else inner = `<img src="${src}" alt="">`;
         const badge = isVideo(v) ? '📹' : '🖼';
-        html += `
-          <div class="media-cell filled" data-cell="${i}" data-kind="${kind}">
-            ${inner}
-            <span class="cell-badge">${badge}</span>
-            <button type="button" class="cell-remove" data-remove-cell="${i}" data-remove-kind="${kind}" title="删除">✕</button>
-            <span class="cell-num">${i+1}</span>
-          </div>`;
+        html += `<div class="media-cell filled" data-cell="${i}" data-kind="${kind}">${inner}<span class="cell-badge">${badge}</span><button type="button" class="cell-remove" data-remove-cell="${i}" data-remove-kind="${kind}" title="删除">✕</button><span class="cell-num">${i+1}</span></div>`;
       } else {
-        html += `
-          <div class="media-cell" data-cell="${i}" data-kind="${kind}" title="点击上传">
-            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M12 5v14M5 12h14"/>
-            </svg>
-            <span class="cell-num">${i+1}</span>
-          </div>`;
+        html += `<div class="media-cell" data-cell="${i}" data-kind="${kind}" title="点击上传"><svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg><span class="cell-num">${i+1}</span></div>`;
       }
     }
     grid.innerHTML = html;
@@ -1406,9 +1449,7 @@
     const removed = current[kind].splice(idx, 1)[0];
     renderMediaGrid(kind);
     changed = true;
-    if(removed && !removed.startsWith('data:') && !/^https?:\/\//i.test(removed)){
-      ghDeleteFile(removed).catch(()=>{});
-    }
+    if(removed && !removed.startsWith('data:') && !/^https?:\/\//i.test(removed)) ghDeleteFile(removed).catch(()=>{});
   }
 
   function appendMedia(kind, value){
@@ -1429,44 +1470,34 @@
       <label class="check-item ${x.done?'done':''}">
         <input type="checkbox" data-check="${i}" ${x.done?'checked':''}>
         <span class="check-text">${esc(x.text)}</span>
-        <button type="button" class="icon-btn" data-del="${i}" aria-label="删除">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/></svg>
-        </button>
+        <button type="button" class="icon-btn" data-del="${i}" aria-label="删除"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/></svg></button>
       </label>`).join('');
     const done = checks.filter(x=>x.done).length;
     $('#progress').textContent = `完成 ${checks.length?Math.round(done/checks.length*100):0}%`;
   }
 
+  // ========== 保存 ==========
   async function saveCurrent(){
     if(saving) return;
-    if(!recordsLoaded){
-      showAlert('请稍候', '正在从 GitHub 读取数据，请等待读取完成后再保存。');
-      return;
-    }
+    if(!recordsLoaded){ showAlert('请稍候', '正在从 GitHub 读取数据，请等待读取完成后再保存。'); return; }
     syncForm();
     if(!current) return;
 
     if(!current.signature){
-      showAlert('无法保存', '请先在「用户签名」区域完成手写签名，然后再保存。<br><br>签名是对本次改善确认的正式确认，未签名不能提交。');
-      try {
-        const wrap = $('#signatureWrap');
-        wrap.scrollIntoView({ behavior:'smooth', block:'center' });
-        wrap.style.transition = 'box-shadow .3s';
-        wrap.style.boxShadow = '0 0 0 4px rgba(217,45,32,.25)';
-        setTimeout(() => { wrap.style.boxShadow = ''; }, 1500);
-      } catch(e){}
+      showAlert('无法保存', '请先在「客户签名」区域完成手写签名，然后再保存。<br><br>签名是对本次定妆确认的正式确认，未签名不能提交。');
+      try { const wrap = $('#signatureWrap'); wrap.scrollIntoView({ behavior:'smooth', block:'center' }); wrap.style.transition = 'box-shadow .3s'; wrap.style.boxShadow = '0 0 0 4px rgba(179,62,62,.25)'; setTimeout(() => { wrap.style.boxShadow = ''; }, 1500); } catch(e){}
       return;
     }
-
+    if(!current.techSignature){
+      if(!confirm('技术签字尚未完成，确定要保存吗？')) return;
+    }
     if(isSignRelevantChanged()){
       current.signature = '';
-      try {
-        const c = $('#signature');
-        const w = c.width / ratio;
-        const h = c.height / ratio;
-        ctx.clearRect(0,0,w,h);
-      } catch(e){}
+      current.techSignature = '';
+      try { const c = $('#signature'); const w = c.width / ratio, h = c.height / ratio; ctx.clearRect(0,0,w,h); } catch(e){}
+      try { const c = $('#techSignature'); const w = c.width / techRatio, h = c.height / techRatio; techCtx.clearRect(0,0,w,h); } catch(e){}
       $('#signPlaceholder').style.display = 'block';
+      $('#techSignPlaceholder').style.display = 'block';
       showAlert('需要重新签名', '「确认事项」或「说明与签名」内容已修改，原签名已失效。<br><br>请重新签名后再保存。');
       return;
     }
@@ -1476,20 +1507,15 @@
     current.updatedAt = nowISO();
     if(!current.savedAt) current.savedAt = current.updatedAt;
     const snapshot = JSON.parse(JSON.stringify(current));
-    if(idx>=0) nextRecords[idx] = snapshot;
-    else nextRecords.push(snapshot);
+    if(idx>=0) nextRecords[idx] = snapshot; else nextRecords.push(snapshot);
 
     if(fileSha && records.length >= 2 && nextRecords.length < records.length){
-      const confirmDelete = confirm(`注意：本次保存将使记录从 ${records.length} 条变为 ${nextRecords.length} 条（疑似删除）。\n\n确定要继续吗？`);
-      if(!confirmDelete){
-        return;
-      }
+      if(!confirm(`注意：本次保存将使记录从 ${records.length} 条变为 ${nextRecords.length} 条（疑似删除）。\n\n确定要继续吗？`)) return;
     }
 
     saving = true;
     const backup = JSON.parse(JSON.stringify(records));
     records = nextRecords;
-
     try {
       await ghSave();
       changed = false;
@@ -1500,11 +1526,10 @@
       records = backup;
       toast('保存失败：' + err.message);
       setStatus('保存失败：' + err.message, 'err');
-    } finally {
-      saving = false;
-    }
+    } finally { saving = false; }
   }
 
+  // ========== 媒体上传 ==========
   function compressImage(file){
     return new Promise((resolve, reject) => {
       const r = new FileReader();
@@ -1514,50 +1539,34 @@
           const max = 1600;
           const scale = Math.min(1, max/Math.max(img.width,img.height));
           const c = document.createElement('canvas');
-          c.width = Math.round(img.width*scale);
-          c.height = Math.round(img.height*scale);
+          c.width = Math.round(img.width*scale); c.height = Math.round(img.height*scale);
           c.getContext('2d').drawImage(img,0,0,c.width,c.height);
           resolve(c.toDataURL('image/jpeg',.82));
         };
-        img.onerror = reject;
-        img.src = e.target.result;
+        img.onerror = reject; img.src = e.target.result;
       };
-      r.onerror = reject;
-      r.readAsDataURL(file);
+      r.onerror = reject; r.readAsDataURL(file);
     });
   }
   function readVideo(file){
-    return new Promise((resolve, reject) => {
-      const r = new FileReader();
-      r.onload = e => resolve(e.target.result);
-      r.onerror = reject;
-      r.readAsDataURL(file);
-    });
+    return new Promise((resolve, reject) => { const r = new FileReader(); r.onload = e => resolve(e.target.result); r.onerror = reject; r.readAsDataURL(file); });
   }
 
   async function processFiles(kind, files){
     if(!current) current = blankRecord();
     if(!Array.isArray(current[kind])) current[kind] = toMediaArray(current[kind]);
     const remain = MAX_MEDIA - current[kind].length;
-    if(remain <= 0){
-      toast(`最多 ${MAX_MEDIA} 个，请先删除部分再上传`);
-      return;
-    }
+    if(remain <= 0){ toast(`最多 ${MAX_MEDIA} 个，请先删除部分再上传`); return; }
     const arr = Array.from(files || []);
-    if(arr.length > remain){
-      toast(`本次只处理前 ${remain} 个（已满 ${MAX_MEDIA}）`);
-    }
+    if(arr.length > remain) toast(`本次只处理前 ${remain} 个（已满 ${MAX_MEDIA}）`);
     const todo = arr.slice(0, remain);
-
     const progressEl = $(`#${kind}Progress`);
     let done = 0;
     progressEl.textContent = `准备上传 0 / ${todo.length}…`;
-
     for(const file of todo){
       try {
         const stamp = Date.now();
         const rand = Math.random().toString(36).slice(2,6);
-
         if(file.type.startsWith('image/')){
           progressEl.textContent = `压缩图片 ${done+1} / ${todo.length}…`;
           const dataUrl = await compressImage(file);
@@ -1569,8 +1578,7 @@
           appendMedia(kind, path);
         } else if(file.type.startsWith('video/')){
           if(file.size > 25 * 1024 * 1024){
-            const ok = confirm(`「${file.name}」约 ${(file.size/1024/1024).toFixed(1)}MB，上传可能较慢。\n仍要上传吗？`);
-            if(!ok){ done++; continue; }
+            if(!confirm(`「${file.name}」约 ${(file.size/1024/1024).toFixed(1)}MB，上传可能较慢。\n仍要上传吗？`)){ done++; continue; }
           }
           progressEl.textContent = `读取视频 ${done+1} / ${todo.length}…`;
           const dataUrl = await readVideo(file);
@@ -1581,46 +1589,55 @@
           progressEl.textContent = `上传视频 ${done+1} / ${todo.length}…`;
           await ghUploadFile(path, b64, `upload ${name}`);
           appendMedia(kind, path);
-        } else {
-          toast(`跳过不支持的文件：${file.name}`);
-        }
-      } catch(err){
-        toast(`上传失败：${file.name} — ${err.message}`);
-      }
+        } else { toast(`跳过不支持的文件：${file.name}`); }
+      } catch(err){ toast(`上传失败：${file.name} — ${err.message}`); }
       done++;
     }
     progressEl.textContent = '';
     renderMediaGrid(kind);
   }
 
+  // ========== 签名（客户 + 技术） ==========
   function resizeCanvas(preserve=true){
     const c = $('#signature');
     const rect = c.getBoundingClientRect();
     if(rect.width === 0 || rect.height === 0) return;
-
     const old = preserve && c.width ? c.toDataURL() : '';
     ratio = Math.max(1, window.devicePixelRatio||1);
-    c.width = Math.round(rect.width*ratio);
-    c.height = Math.round(rect.height*ratio);
+    c.width = Math.round(rect.width*ratio); c.height = Math.round(rect.height*ratio);
     ctx = c.getContext('2d');
     ctx.setTransform(ratio,0,0,ratio,0,0);
-    ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineWidth=2.5; ctx.strokeStyle='#172033';
-    if(old){
-      const im = new Image();
-      im.onload = () => ctx.drawImage(im,0,0,rect.width,rect.height);
-      im.src = old;
-    }
+    ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineWidth=2.5; ctx.strokeStyle='#2e2a25';
+    if(old){ const im = new Image(); im.onload = () => ctx.drawImage(im,0,0,rect.width,rect.height); im.src = old; }
+  }
+  function resizeTechCanvas(preserve=true){
+    const c = $('#techSignature');
+    const rect = c.getBoundingClientRect();
+    if(rect.width === 0 || rect.height === 0) return;
+    const old = preserve && c.width ? c.toDataURL() : '';
+    techRatio = Math.max(1, window.devicePixelRatio||1);
+    c.width = Math.round(rect.width*techRatio); c.height = Math.round(rect.height*techRatio);
+    techCtx = c.getContext('2d');
+    techCtx.setTransform(techRatio,0,0,techRatio,0,0);
+    techCtx.lineCap='round'; techCtx.lineJoin='round'; techCtx.lineWidth=2.5; techCtx.strokeStyle='#2e2a25';
+    if(old){ const im = new Image(); im.onload = () => techCtx.drawImage(im,0,0,rect.width,rect.height); im.src = old; }
   }
   function point(e, canvas){
     const r = canvas.getBoundingClientRect(), p = e.touches ? e.touches[0] : e;
     return { x: p.clientX-r.left, y: p.clientY-r.top };
   }
   function clearSignature(mark=true){
-    const c = $('#signature');
-    const w = c.width / ratio, h = c.height / ratio;
+    const c = $('#signature'); const w = c.width / ratio, h = c.height / ratio;
     ctx.clearRect(0,0,w,h);
     if(current) current.signature='';
     $('#signPlaceholder').style.display = 'block';
+    if(mark) changed = true;
+  }
+  function clearTechSignature(mark=true){
+    const c = $('#techSignature'); const w = c.width / techRatio, h = c.height / techRatio;
+    techCtx.clearRect(0,0,w,h);
+    if(current) current.techSignature='';
+    $('#techSignPlaceholder').style.display = 'block';
     if(mark) changed = true;
   }
 
@@ -1628,26 +1645,22 @@
     const c = $('#signatureModal'), wrap = $('#signModalCanvasWrap');
     const rect = wrap.getBoundingClientRect();
     if(rect.width === 0 || rect.height === 0) return;
-
     const old = preserve && c.width ? c.toDataURL() : '';
     modalRatio = Math.max(1, window.devicePixelRatio||1);
-    c.width = Math.round(rect.width*modalRatio);
-    c.height = Math.round(rect.height*modalRatio);
+    c.width = Math.round(rect.width*modalRatio); c.height = Math.round(rect.height*modalRatio);
     modalCtx = c.getContext('2d');
     modalCtx.setTransform(modalRatio,0,0,modalRatio,0,0);
-    modalCtx.lineCap='round'; modalCtx.lineJoin='round'; modalCtx.lineWidth=3; modalCtx.strokeStyle='#172033';
-    if(old){
-      const im = new Image();
-      im.onload = () => modalCtx.drawImage(im,0,0,rect.width,rect.height);
-      im.src = old;
-    }
+    modalCtx.lineCap='round'; modalCtx.lineJoin='round'; modalCtx.lineWidth=3; modalCtx.strokeStyle='#2e2a25';
+    if(old){ const im = new Image(); im.onload = () => modalCtx.drawImage(im,0,0,rect.width,rect.height); im.src = old; }
   }
   function clearModalSignature(){
     const c = $('#signatureModal');
     modalCtx.clearRect(0,0,c.width/modalRatio,c.height/modalRatio);
     $('#signModalHint').style.display = 'block';
   }
-  function openSignModal(){
+  function openSignModal(target){
+    modalTarget = target || 'customer';
+    $('#signModalTitle').textContent = modalTarget === 'tech' ? '技术签字' : '客户签名';
     $('#signModal').classList.add('show');
     modalOpen = true;
     document.body.style.overflow='hidden';
@@ -1655,16 +1668,12 @@
       requestAnimationFrame(() => {
         resizeModalCanvas(false);
         clearModalSignature();
-        if(current && current.signature){
-          const c = $('#signatureModal');
-          const w = c.width / modalRatio;
-          const h = c.height / modalRatio;
+        const existing = modalTarget === 'tech' ? (current && current.techSignature) : (current && current.signature);
+        if(existing){
+          const c = $('#signatureModal'); const w = c.width / modalRatio, h = c.height / modalRatio;
           const im = new Image();
-          im.onload = () => {
-            modalCtx.drawImage(im, 0, 0, w, h);
-            $('#signModalHint').style.display = 'none';
-          };
-          im.src = current.signature;
+          im.onload = () => { modalCtx.drawImage(im, 0, 0, w, h); $('#signModalHint').style.display = 'none'; };
+          im.src = existing;
         }
       });
     });
@@ -1673,22 +1682,20 @@
     if(confirmSave){
       const c = $('#signatureModal');
       const data = exportSignature(c);
-      if(current) current.signature = data;
-      changed = true;
-
-      const main = $('#signature');
-      const w = main.width / ratio;
-      const h = main.height / ratio;
-      ctx.clearRect(0, 0, w, h);
-      if(data){
-        const im = new Image();
-        im.onload = () => {
-          ctx.drawImage(im, 0, 0, w, h);
-          $('#signPlaceholder').style.display = 'none';
-        };
-        im.src = data;
+      if(modalTarget === 'tech'){
+        if(current) current.techSignature = data;
+        changed = true;
+        const main = $('#techSignature'); const w = main.width / techRatio, h = main.height / techRatio;
+        techCtx.clearRect(0, 0, w, h);
+        if(data){ const im = new Image(); im.onload = () => { techCtx.drawImage(im, 0, 0, w, h); $('#techSignPlaceholder').style.display = 'none'; }; im.src = data; }
+        else { $('#techSignPlaceholder').style.display = 'block'; }
       } else {
-        $('#signPlaceholder').style.display = 'block';
+        if(current) current.signature = data;
+        changed = true;
+        const main = $('#signature'); const w = main.width / ratio, h = main.height / ratio;
+        ctx.clearRect(0, 0, w, h);
+        if(data){ const im = new Image(); im.onload = () => { ctx.drawImage(im, 0, 0, w, h); $('#signPlaceholder').style.display = 'none'; }; im.src = data; }
+        else { $('#signPlaceholder').style.display = 'block'; }
       }
       pristineSnapshot = computeSignRelevantSnapshot(current);
     }
@@ -1697,6 +1704,7 @@
     document.body.style.overflow = '';
   }
 
+  // ========== 媒体查看器 ==========
   function openViewer(mediaValue, label){
     if(!mediaValue) return;
     const src = mediaUrl(mediaValue);
@@ -1706,25 +1714,18 @@
     host.innerHTML = '';
     if(isVideo(mediaValue)){
       const v = document.createElement('video');
-      v.src = src;
-      v.controls = true;
-      v.autoplay = true;
-      v.playsInline = true;
-      v.style.maxWidth = '100%';
-      v.style.maxHeight = 'calc(100vh - 80px)';
+      v.src = src; v.controls = true; v.autoplay = true; v.playsInline = true;
+      v.style.maxWidth = '100%'; v.style.maxHeight = 'calc(100vh - 80px)';
       host.appendChild(v);
     } else {
-      const i = document.createElement('img');
-      i.src = src;
-      i.alt = label || '';
+      const i = document.createElement('img'); i.src = src; i.alt = label || '';
       host.appendChild(i);
     }
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
   }
   function closeViewer(){
-    const modal = $('#viewerModal');
-    const host = $('#viewerMediaHost');
+    const modal = $('#viewerModal'); const host = $('#viewerMediaHost');
     const v = host.querySelector('video');
     if(v){ try { v.pause(); v.currentTime = 0; } catch(e){} }
     host.innerHTML = '';
@@ -1732,64 +1733,119 @@
     document.body.style.overflow = '';
   }
   $('#viewerClose').onclick = closeViewer;
-  $('#viewerModal').addEventListener('click', e => {
-    if(e.target.id === 'viewerModal' || e.target.classList.contains('viewer-content')) closeViewer();
+  $('#viewerModal').addEventListener('click', e => { if(e.target.id === 'viewerModal' || e.target.classList.contains('viewer-content')) closeViewer(); });
+
+  // ========== 步骤切换 ==========
+  $$('#stepTabs .step-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const step = +tab.dataset.step;
+      $$('#stepTabs .step-tab').forEach(t => t.classList.toggle('active', +t.dataset.step === step));
+      $$('.step-pane').forEach(p => p.classList.toggle('active', +p.dataset.pane === step));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if(step === 1) updateNoticeVisibility();
+      if(step === 3){ setTimeout(() => { try { resizeCanvas(false); resizeTechCanvas(false); redrawMainSignature(); redrawTechSignature(); } catch(e){} }, 100); }
+    });
   });
 
+  // ========== 表单事件 ==========
+  $('#custName').addEventListener('input', () => { changed = true; if(current) current.name = $('#custName').value; });
+  $('#custAge').addEventListener('input', () => { changed = true; if(current) current.age = $('#custAge').value; });
+  $$('input[name="gender"]').forEach(el => el.addEventListener('change', () => {
+    changed = true; if(current) current.gender = el.value;
+    $$('#genderGroup .chip').forEach(c => c.classList.toggle('checked', c.querySelector('input').checked));
+  }));
+  $$('#healthGroup input[type=checkbox]').forEach(el => el.addEventListener('change', () => {
+    changed = true;
+    syncHealthFromDOM();
+    el.closest('.chip').classList.toggle('checked', el.checked);
+  }));
+  $('#healthAddBtn').addEventListener('click', () => {
+    const input = $('#healthOtherInput');
+    const val = input.value.trim();
+    if(!val) return;
+    const exist = [...$$('#healthGroup input[type=checkbox]')].some(el => el.value === val);
+    if(exist){ toast('该选项已存在'); input.value=''; return; }
+    const label = document.createElement('label');
+    label.className = 'chip custom-health checked';
+    label.innerHTML = `<input type="checkbox" value="${esc(val)}" checked>${esc(val)}`;
+    label.querySelector('input').addEventListener('change', () => {
+      changed = true;
+      syncHealthFromDOM();
+      label.classList.toggle('checked', label.querySelector('input').checked);
+    });
+    $('#healthGroup').appendChild(label);
+    syncHealthFromDOM();
+    changed = true;
+    input.value = '';
+  });
+  $('#healthOtherInput').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); $('#healthAddBtn').click(); } });
+
+  $$('input[name="skin"]').forEach(el => el.addEventListener('change', () => {
+    changed = true; if(current) current.skinType = el.value;
+    $$('input[name="skin"]').forEach(x => x.closest('.chip').classList.toggle('checked', x.checked));
+  }));
+  $$('input[name="lip"]').forEach(el => el.addEventListener('change', () => {
+    changed = true; if(current) current.lipColor = el.value;
+    $$('input[name="lip"]').forEach(x => x.closest('.chip').classList.toggle('checked', x.checked));
+  }));
+  $('#doneBefore').addEventListener('change', () => {
+    changed = true; if(current) current.doneBefore = $('#doneBefore').checked;
+    $('#doneBefore').closest('.chip').classList.toggle('checked', $('#doneBefore').checked);
+  });
+  $('#eyeSensitive').addEventListener('change', () => {
+    changed = true; if(current) current.eyeSensitive = $('#eyeSensitive').checked;
+    $('#eyeSensitive').closest('.chip').classList.toggle('checked', $('#eyeSensitive').checked);
+  });
+  $$('.svc-check input[type=checkbox]').forEach(el => el.addEventListener('change', () => {
+    changed = true;
+    if(current){ current.selectedServices = [...$$('.svc-check input[type=checkbox]:checked')].map(x=>x.value); }
+    el.closest('.svc-check').classList.toggle('checked', el.checked);
+    updateNoticeVisibility();
+  }));
+  $('#servicePrice').addEventListener('input', () => { changed = true; if(current) current.servicePrice = $('#servicePrice').value; });
+  $('#serviceTime').addEventListener('input', () => { changed = true; if(current) current.serviceTime = $('#serviceTime').value; });
+  $('#noticeConfirm').addEventListener('change', () => { changed = true; if(current) current.noticeConfirmed = $('#noticeConfirm').checked; });
+  $('#notes').addEventListener('input', () => {
+    changed = true;
+    if(current) current.notes = $('#notes').value;
+    checkAndInvalidateSignature();
+  });
+
+  // 媒体
   $$('[data-pick]').forEach(b => b.onclick = () => document.querySelector(`#${b.dataset.pick}Input`).click());
   $$('[data-clear]').forEach(b => b.onclick = () => {
     const kind = b.dataset.clear;
     if(!current) return;
     const arr = current[kind] || [];
     if(!arr.length) return;
-    if(!confirm(`确定清空「${kind==='before'?'改善之前':'改善之后'}」的全部 ${arr.length} 个媒体吗？`)) return;
-    arr.forEach(p => {
-      if(p && !p.startsWith('data:') && !/^https?:\/\//i.test(p)) ghDeleteFile(p).catch(()=>{});
-    });
+    if(!confirm(`确定清空「${kind==='before'?'定妆前&补色前照片':'定妆后&补色后照片'}」的全部 ${arr.length} 个媒体吗？`)) return;
+    arr.forEach(p => { if(p && !p.startsWith('data:') && !/^https?:\/\//i.test(p)) ghDeleteFile(p).catch(()=>{}); });
     current[kind] = [];
     renderMediaGrid(kind);
     changed = true;
   });
-
   ['before','after'].forEach(kind => {
-    $(`#${kind}Input`).addEventListener('change', e => {
-      const files = e.target.files;
-      if(files && files.length) processFiles(kind, files);
-      e.target.value = '';
-    });
+    $(`#${kind}Input`).addEventListener('change', e => { const files = e.target.files; if(files && files.length) processFiles(kind, files); e.target.value = ''; });
   });
-
   ['before','after'].forEach(kind => {
     const grid = $(`#${kind}Grid`);
     grid.addEventListener('click', e => {
       const rm = e.target.closest('[data-remove-cell]');
-      if(rm){
-        e.stopPropagation();
-        const idx = +rm.dataset.removeCell;
-        const k = rm.dataset.removeKind;
-        removeMediaAt(k, idx);
-        return;
-      }
+      if(rm){ e.stopPropagation(); removeMediaAt(rm.dataset.removeKind, +rm.dataset.removeCell); return; }
       const cell = e.target.closest('[data-cell]');
       if(!cell) return;
-      const idx = +cell.dataset.cell;
-      const k = cell.dataset.kind;
+      const idx = +cell.dataset.cell, k = cell.dataset.kind;
       const arr = current && current[k] ? current[k] : [];
-      if(arr[idx]){
-        const label = (k === 'before' ? '改善之前' : '改善之后') + ` · ${idx+1}`;
-        openViewer(arr[idx], label);
-      } else {
-        $(`#${k}Input`).click();
-      }
+      if(arr[idx]) openViewer(arr[idx], (k === 'before' ? '定妆前&补色前照片' : '定妆后&补色后照片') + ` · ${idx+1}`);
+      else $(`#${k}Input`).click();
     });
   });
 
+  // 确认事项
   $('#checkList').addEventListener('change', e => {
     if(e.target.matches('[data-check]')){
       current.checks[+e.target.dataset.check].done = e.target.checked;
-      renderChecks();
-      changed = true;
-      checkAndInvalidateSignature();
+      renderChecks(); changed = true; checkAndInvalidateSignature();
     }
   });
   $('#checkList').addEventListener('click', e => {
@@ -1799,6 +1855,7 @@
   function addCheck(){
     const i = $('#newCheck'), text = i.value.trim();
     if(!text) return;
+    if(!current) current = blankRecord();
     current.checks.push({text,done:false});
     i.value=''; renderChecks(); changed=true;
     checkAndInvalidateSignature();
@@ -1806,40 +1863,38 @@
   $('#addCheck').onclick = addCheck;
   $('#newCheck').onkeydown = e => { if(e.key==='Enter'){ e.preventDefault(); addCheck(); } };
 
-  $('#notes').addEventListener('input', () => {
-    changed = true;
-    if(current) current.notes = $('#notes').value;
-    checkAndInvalidateSignature();
-  });
-
-  ['title','location','owner'].forEach(id => $('#'+id).addEventListener('input', () => {
-    changed = true;
-    if(current) current[id] = $('#'+id).value;
-  }));
-
+  // 签名
   $('#clearSign').onclick = () => clearSignature(true);
+  $('#clearTechSign').onclick = () => clearTechSignature(true);
   $('#newBtn').onclick = createNewRecord;
   $('#refreshBtn').onclick = () => refreshFromGitHub();
   $('#settingsBtn').onclick = () => showConfigModal();
 
+  // 客户签名 canvas
   const canvas = $('#signature');
   const start = e => { e.preventDefault(); drawing=true; const p=point(e,canvas); ctx.beginPath(); ctx.moveTo(p.x,p.y); $('#signPlaceholder').style.display='none'; };
   const move = e => { if(!drawing) return; e.preventDefault(); const p=point(e,canvas); ctx.lineTo(p.x,p.y); ctx.stroke(); };
-  const end = e => {
-    if(!drawing) return;
-    if(e) e.preventDefault();
-    drawing = false;
-    if(current) current.signature = exportSignature(canvas);
-    changed = true;
-    pristineSnapshot = computeSignRelevantSnapshot(current);
-  };
+  const end = e => { if(!drawing) return; if(e) e.preventDefault(); drawing = false; if(current) current.signature = exportSignature(canvas); changed = true; pristineSnapshot = computeSignRelevantSnapshot(current); };
   canvas.addEventListener('pointerdown', start);
   canvas.addEventListener('pointermove', move);
   canvas.addEventListener('pointerup', end);
   canvas.addEventListener('pointercancel', end);
   canvas.addEventListener('pointerleave', end);
-  $('#signatureWrap').addEventListener('click', openSignModal);
+  $('#signatureWrap').addEventListener('click', () => openSignModal('customer'));
 
+  // 技术签名 canvas
+  const techCanvas = $('#techSignature');
+  const techStart = e => { e.preventDefault(); techDrawing=true; const p=point(e,techCanvas); techCtx.beginPath(); techCtx.moveTo(p.x,p.y); $('#techSignPlaceholder').style.display='none'; };
+  const techMove = e => { if(!techDrawing) return; e.preventDefault(); const p=point(e,techCanvas); techCtx.lineTo(p.x,p.y); techCtx.stroke(); };
+  const techEnd = e => { if(!techDrawing) return; if(e) e.preventDefault(); techDrawing = false; if(current) current.techSignature = exportSignature(techCanvas); changed = true; pristineSnapshot = computeSignRelevantSnapshot(current); };
+  techCanvas.addEventListener('pointerdown', techStart);
+  techCanvas.addEventListener('pointermove', techMove);
+  techCanvas.addEventListener('pointerup', techEnd);
+  techCanvas.addEventListener('pointercancel', techEnd);
+  techCanvas.addEventListener('pointerleave', techEnd);
+  $('#techSignatureWrap').addEventListener('click', () => openSignModal('tech'));
+
+  // 弹窗签名
   const modalCanvas = $('#signatureModal');
   const mStart = e => { e.preventDefault(); modalDrawing=true; const p=point(e,modalCanvas); modalCtx.beginPath(); modalCtx.moveTo(p.x,p.y); $('#signModalHint').style.display='none'; };
   const mMove = e => { if(!modalDrawing) return; e.preventDefault(); const p=point(e,modalCanvas); modalCtx.lineTo(p.x,p.y); modalCtx.stroke(); };
@@ -1852,6 +1907,7 @@
   $$('[data-close-sign]').forEach(el => el.onclick = () => closeSignModal(false));
   $('#signModalClear').onclick = clearModalSignature;
   $('#signModalConfirm').onclick = () => closeSignModal(true);
+
   document.addEventListener('keydown', e => {
     if(e.key === 'Escape'){
       if($('#alertModal').classList.contains('show')) closeAlert();
@@ -1862,7 +1918,7 @@
 
   window.addEventListener('resize', () => {
     if(modalOpen) resizeModalCanvas(true);
-    else if($('#viewForm').classList.contains('active')) resizeCanvas(true);
+    else if($('#viewForm').classList.contains('active')){ resizeCanvas(true); resizeTechCanvas(true); }
   });
   window.addEventListener('beforeunload', e => { if(changed){ e.preventDefault(); e.returnValue=''; } });
 
@@ -1873,29 +1929,21 @@
       await ghLoad();
       renderList();
       toast('已刷新 · ' + records.length + ' 条');
-    } catch(err){
-      recordsLoaded = false;
-      toast('刷新失败：' + err.message);
-    }
+    } catch(err){ recordsLoaded = false; toast('刷新失败：' + err.message); }
   }
 
-  // ============================================================
-  // ★ 初始化：有配置 → 显示欢迎页；无配置 → 弹配置界面
-  // ============================================================
+  // ========== 初始化 ==========
   current = blankRecord();
   renderTopActions('list');
   initWelcome();
-
   const saved = loadCfg();
   if(saved && saved.token){
     cfg = { ...DEFAULTS, ...saved };
     cfg.pagesBase = saved.pagesBase || `https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${cfg.branch}`;
-    // ★ 已有配置：确保配置界面关闭，显示欢迎页
     hideConfigModal();
     $('#welcomeOverlay').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
   } else {
-    // ★ 无配置：显示配置界面
     showConfigModal();
     document.body.style.overflow = 'hidden';
   }
