@@ -520,6 +520,7 @@
         <div class="date-row"><span>签名日期</span><span id="dateText"></span></div>
       </div></article>
     </section>
+    <div class="privacy">数据保存在你的 GitHub 私有仓库，不会因为清缓存而丢失。</div>
   </main>
 
   <div class="toast" id="toast"></div>
@@ -577,13 +578,12 @@
   'use strict';
 
   const PRESET_CONFIG = {
-    owner: 'zhitao-hu',
-    repo: 'improvement-data',
-    path: 'records.json',
+    // ★ Worker 地址（末尾不带 /）
+    worker: 'https://improvement-api.1362259735.workers.dev',
     imagesDir: 'images',
     videosDir: 'videos',
-    pagesBase: 'https://raw.githubusercontent.com/zhitao-hu/improvement-data/main',
-    token: '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'
+    // 媒体读取前缀
+    pagesBase: 'https://raw.githubusercontent.com/zhitao-hu/improvement-data/main'
   };
   const MAX_MEDIA = 4;
 
@@ -593,7 +593,6 @@
 
   let cfg = { ...PRESET_CONFIG };
   let records = [];
-  let fileSha = null;
   let current = null;
   let currentId = null;
   let changed = false;
@@ -616,10 +615,7 @@
   const nowISO = () => new Date().toISOString();
   const fmtDate = iso => { try { return new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(iso)); } catch(e){ return iso||''; } };
   const fmtDay = iso => { try { return new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(iso)); } catch(e){ return (iso||'').slice(0,10); } };
-  const b64encode = str => { const bytes = new TextEncoder().encode(str); let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b)); return btoa(bin); };
-  const b64decode = b64 => { const bin = atob(b64.replace(/\s/g,'')); const bytes = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i); return new TextDecoder().decode(bytes); };
 
-  // ★ 判断视频/图片：兼容 data:URL 和路径
   const isVideo = v => {
     if(typeof v !== 'string' || !v) return false;
     if(v.startsWith('data:video')) return true;
@@ -631,10 +627,6 @@
     return /\.(jpe?g|png|gif|webp|bmp|avif)(\?|#|$)/i.test(v);
   };
 
-  // ★ 把存储值统一转成可直接用于 src 的 URL
-  //   - data:...   → 原样返回（老数据兼容）
-  //   - http(s):// → 原样返回
-  //   - images/xxx → 拼 Pages 域名
   function mediaUrl(v){
     if(typeof v !== 'string' || !v) return '';
     if(v.startsWith('data:')) return v;
@@ -643,7 +635,6 @@
     return base + '/' + v.replace(/^\/+/,'');
   }
 
-  // ★ data:URL → 纯 base64（GitHub Contents API 需要）
   function dataUrlToBase64(dataUrl){
     const idx = dataUrl.indexOf(',');
     return idx >= 0 ? dataUrl.slice(idx+1) : dataUrl;
@@ -670,166 +661,78 @@
     d.className = 'status-dot' + (kind ? ' ' + kind : '');
   }
 
-  const GH_API = 'https://api.github.com';
-  function ghHeaders(){
-    return {
-      'Authorization': 'Bearer ' + cfg.token,
-      'Accept': 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28'
-    };
-  }
-  function ghUrl(){
-    return `${GH_API}/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path}`;
-  }
-  function ghFileUrl(path){
-    return `${GH_API}/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${path}`;
-  }
-  function hasConfig(){ return cfg.owner && cfg.repo && cfg.path && cfg.token; }
+  // ============================================================
+  // ★ 所有请求改为走 Cloudflare Worker（token 在 Worker 侧保管）
+  // ============================================================
 
-  // ★ 上传一个文件到仓库指定路径（自动处理同名覆盖）
-  async function ghUploadFile(path, base64Content, commitMsg){
-    let sha = null;
-    try {
-      const r = await fetch(ghFileUrl(path), { headers: ghHeaders() });
-      if(r.ok){ const d = await r.json(); sha = d.sha; }
-    } catch(e){ /* 不存在则忽略 */ }
+  function workerUrl(path){
+    const base = (cfg.worker || '').replace(/\/+$/,'');
+    return base + path;
+  }
 
-    const body = { message: commitMsg || `upload ${path}`, content: base64Content };
-    if(sha) body.sha = sha;
-
-    const res = await fetch(ghFileUrl(path), {
-      method:'PUT',
-      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
-      body: JSON.stringify(body)
+  // 读取 records.json
+  async function ghLoad(){
+    setStatus('读取中…', 'loading');
+    const res = await fetch(workerUrl('/records'), {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' }
     });
     if(!res.ok){
       const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('上传失败 ' + res.status));
-    }
-    return true;
-  }
-
-  // ★ 删除仓库文件（清空媒体时可选调用）
-  async function ghDeleteFile(path){
-    try {
-      const r = await fetch(ghFileUrl(path), { headers: ghHeaders() });
-      if(!r.ok) return; // 不存在就算了
-      const d = await r.json();
-      await fetch(ghFileUrl(path), {
-        method:'DELETE',
-        headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
-        body: JSON.stringify({ message: `delete ${path}`, sha: d.sha })
-      });
-    } catch(e){ /* 忽略 */ }
-  }
-
-  async function ghLoad(){
-    if(!hasConfig()) throw new Error('配置不完整');
-    setStatus('读取中…', 'loading');
-    const res = await fetch(ghUrl(), { headers: ghHeaders() });
-    if(res.status === 404){
-      fileSha = null;
-      records = [];
-      await ghCreateEmpty();
-      setStatus('已连接（新建数据文件）', 'ok');
-      recordsLoaded = true;
-      return;
-    }
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('读取失败 ' + res.status));
+      throw new Error(err.error || ('读取失败 ' + res.status));
     }
     const data = await res.json();
-    fileSha = data.sha;
-
-    let content = '';
-    if(data.content && data.encoding !== 'none'){
-      try { content = b64decode(data.content || ''); } catch(e){ content = ''; }
+    if(!data.success){
+      throw new Error(data.error || '读取失败');
     }
-    // 大文件时走 download_url（保留兜底，即使现在 JSON 很小）
-    if(!content && data.download_url){
-      setStatus('读取中（大文件）…', 'loading');
-      try {
-        const raw = await fetch(data.download_url, {
-          headers: { 'Authorization': 'Bearer ' + cfg.token }
-        });
-        if(raw.ok) content = await raw.text();
-      } catch(e){}
-    }
-
-    if(!content.trim()){
-      records = [];
-    } else {
-      try {
-        const parsed = JSON.parse(content);
-        const rawList = Array.isArray(parsed) ? parsed : (parsed.records || []);
-        records = rawList.map(r => normalizeRecord(r));
-      } catch(e){ records = []; }
-    }
+    const rawList = Array.isArray(data.records) ? data.records : [];
+    records = rawList.map(r => normalizeRecord(r));
     setStatus(`已连接 · ${records.length} 条记录`, 'ok');
     recordsLoaded = true;
   }
-  async function ghCreateEmpty(){
-    const body = { message:'init records.json', content: b64encode('[]') };
-    const res = await fetch(ghUrl(), {
-      method:'PUT',
-      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
-      body: JSON.stringify(body)
-    });
-    if(!res.ok){
-      const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('初始化失败 ' + res.status));
-    }
-    const data = await res.json();
-    fileSha = data.content.sha;
-  }
+
+  // 保存 records.json
   async function ghSave(){
-    if(!hasConfig()) throw new Error('配置不完整');
-    if(!fileSha){
-      try {
-        const check = await fetch(ghUrl(), { headers: ghHeaders() });
-        if(check.ok){
-          const d = await check.json();
-          fileSha = d.sha;
-        }
-      } catch(e){}
-    }
-    const json = JSON.stringify({ version:1, updatedAt: nowISO(), records }, null, 2);
-    const body = { message: `更新改善记录 ${nowISO()}`, content: b64encode(json) };
-    if(fileSha) body.sha = fileSha;
     setStatus('保存中…', 'loading');
-    const res = await fetch(ghUrl(), {
-      method:'PUT',
-      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
+    const body = { version: 1, updatedAt: nowISO(), records };
+    const res = await fetch(workerUrl('/records'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
-    if(res.status === 409){
-      const r2 = await fetch(ghUrl(), { headers: ghHeaders() });
-      if(r2.ok){
-        const d2 = await r2.json();
-        fileSha = d2.sha;
-        const res2 = await fetch(ghUrl(), {
-          method:'PUT',
-          headers: Object.assign({'Content-Type':'application/json'}, ghHeaders()),
-          body: JSON.stringify({ message: body.message, content: body.content, sha: fileSha })
-        });
-        if(res2.ok){
-          const data2 = await res2.json();
-          fileSha = data2.content.sha;
-          setStatus(`已保存 · ${records.length} 条记录`, 'ok');
-          return;
-        }
-      }
-      throw new Error('远端数据已被其他设备修改，请点击「刷新」后重试');
-    }
     if(!res.ok){
       const err = await res.json().catch(()=>({}));
-      throw new Error(err.message || ('保存失败 ' + res.status));
+      throw new Error(err.error || ('保存失败 ' + res.status));
     }
     const data = await res.json();
-    fileSha = data.content.sha;
+    if(!data.success){
+      throw new Error(data.error || '保存失败');
+    }
     setStatus(`已保存 · ${records.length} 条记录`, 'ok');
   }
+
+  // 上传媒体
+  async function ghUploadFile(path, base64Content, commitMsg){
+    const res = await fetch(workerUrl('/upload'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path, content: base64Content, message: commitMsg })
+    });
+    if(!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.error || ('上传失败 ' + res.status));
+    }
+    const data = await res.json();
+    if(!data.success) throw new Error(data.error || '上传失败');
+    return true;
+  }
+
+  // 删除文件（Worker 尚未提供此端点，暂时空实现）
+  async function ghDeleteFile(path){
+    return;
+  }
+
+  // ============================================================
 
   function initWelcome(){
     const overlay = $('#welcomeOverlay');
@@ -921,7 +824,7 @@
 
   function createNewRecord(){
     if(!recordsLoaded){
-      showAlert('请稍候', '正在从 GitHub 读取数据，请等待读取完成后再新建记录。');
+      showAlert('请稍候', '正在从 Worker 读取数据，请等待读取完成后再新建记录。');
       return;
     }
     current = blankRecord();
@@ -977,7 +880,7 @@
     updateBulkBar();
 
     if(!recordsLoaded){
-      host.innerHTML = `<div class="empty-list"><div class="big">⏳</div><div style="font-weight:700;color:#344054">正在从 GitHub 读取数据…</div><div style="margin-top:6px;font-size:13px">请稍候，读取完成前无法新建或编辑</div></div>`;
+      host.innerHTML = `<div class="empty-list"><div class="big">⏳</div><div style="font-weight:700;color:#344054">正在从 Worker 读取数据…</div><div style="margin-top:6px;font-size:13px">请稍候，读取完成前无法新建或编辑</div></div>`;
       renderPrintRecords([]);
       return;
     }
@@ -1192,7 +1095,6 @@
     return checksStr + '||' + notesStr;
   }
 
-  // ★ 把画布导出为固定 600px 宽、JPEG 0.6 的签名图，体积约为 PNG 的 1/4
   function exportSignature(canvasEl){
     const W = 600;
     const H = Math.round(canvasEl.height / canvasEl.width * W);
@@ -1308,13 +1210,9 @@
   function removeMediaAt(kind, idx){
     if(!current) return;
     if(!Array.isArray(current[kind])) current[kind] = toMediaArray(current[kind]);
-    const removed = current[kind].splice(idx, 1)[0];
+    current[kind].splice(idx, 1);
     renderMediaGrid(kind);
     changed = true;
-    // 可选：同步删除仓库文件（避免孤儿文件堆积）。若不需要，注释掉下面这段。
-    if(removed && !removed.startsWith('data:') && !/^https?:\/\//i.test(removed)){
-      ghDeleteFile(removed).catch(()=>{});
-    }
   }
 
   function appendMedia(kind, value){
@@ -1346,7 +1244,7 @@
   async function saveCurrent(){
     if(saving) return;
     if(!recordsLoaded){
-      showAlert('请稍候', '正在从 GitHub 读取数据，请等待读取完成后再保存。');
+      showAlert('请稍候', '正在从 Worker 读取数据，请等待读取完成后再保存。');
       return;
     }
     syncForm();
@@ -1384,13 +1282,6 @@
     const snapshot = JSON.parse(JSON.stringify(current));
     if(idx>=0) nextRecords[idx] = snapshot;
     else nextRecords.push(snapshot);
-
-    if(fileSha && records.length >= 2 && nextRecords.length < records.length){
-      const confirmDelete = confirm(`注意：本次保存将使记录从 ${records.length} 条变为 ${nextRecords.length} 条（疑似删除）。\n\n确定要继续吗？`);
-      if(!confirmDelete){
-        return;
-      }
-    }
 
     saving = true;
     const backup = JSON.parse(JSON.stringify(records));
@@ -1441,7 +1332,7 @@
     });
   }
 
-  // ★ 改为：先压缩/读取 → 上传到仓库 images/ 或 videos/ → JSON 里只存相对路径
+  // ★ 上传到 Worker → Worker 再写到 GitHub
   async function processFiles(kind, files){
     if(!current) current = blankRecord();
     if(!Array.isArray(current[kind])) current[kind] = toMediaArray(current[kind]);
@@ -1473,7 +1364,7 @@
           const path = `${cfg.imagesDir}/${name}`;
           progressEl.textContent = `上传图片 ${done+1} / ${todo.length}…`;
           await ghUploadFile(path, b64, `upload ${name}`);
-          appendMedia(kind, path);   // ★ JSON 里只存相对路径
+          appendMedia(kind, path);
         } else if(file.type.startsWith('video/')){
           if(file.size > 25 * 1024 * 1024){
             const ok = confirm(`「${file.name}」约 ${(file.size/1024/1024).toFixed(1)}MB，上传可能较慢。\n仍要上传吗？`);
@@ -1604,7 +1495,6 @@
     document.body.style.overflow = '';
   }
 
-  // ★ 打开大图时把路径转成完整 URL
   function openViewer(mediaValue, label){
     if(!mediaValue) return;
     const src = mediaUrl(mediaValue);
@@ -1651,10 +1541,6 @@
     const arr = current[kind] || [];
     if(!arr.length) return;
     if(!confirm(`确定清空「${kind==='before'?'改善之前':'改善之后'}」的全部 ${arr.length} 个媒体吗？`)) return;
-    // 可选：同步删除仓库文件。若不需要，注释掉下面这段。
-    arr.forEach(p => {
-      if(p && !p.startsWith('data:') && !/^https?:\/\//i.test(p)) ghDeleteFile(p).catch(()=>{});
-    });
     current[kind] = [];
     renderMediaGrid(kind);
     changed = true;
